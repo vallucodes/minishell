@@ -6,8 +6,13 @@
 /*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 12:02:44 by hiennguy          #+#    #+#             */
-/*   Updated: 2025/03/03 12:08:19 by hiennguy         ###   ########.fr       */
+/*   Updated: 2025/03/03 12:26:22 by hiennguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
+
+int	main ()
+{
+	return (0);
+}
