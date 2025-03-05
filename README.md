@@ -2,6 +2,7 @@
 
 Very useful links:
 
+https://dashboard.hive.fi/topics/101/messages?cursus_id=21
 https://github.com/zelhajou/ft_unix_minishell
 https://gitlab.com/madebypixel02/minishell
 https://whimsical.com/minishell-architecture-big-picture-7b9N8PL3qHrddbs977mQ2J
@@ -32,3 +33,4 @@ If there are conflicts, you'll have to resolve them before proceeding.
 git merge:
 
 Add changes from main to your branch. For example before pull request.
+From main branch to your own branch: git merge main
