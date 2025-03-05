@@ -1,4 +1,4 @@
-#include <unistd.h>
+#include "../inc/minishell.h"
 
 int main()
 {
@@ -10,4 +10,5 @@ int main()
 	//2 commit from branch vlad-2
 
 	//added feature after merging main to branch vlad-1
+	return (0);
 }
