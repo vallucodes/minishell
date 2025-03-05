@@ -1,14 +1,9 @@
-#include <unistd.h>
-
-int	main ()
-{
-	//hien-test-commit-1
-	return (0);
 
 #include <unistd.h>
 
 int main()
 {
+	//hien-test-commit-1
 	//commit - 1
 	//commit - 2
 	//commit - 3
