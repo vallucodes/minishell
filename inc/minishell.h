@@ -7,8 +7,7 @@
 # include <readline/readline.h>	//readline
 # include <readline/history.h>	//readline
 
-// # define PROMPT "\001\e[93m\002>>> \001\e[0m\e[95m\002 Giraffeshell>$ \001\e[0m\002"
-#define PROMPT "\001\e[93m\002🦒 >>>\001\e[0m\e[95m\002 Giraffeshell>$ \001\e[0m\002"
+# define PROMPT "\001\e[93m\002🦒 >>>\001\e[0m\e[95m\002 Giraffeshell>$ \001\e[0m\002"
 
 
 typedef enum e_types
