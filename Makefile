@@ -9,9 +9,6 @@ LIBFT 		= $(LIBFT_DIR)/libft.a
 OBJ_DIR		= obj/
 SRC_DIR		= src/
 
-# READLINE_INCLUDE = $(shell brew --prefix readline)/include
-# READLINE_LIB = $(shell brew --prefix readline)/lib
-
 INCLUDES		= -I ./inc -I $(LIBFT_DIR)/inc
 
 LIBFTH		= $(LIBFT_DIR)/inc/libft.h
@@ -31,7 +28,7 @@ $(OBJ_DIR)%.o: $(SRC_DIR)%.c $(MINISHH) $(LIBFTH)
 	$(CC) $(CFLAGS) -o $@ -c $< $(INCLUDES)
 
 $(NAME): $(LIBFT) $(OBJS) $(MINISHH) $(LIBFTH)
-	$(CC) $(CFLAGS) $(OBJS) $(LDFLAGS) -o $(NAME)
+	$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) -o $(NAME)
 
 clean:
 	rm -rf $(OBJ_DIR)
