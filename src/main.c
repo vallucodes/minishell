@@ -2,13 +2,15 @@
 
 int main()
 {
-	//hien-test-commit-1
-	//commit - 1
-	//commit - 2
-	//commit - 3
-	//first commit from branch vlad-2
-	//2 commit from branch vlad-2
+	char *input;
 
-	//added feature after merging main to branch vlad-1
-	return (0);
+	while (1)
+	{
+		input = readline(PROMPT);
+		if (!input)
+			break ;
+		printf("Input: %s\n", input);
+		free(input);
+	}
+	return 0;
 }
