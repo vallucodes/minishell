@@ -10,6 +10,7 @@ https://whimsical.com/minishell-architecture-big-picture-7b9N8PL3qHrddbs977mQ2J
 
 Maybe useful stuff:
 
+https://www.gnu.org/software/bash/manual/bash.html
 https://github.com/charMstr/minishell
 https://42-cursus.gitbook.io/guide/rank-03/minishell/functions #brief explanation of all allowed functions
 
