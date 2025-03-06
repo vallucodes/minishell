@@ -1,16 +1,17 @@
 NAME		= minishell
 CC			= cc
 CFLAGS		= -Wextra -Wall -Werror
+LDFLAGS		= -lreadline
 
-LIBFT_DIR 	= ./libft
+LIBFT_DIR 	= ./lib/libft
 LIBFT 		= $(LIBFT_DIR)/libft.a
 
 OBJ_DIR		= obj/
 SRC_DIR		= src/
 
-HEADERS		= -I ./inc -I $(LIBFT_DIR)/inc
+INCLUDES		= -I ./inc -I $(LIBFT_DIR)/inc
 
-LIBFTH		= ./libft/inc/libft.h
+LIBFTH		= $(LIBFT_DIR)/inc/libft.h
 MINISHH		= ./inc/minishell.h
 
 SRC			=	main.c
@@ -24,10 +25,10 @@ $(LIBFT):
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c $(MINISHH) $(LIBFTH)
 	@mkdir -p $(dir $@)
-	@$(CC) $(CFLAGS) -o $@ -c $< $(HEADERS)
+	$(CC) $(CFLAGS) -o $@ -c $< $(INCLUDES)
 
 $(NAME): $(LIBFT) $(OBJS) $(MINISHH) $(LIBFTH)
-	@$(CC) $(OBJS) $(LIBFT) $(HEADERS) -o $(NAME)
+	$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) -o $(NAME)
 
 clean:
 	rm -rf $(OBJ_DIR)
