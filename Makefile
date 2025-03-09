@@ -1,6 +1,6 @@
 NAME		= minishell
 CC			= cc
-CFLAGS		= -Wextra -Wall -Werror
+CFLAGS		= -Wextra -Wall -Werror -g
 LDFLAGS		= -lreadline
 
 LIBFT_DIR 	= ./lib/libft
@@ -14,7 +14,8 @@ INCLUDES		= -I ./inc -I $(LIBFT_DIR)/inc
 LIBFTH		= $(LIBFT_DIR)/inc/libft.h
 MINISHH		= ./inc/minishell.h
 
-SRC			=	main.c
+SRC			=	main.c \
+				tokenizer.c
 
 OBJS		= $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
 
@@ -28,7 +29,7 @@ $(OBJ_DIR)%.o: $(SRC_DIR)%.c $(MINISHH) $(LIBFTH)
 	$(CC) $(CFLAGS) -o $@ -c $< $(INCLUDES)
 
 $(NAME): $(LIBFT) $(OBJS) $(MINISHH) $(LIBFTH)
-	$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) -o $(NAME)
+	$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) $(LIBFT) -o $(NAME)
 
 clean:
 	rm -rf $(OBJ_DIR)

@@ -6,26 +6,42 @@
 # include <stdio.h>				//printf
 # include <readline/readline.h>	//readline
 # include <readline/history.h>	//readline
+# include "../lib/libft/inc/libft.h"
 
 # define PROMPT "\001\e[93m\002🦒 >>>\001\e[0m\e[95m\002 Giraffeshell>$ \001\e[0m\002"
 
 
-typedef enum e_types
+typedef enum e_token_type
 {
-	WORD,			// some word in double quotes "Something here"
-	PIPE,			// |
-	REDIRECT,		// < >
-	APPEND,			// >>
-	HERE_STRING,	// <<
-	DOLLAR,			// $
-}	t_types;
+	WORD,				// some word in double quotes "Something here"
+	PIPE,				// |
+	REDIRECT_IN,		// <
+	REDIRECT_OUT,		// >
+	REDIRECT_APPEND,	// >>
+	HERE_STRING,		// <<
+	ENV_VAR,			// $
+}	t_token_type;
 
-typedef struct s_input
+typedef struct s_token
 {
-	char			*token;
-	t_types			token_type;
-	struct s_input	*next;
-}	t_input;
+	char *value;
+	t_token_type	type;
+	int				len;
+	struct s_token	*next;
+}	t_token;
+
+typedef struct	s_input
+{
+	char 	*full_str; // The full user input
+	int		index; //track position while scanning
+	int		len; // len helps check if end of input is reached
+	t_token	*tokens;
+}				t_input;
+
+
+//functions
+void	extract_token(t_input *input, int start, int word_len);
+void	init_lexer(t_input *new_input, char *input_str);
 
 
 #endif
