@@ -1,5 +1,7 @@
 #include "../inc/minishell.h"
 
+//For testing purpose
+
 static char *get_token_type_name(t_token_type token_type)
 {
     switch (token_type)
@@ -26,6 +28,7 @@ static void print_tokens(t_token *tokens)
         tokens = tokens->next;
     }
 }
+//Testing ends
 
 int main()
 {
