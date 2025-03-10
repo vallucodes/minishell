@@ -1,21 +1,5 @@
 #include "../inc/minishell.h"
 
-//VLAD'S MAIN
-// int main()
-// {
-// 	char *input;
-
-// 	while (1)
-// 	{
-// 		input = readline(PROMPT);
-// 		if (!input)
-// 			break ;
-// 		printf("Input: %s\n", input);
-// 		free(input);
-// 	}
-// 	return (0);
-// }
-
 static char *get_token_type_name(t_token_type token_type)
 {
     switch (token_type)
