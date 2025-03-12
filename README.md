@@ -7,6 +7,14 @@
 - [Git repo: madebypixel02](https://gitlab.com/madebypixel02/minishell)
 - [Minishell architecture flowchart picture](https://whimsical.com/minishell-architecture-big-picture-7b9N8PL3qHrddbs977mQ2J)
 
+## Memory arena knowledge:
+https://www.rfleury.com/p/untangling-lifetimes-the-arena-allocator
+https://m.youtube.com/watch?v=3IAlJSIjvH0
+https://m.youtube.com/watch?v=TZ5a3gCCZYo
+https://m.youtube.com/watch?v=hI9aN8ZG4vg
+https://nullprogram.com/blog/2023/09/27/
+https://m.youtube.com/watch?v=UYLHA_Ey8Ys
+
 ## Maybe useful stuff:
 
 - [GNU Bash Manual](https://www.gnu.org/software/bash/manual/bash.html)
