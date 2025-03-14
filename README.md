@@ -1,4 +1,28 @@
-# minishell
+# Minishell
+**As beautiful as a shell**
+
+## 📌 Overview
+
+Minishell is a simple Unix shell implementation written in C. This project is part of the 42 curriculum and aims to deepen the understanding of process management, file descriptors, and system calls.
+
+## Features
+
+- Custom interactive prompt.
+- Command execution via absolute, relative paths, or `$PATH` resolution.
+- Handle input/output redirections (`<`, `>`, `<<`, `>>`).
+- Implement pipes (`|`) for command chaining.
+- Environment variable expansion (`$VAR` and `$?`).
+- Built-in commands:  
+  - `echo` (with `-n` option)  
+  - `cd` (with relative/absolute paths)  
+  - `pwd`  
+  - `export`  
+  - `unset`  
+  - `env`  
+  - `exit`  
+- Signal handling (`Ctrl-C`, `Ctrl-D`, `Ctrl-\`).
+- Command history support.
+
 
 ## Very useful links:
 
