@@ -13,7 +13,8 @@
 
 typedef enum e_token_type
 {
-	WORD,				// some word in double quotes "Something here"
+	WORD_DOUBLE,		// some word in double quotes "Something here"
+	WORD_SINGLE,		// some word in single quotes 'Something here'
 	PIPE,				// |
 	REDIRECT_IN,		// <
 	REDIRECT_OUT,		// >
@@ -24,23 +25,23 @@ typedef enum e_token_type
 
 typedef struct s_token
 {
-	char *value;
-	t_token_type	type;
+	char			*value;
 	int				len;
+	t_token_type	type;
 	struct s_token	*next;
 }	t_token;
 
 typedef struct	s_input
 {
-	char 	*full_str; // The full user input
-	int		index; //track position while scanning
-	int		len; // len helps check if end of input is reached
+	char 	*full_str;	// The full user input
+	int		index;		//track position while scanning
+	int		len;		// len helps check if end of input is reached
 	t_token	*tokens;
 }				t_input;
 
 
 //functions
-void	extract_token(t_input *input, int start, int word_len);
+void	extract_token(t_input *input);
 void	init_lexer(t_input *new_input, char *input_str);
 
 

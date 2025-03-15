@@ -1,7 +1,7 @@
 NAME		= minishell
 CC			= cc
 CFLAGS		= -Wextra -Wall -Werror -g
-LDFLAGS		= -lreadline
+LDFLAGS		= -lreadline #-lncurses -lhistory
 
 LIBFT_DIR 	= ./lib/libft
 LIBFT 		= $(LIBFT_DIR)/libft.a
@@ -29,7 +29,7 @@ $(OBJ_DIR)%.o: $(SRC_DIR)%.c $(MINISHH) $(LIBFTH)
 	$(CC) $(CFLAGS) -o $@ -c $< $(INCLUDES)
 
 $(NAME): $(LIBFT) $(OBJS) $(MINISHH) $(LIBFTH)
-	$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) $(LIBFT) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME) $(LDFLAGS)
 
 clean:
 	rm -rf $(OBJ_DIR)
