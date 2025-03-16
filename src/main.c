@@ -42,6 +42,7 @@ int main()
 		if (!input_str)
 			break ;
 		add_history(input_str);
+		input_validation(input_str, NONE);
 		init_lexer(&input, input_str);
 		extract_token(&input);
 		print_tokens(input.tokens);

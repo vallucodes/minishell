@@ -23,6 +23,13 @@ typedef enum e_token_type
 	ENV_VAR,			// $
 }	t_token_type;
 
+typedef enum e_quotes
+{
+	NONE,
+	SINGLE,
+	DOUBLE,
+}	t_quotes;
+
 typedef struct s_token
 {
 	char			*value;
