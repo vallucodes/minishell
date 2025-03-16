@@ -9,7 +9,7 @@
 # include "../lib/libft/inc/libft.h"
 
 # define PROMPT "\001\e[93m\002🦒 >>>\001\e[0m\e[95m\002 Giraffeshell>$ \001\e[0m\002"
-
+# define BALANCE "quotes or brackets unbalanced"
 
 typedef enum e_token_type
 {

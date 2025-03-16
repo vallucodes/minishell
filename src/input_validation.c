@@ -36,4 +36,6 @@ void input_validation(char *input)
 	balanced = 1;
 	quote_validation(input, NONE, &balanced);
 	// brackets_validation(input, NONE, &balanced);
+	if (balanced == 0)
+		exit_error(BALANCE);
 }
