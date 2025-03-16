@@ -42,10 +42,12 @@ static void add_token(t_token **head, t_token *new)
 static int	is_word(t_input *input, int i)
 {
 	if (input->full_str[input->index + i] &&
-                   !ft_isspace(input->full_str[input->index + i]) &&
-                   input->full_str[input->index + i] != '|' &&
-                   input->full_str[input->index + i] != '<' &&
-                   input->full_str[input->index + i] != '>')
+					!ft_isspace(input->full_str[input->index + i]) &&
+					input->full_str[input->index + i] != '|' &&
+					input->full_str[input->index + i] != '<' &&
+					input->full_str[input->index + i] != '>' &&
+					input->full_str[input->index + i] != '\'' &&
+					input->full_str[input->index + i] != '"')
 		return (1);
 	else
 		return (0);
