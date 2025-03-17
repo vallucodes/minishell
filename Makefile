@@ -9,7 +9,7 @@ LIBFT 		= $(LIBFT_DIR)/libft.a
 OBJ_DIR		= obj/
 SRC_DIR		= src/
 
-INCLUDES		= -I ./inc -I $(LIBFT_DIR)/inc
+INCLUDES	= -I ./inc -I $(LIBFT_DIR)/inc
 
 LIBFTH		= $(LIBFT_DIR)/inc/libft.h
 MINISHH		= ./inc/minishell.h
