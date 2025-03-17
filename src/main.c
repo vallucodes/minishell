@@ -42,10 +42,13 @@ int main()
 		if (!input_str)
 			break ;
 		add_history(input_str);
-		init_lexer(&input, input_str);
-		extract_token(&input);
-		print_tokens(input.tokens);
-		free(input_str);
+		if (!input_validation(input_str))
+		{
+			init_lexer(&input, input_str);
+			extract_token(&input);
+			print_tokens(input.tokens);
+			free(input_str);
+		}
 	}
 	return (0);
 }
