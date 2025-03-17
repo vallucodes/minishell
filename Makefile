@@ -1,7 +1,7 @@
-NAME		= minishell
+NAME		= minishell.out
 CC			= cc
 CFLAGS		= -Wextra -Wall -Werror -g
-LDFLAGS		= -lreadline #-lncurses -lhistory
+LDFLAGS		= -lreadline
 
 LIBFT_DIR 	= ./lib/libft
 LIBFT 		= $(LIBFT_DIR)/libft.a
@@ -15,7 +15,9 @@ LIBFTH		= $(LIBFT_DIR)/inc/libft.h
 MINISHH		= ./inc/minishell.h
 
 SRC			=	main.c \
-				tokenizer.c
+				tokenizer.c \
+				input_validation.c \
+				error.c
 
 OBJS		= $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
 

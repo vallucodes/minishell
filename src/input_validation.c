@@ -28,8 +28,7 @@ int	quote_validation(char *input, t_quotes type, int *balanced)
 	return (i);
 }
 
-
-void input_validation(char *input)
+int input_validation(char *input)
 {
 	int balanced;
 
@@ -37,5 +36,9 @@ void input_validation(char *input)
 	quote_validation(input, NONE, &balanced);
 	// brackets_validation(input, NONE, &balanced);
 	if (balanced == 0)
-		exit_error(BALANCE);
+	{
+		print_error(BALANCE);
+		return (FAIL);
+	}
+	return (SUCCESS);
 }

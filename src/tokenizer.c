@@ -94,7 +94,7 @@ void extract_token(t_input *input)
 		while (input->full_str[input->index] == ' ')
 			input->index++;
 		if (input->full_str[input->index] == '\0')
-			break;
+			break ;
 		if (ft_strncmp(&input->full_str[input->index], "<<", 2) == 0)
 			add_token(&input->tokens, init_token(input, 2, HERE_STRING));
 		else if (ft_strncmp(&input->full_str[input->index], ">>", 2) == 0)

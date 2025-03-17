@@ -23,6 +23,12 @@ typedef enum e_token_type
 	ENV_VAR,			// $
 }	t_token_type;
 
+typedef enum e_exit
+{
+	SUCCESS,
+	FAIL,
+}	t_exit;
+
 typedef enum e_quotes
 {
 	NONE,
@@ -36,20 +42,20 @@ typedef struct s_token
 	int				len;
 	t_token_type	type;
 	struct s_token	*next;
-}	t_token;
+}				t_token;
 
 typedef struct	s_input
 {
-	char 	*full_str;	// The full user input
-	int		index;		//track position while scanning
+	char	*full_str;	// The full user input
+	int		index;		// track position while scanning
 	int		len;		// len helps check if end of input is reached
 	t_token	*tokens;
 }				t_input;
 
-
 //functions
+void	print_error(char *msg);
 void	extract_token(t_input *input);
 void	init_lexer(t_input *new_input, char *input_str);
-
+int		input_validation(char *input);
 
 #endif
