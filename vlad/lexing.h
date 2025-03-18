@@ -9,6 +9,8 @@ typedef enum e_token_type
 {
 	WORD_DOUBLE,		// some word in double quotes "Something here"
 	WORD_SINGLE,		// some word in single quotes 'Something here'
+	FILE_TOKEN,			// classified as file
+	COMMAND,			// command
 	PIPE,				// |
 	REDIRECT_IN,		// <
 	REDIRECT_OUT,		// >

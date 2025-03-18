@@ -46,7 +46,8 @@ int main()
 		{
 			init_lexer(&input, input_str);
 			extract_token(&input);
-			print_tokens(input.tokens);
+			// print_tokens(input.tokens);
+			tokens_validation(input.tokens);
 			free(input_str);
 		}
 	}
