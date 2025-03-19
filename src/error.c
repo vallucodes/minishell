@@ -1,6 +1,6 @@
 #include "../inc/minishell.h"
 
-void	print_error(char *msg)
+void	print_error(char *msg, char *token)
 {
-	ft_putendl_fd(msg, 2);
+	printf("%s%s\n", msg, token);
 }

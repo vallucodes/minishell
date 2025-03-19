@@ -15,6 +15,9 @@
 //error prompts
 # define BALANCE "quotes or brackets unbalanced"
 # define REDIRECT "redirections invalid"
+# define TOKEN_ERROR "syntax error near unexpected token"
+# define PIPE_ERROR " `|'"
+# define NEWLINE_ERROR " `newline'"
 
 typedef enum e_exit
 {
@@ -23,9 +26,12 @@ typedef enum e_exit
 }	t_exit;
 
 //functions
-void	print_error(char *msg);
+void	print_error(char *msg, char *token);
 void	extract_token(t_input *input);
 void	init_lexer(t_input *new_input, char *input_str);
 int		input_validation(char *input);
+int		tokens_validation(t_token *tokens);
+
+void print_tokens(t_token *tokens);
 
 #endif

@@ -64,67 +64,13 @@ int input_validation(char *input)
 	quote_validation(input, NONE, &balanced);
 	if(!balanced)
 	{
-		print_error(BALANCE);
+		print_error(BALANCE, NULL);
 		return (FAIL);
 	}
 	if (redirection_validation(input))
 	{
-		print_error(REDIRECT);
+		print_error(REDIRECT, NULL);
 		return (FAIL);
 	}
 	return (SUCCESS);
 }
-
-
-// #include <strings.h>
-
-// static int	redirection_validation(char *input)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (input[i])
-// 	{
-// 		if (input[i] == '\'')
-// 		{
-// 			i++;
-// 			while (input[i] != '\'')
-// 				i++;
-// 		}
-// 		if (input[i] == '"')
-// 		{
-// 			i++;
-// 			while (input[i] != '"')
-// 				i++;
-// 		}
-// 		if (strstr(input, "<>") || strstr(input, "<<<") ||
-// 			strstr(input, "><") || strstr(input, ">>>"))
-// 			return (FAIL);
-// 		i++;
-// 	}
-// 	return (SUCCESS);
-// }
-
-// int main(void)
-// {
-// 	char *tests[] = {
-// 		"echo hello > file.txt",   // Valid
-// 		"echo 'hello > world'",    // Valid (inside quotes)
-// 		"echo \"hello > world\"",  // Valid (inside quotes)
-// 		"cat file <> output",      // Invalid (<>)
-// 		"cmd <<< input",           // Invalid (<<<)
-// 		"ls >< file",              // Invalid (><)
-// 		"echo test >>> file",      // Invalid (>>>)
-// 		NULL
-// 	};
-
-// 	for (int i = 0; tests[i]; i++)
-// 	{
-// 		if (redirection_validation(tests[i]) == FAIL)
-// 			printf("Test %d: FAIL (%s)\n", i + 1, tests[i]);
-// 		else
-// 			printf("Test %d: SUCCESS (%s)\n", i + 1, tests[i]);
-// 	}
-
-// 	return 0;
-// }

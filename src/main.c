@@ -18,7 +18,7 @@ static char *get_token_type_name(t_token_type token_type)
 	}
 }
 
-static void print_tokens(t_token *tokens)
+void print_tokens(t_token *tokens)
 {
 	while (tokens)
 	{
@@ -47,6 +47,7 @@ int main()
 			init_lexer(&input, input_str);
 			extract_token(&input);
 			print_tokens(input.tokens);
+			tokens_validation(input.tokens);
 			free(input_str);
 		}
 	}
