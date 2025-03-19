@@ -41,7 +41,7 @@ static int	validate_tokens(t_token *tokens)
 
 int tokens_validation(t_token *tokens)
 {
-	if (validate_pipes(tokens) == FAIL)
+	if (validate_tokens(tokens) == FAIL)
 		return (FAIL);
 	return (SUCCESS);
 }
