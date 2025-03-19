@@ -1,12 +1,18 @@
 #include "minishell.h"
 
+int	any_redirect(t_token *current)
+{
+	return(current->type == REDIRECT_IN ||
+			current->type == REDIRECT_OUT ||
+			current->type == REDIRECT_APPEND ||
+			current->type == HERE_STRING);
+}
+
 static int	validate_tokens_looping(t_token *current)
 {
 	while (current != NULL)
 	{
-		if (current->type == PIPE || current->type == REDIRECT_IN ||
-			current->type == REDIRECT_OUT || current->type == REDIRECT_APPEND ||
-			current->type == HERE_STRING)
+		if (current->type == PIPE || any_redirect(current))
 		{
 			if (current->next == NULL)
 			{

@@ -8,6 +8,10 @@ static char *get_token_type_name(t_token_type token_type)
 	{
 		case WORD_SINGLE: return "WORD_S";
 		case WORD_DOUBLE: return "WORD_D";
+		case COMMAND: return "COMMAND";
+		case ARG: return "ARG";
+		case FILE_TOKEN: return "FILE";
+		case HERE_TOKEN: return "HERE_WORD";
 		case PIPE: return "PIPE";
 		case REDIRECT_IN: return "REDIRECT_IN";
 		case REDIRECT_OUT: return "REDIRECT_OUT";
@@ -28,6 +32,7 @@ void print_tokens(t_token *tokens)
 		}
 		tokens = tokens->next;
 	}
+	printf("\n");
 }
 //Testing ends
 
@@ -48,6 +53,8 @@ int main()
 			extract_token(&input);
 			print_tokens(input.tokens);
 			tokens_validation(input.tokens);
+			retokenize_words(input.tokens);
+			print_tokens(input.tokens);
 			free(input_str);
 		}
 	}
