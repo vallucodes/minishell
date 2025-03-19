@@ -30,4 +30,6 @@ void	init_lexer(t_input *new_input, char *input_str);
 int		input_validation(char *input);
 int		tokens_validation(t_token *tokens);
 
+void print_tokens(t_token *tokens);
+
 #endif
