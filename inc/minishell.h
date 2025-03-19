@@ -26,12 +26,17 @@ typedef enum e_exit
 }	t_exit;
 
 //functions
-void	print_error(char *msg, char *token);
 void	extract_token(t_input *input);
 void	init_lexer(t_input *new_input, char *input_str);
 int		input_validation(char *input);
 int		tokens_validation(t_token *tokens);
+void	retokenize_words(t_token *tokens);
 
+//utils
+int		any_redirect(t_token *current);
+void	print_error(char *msg, char *token);
+
+//developlment fucntions
 void print_tokens(t_token *tokens);
 
 #endif
