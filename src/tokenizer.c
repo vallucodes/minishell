@@ -1,5 +1,20 @@
 #include "minishell.h"
 
+static int	is_separator(char c)
+{
+	return(c == '<' || c == '>' || c == '|' || c == '<' || c == '\'' || c == '\"' || ft_isspace(c));
+}
+
+static int	is_quote(char c)
+{
+	return (c == '\'' || c == '\"');
+}
+
+static int	is_operator(char c)
+{
+	return (c == '<' || c == '>' || c == '|' || c == '<');
+}
+
 void	init_lexer(t_input *new_input, char *input_str)
 {
 	new_input->full_str = input_str;
@@ -53,37 +68,65 @@ static int	is_word(t_input *input, int i)
 		return (0);
 }
 
-static void	no_quotes(t_input *input)
+int	inquotes(char c, int *in_double, int *in_single)
 {
-	int word_len;
-
-	word_len = 0;
-	while (is_word(input, word_len))
-		word_len++;
-	add_token(&input->tokens, init_token(input, word_len, WORD_DOUBLE)); // maybe we will need this to be separate token like WORD, depending how this is handled later related to expansions and so on
+	if (c == '\'' && !*in_double)
+		*in_single = !*in_single;
+	else if (c == '"' && !*in_single)
+		*in_double = !*in_double;
+	return (*in_double || *in_single);
 }
 
-static void	double_quotes(t_input *input)
+static int	word(t_input *input, int word_len)
 {
-	int word_len;
+	int	in_double;
+	int	in_single;
 
-	word_len = 0;
-	while (input->full_str[input->index + 1 + word_len] != '"')
-		word_len++;
+	in_double = 0;
+	in_single = 0;
+	inquotes(input->full_str[input->index], &in_double, &in_single);
+	if (in_single)
+	{
+		while (input->full_str[input->index + 1 + word_len] != '\'' &&
+				input->full_str[input->index + 1 + word_len])
+			word_len++;
+		if (input->full_str[input->index + 1 + word_len + 1] == '\'' ||
+			input->full_str[input->index + 1 + word_len + 1] == '\"' ||
+			!is_separator(input->full_str[input->index + 1 + word_len + 1]))
+			word_len += word(input, word_len);
+	}
+	else if (in_double)
+	{
+		while (input->full_str[input->index + 1 + word_len] != '\"' &&
+				input->full_str[input->index + 1 + word_len])
+			word_len++;
+		if (input->full_str[input->index + 1 + word_len + 1] == '\'' ||
+			input->full_str[input->index + 1 + word_len + 1] == '\"' ||
+			!is_separator(input->full_str[input->index + 1 + word_len + 1]))
+			word_len += word(input, word_len);
+	}
+	else
+	{
+		printf("index %i, word_len %i, str %s\n", input->index, word_len, input->full_str);
+		while (!is_separator(input->full_str[input->index + 1 + word_len]) &&
+				input->full_str[input->index + 1 + word_len + 1])
+			word_len++;
+		printf("index %i, word_len %i, str %s\n", input->index, word_len, input->full_str);
+		if (input->full_str[input->index + 1 + word_len + 1] == '\'' ||
+			input->full_str[input->index + 1 + word_len + 1] == '\"' ||
+			!is_separator(input->full_str[input->index + 1 + word_len + 1]))
+			word_len += word(input, word_len);
+		else
+			return (word_len);// testing this, coredumping atm
+	}
+	return (word_len);
+}
+
+static void	word2(t_input *input, int word_len)
+{
+	word(input, word_len);
 	input->index++;
 	add_token(&input->tokens, init_token(input, word_len, WORD_DOUBLE));
-	input->index++;
-}
-
-static void	single_quotes(t_input *input)
-{
-	int word_len;
-
-	word_len = 0;
-	while (input->full_str[input->index + 1 + word_len] != '\'')
-		word_len++;
-	input->index++;
-	add_token(&input->tokens, init_token(input, word_len, WORD_SINGLE));
 	input->index++;
 }
 
@@ -105,11 +148,7 @@ void extract_token(t_input *input)
 			add_token(&input->tokens, init_token(input, 1, REDIRECT_IN));
 		else if (input->full_str[input->index] == '>')
 			add_token(&input->tokens, init_token(input, 1, REDIRECT_OUT));
-		else if (input->full_str[input->index] == '\'')
-			single_quotes(input);
-		else if (input->full_str[input->index] == '"')
-			double_quotes(input);
 		else
-			no_quotes(input);
+			word(input, 0);
 	}
 }
