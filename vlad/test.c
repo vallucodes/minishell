@@ -17,7 +17,16 @@ static int	is_operator(char c)
 	return (c == '<' || c == '>' || c == '|' || c == '<');
 }
 
-char	*con(char *str)
+int	inquotes(char c, int *in_single, int *in_double)
+{
+	if (c == '\'' && !*in_double)
+		*in_single = !*in_single;
+	else if (c == '"' && !*in_single)
+		*in_double = !*in_double;
+	return (*in_double || *in_single);
+}
+
+char	*set_quotes_around_operators_in_quotes(const char *str)
 {
 	int	i;
 	int	in_single;
@@ -29,15 +38,11 @@ char	*con(char *str)
 	i = 0;
 	in_single = 0;
 	in_double = 0;
-	in_quotes = 0;
 	new = ft_strdup("");
 	while (str[i])
 	{
-		if (str[i] == '\'' && !in_double)
-			in_single = !in_single;
-		else if (str[i] == '"' && !in_single)
-			in_double = !in_double;
-		if (is_operator(str[i]) && (in_double || in_single))
+		in_quotes = inquotes(str[i], &in_double, &in_single);
+		if (is_operator(str[i]) && in_quotes)
 		{
 			char additive[6] = {'\"', '\"', str[i], '\"' ,'\"', '\0'};
 			temp = new;
@@ -55,7 +60,16 @@ char	*con(char *str)
 		}
 		i++;
 	}
+	return (new);
+}
 
+char	*set_quotes_around_non_quoted_words(char *new)
+{
+	int		i;
+	int		in_single;
+	int		in_double;
+	int		in_quotes;
+	char	*temp;
 
 	in_single = 0;
 	in_double = 0;
@@ -63,7 +77,7 @@ char	*con(char *str)
 	char *new2 = ft_strdup("");
 	if (!is_separator(new[i]))
 	{
-		char additive[3] = {'\"', str[i], '\0'};
+		char additive[3] = {'\"', new[i], '\0'};
 		temp = new;
 		new = ft_strjoin(new, additive);
 		free (temp);
@@ -72,11 +86,7 @@ char	*con(char *str)
 	}
 	while (new[i])
 	{
-		if (new[i] == '\'' && !in_double)
-			in_single = !in_single;
-		else if (new[i] == '"' && !in_single)
-			in_double = !in_double;
-		in_quotes = in_double || in_single;
+		in_quotes = inquotes(new[i], &in_double, &in_single);
 		if (is_separator(new[i]) && !is_separator(new[i + 1]) && !in_quotes && new[i + 1] != '\0')
 		{
 			char additive[3] = {new[i], '\"', '\0'};
@@ -103,8 +113,16 @@ char	*con(char *str)
 		}
 		i++;
 	}
-	free (new);
+	return (new2);
+}
 
+char	*remove_adjacent_quotes(char *new2)
+{
+	int		i;
+	int		in_single;
+	int		in_double;
+	int		in_quotes;
+	char	*temp;
 
 	in_single = 0;
 	in_double = 0;
@@ -112,19 +130,11 @@ char	*con(char *str)
 	char *new3 = ft_strdup("");
 	while (new2[i])
 	{
-		if (new2[i] == '\'' && !in_double)
-			in_single = !in_single;
-		else if (new2[i] == '"' && !in_single)
-			in_double = !in_double;
-		in_quotes = in_double || in_single;
+		in_quotes = inquotes(new2[i], &in_double, &in_single);
 		if (is_quote(new2[i]) && is_quote(new2[i + 1]) && !in_quotes)
 		{
 			i++;
-			if (new2[i] == '\'' && !in_double)
-				in_single = !in_single;
-			else if (new2[i] == '"' && !in_single)
-				in_double = !in_double;
-			in_quotes = in_double || in_single;
+			in_quotes = inquotes(new2[i], &in_double, &in_single);
 		}
 		else
 		{
@@ -136,6 +146,19 @@ char	*con(char *str)
 		}
 		i++;
 	}
+	return(new3);
+}
+
+char	*con(const char *str)
+{
+	char	*new;
+	char	*new2;
+	char	*new3;
+
+	new = set_quotes_around_operators_in_quotes(str);
+	new2 = set_quotes_around_non_quoted_words(new);
+	free (new);
+	new3 = remove_adjacent_quotes(new2);
 	free (new2);
 	return (new3);
 }
@@ -144,10 +167,10 @@ char	*con(char *str)
 int main()
 {
 	// char str[] = "\"asd\"";
-	char str[] = "<asd\"as<dasd\"<123> | asdsad fd's\"\"\"\"d'\"asd\"";
+	char str[] = "<asd\'as<<dasd\'<123> | asdsad fd\"s<<\'\'d\"\"asd\"";
 	printf("original:  %s\n", str);
 	char *str2 = con(str);
-	printf("new3: 	   %s\n", con(str));
-	printf("should be: <\"asdas<dasd\"<\"123\"> | \"asdsad\" \"fds\"\"\"\"dasd\"\n");
+	printf("new3: 	   %s\n", str2);
+	printf("should be: <\"asdas<dasd\"<\"123\"> | \"asdsad\" \"fds<<\"\"\"\"dasd\"\n");
 	free (str2);
 }
