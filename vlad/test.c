@@ -17,8 +17,9 @@ static int	is_operator(char c)
 	return (c == '<' || c == '>' || c == '|' || c == '<');
 }
 
-int	inquotes(char c, int *in_single, int *in_double)
+int	inquotes(char c, int *in_double, int *in_single)
 {
+	// printf("[BEFORE] Char: %c | in_single: %d | in_double: %d\n", c, *in_single, *in_double);
 	if (c == '\'' && !*in_double)
 		*in_single = !*in_single;
 	else if (c == '"' && !*in_single)
@@ -35,6 +36,7 @@ char	*set_quotes_around_operators_in_quotes(const char *str)
 	char	*new;
 	char	*temp;
 
+	char additive[6];
 	i = 0;
 	in_single = 0;
 	in_double = 0;
@@ -44,7 +46,24 @@ char	*set_quotes_around_operators_in_quotes(const char *str)
 		in_quotes = inquotes(str[i], &in_double, &in_single);
 		if (is_operator(str[i]) && in_quotes)
 		{
-			char additive[6] = {'\"', '\"', str[i], '\"' ,'\"', '\0'};
+			if (in_double == 1)
+			{
+				additive[0] = '\"';
+				additive[1] = '\"';
+				additive[2] = str[i];
+				additive[3] = '\"';
+				additive[4] = '\"';
+				additive[5] = '\0';
+			}
+			else if (in_single == 1)
+			{
+				additive[0] = '\'';
+				additive[1] = '\'';
+				additive[2] = str[i];
+				additive[3] = '\'';
+				additive[4] = '\'';
+				additive[5] = '\0';
+			}
 			temp = new;
 			new = ft_strjoin(new, additive);
 			free (temp);
@@ -151,13 +170,14 @@ char	*remove_adjacent_quotes(char *new2)
 
 char	*con(const char *str)
 {
+	// char	*new0;
 	char	*new;
 	char	*new2;
 	char	*new3;
-
 	new = set_quotes_around_operators_in_quotes(str);
 	new2 = set_quotes_around_non_quoted_words(new);
 	free (new);
+	printf("new2: 	   %s\n", new2);
 	new3 = remove_adjacent_quotes(new2);
 	free (new2);
 	return (new3);
@@ -167,10 +187,10 @@ char	*con(const char *str)
 int main()
 {
 	// char str[] = "\"asd\"";
-	char str[] = "<asd\'as<<dasd\'<123> | asdsad fd\"s<<\'\'d\"\"asd\"";
+	char str[] = "<asd\'as<<da<sd\'<123> | asdsad \'12\'fd\"s<<\'\'d\"\"asd\"";
 	printf("original:  %s\n", str);
 	char *str2 = con(str);
 	printf("new3: 	   %s\n", str2);
-	printf("should be: <\"asdas<dasd\"<\"123\"> | \"asdsad\" \"fds<<\"\"\"\"dasd\"\n");
+	printf("should be: <\"asdas<<da<sd\"<\"123\"> | \"asdsad\" \"12fds<<\'\'dasd\"\n");
 	free (str2);
 }
