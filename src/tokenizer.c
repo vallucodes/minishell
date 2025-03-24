@@ -38,7 +38,7 @@ static t_token *init_token(t_input *input, int len, t_token_type type)
 	return (new_token);
 }
 
-static t_token *init_token_word(int len, t_token_type type, char *word)
+static t_token *init_token_word(t_token_type type, char *word)
 {
 	t_token *new_token;
 
@@ -46,10 +46,9 @@ static t_token *init_token_word(int len, t_token_type type, char *word)
 	if (!new_token)
 		return (NULL);
 	new_token->value = &word[0];
-	new_token->len = len;
+	new_token->len = ft_strlen(word);
 	new_token->type = type;
 	new_token->next = NULL;
-	// input->index += len;
 	return (new_token);
 }
 
@@ -83,7 +82,7 @@ static int	is_word(t_input *input, int i)
 		return (0);
 }
 
-int	inquotes(char c, int *in_double, int *in_single)
+static int	inquotes(char c, int *in_double, int *in_single)
 {
 	if (c == '\'' && !*in_double)
 		*in_single = !*in_single;
@@ -97,36 +96,42 @@ static char	*word2(t_input *input)
 	int		in_double;
 	int		in_single;
 	int		in_quotes;
+	int		previous_in_quotes;
 	char	*new;
+	char	*temp;
 	char	*str;
+	char	additive[2];
 
 	str = input->full_str;
 	in_double = 0;
 	in_single = 0;
 	in_quotes = 0;
+	previous_in_quotes = 0;
 	new = ft_strdup("");
-	while (input->full_str[input->index] && (!is_separator(input->full_str[input->index] || in_quotes)))
+	while (input->full_str[input->index] && ((!is_separator(input->full_str[input->index]) || in_quotes)))
 	{
+		previous_in_quotes = in_quotes;
 		in_quotes = inquotes(input->full_str[input->index], &in_double, &in_single);
-		if (!in_quotes && is_quote(str[input->index]))
-		{}
-		else
+		if (previous_in_quotes != in_quotes)
 		{
-			char additive[2] = {str[input->index], '\0'};
-			new = ft_strjoin(new, additive);
+			input->index++;
+			continue ;
 		}
+		additive[0] = str[input->index];
+		additive[1] = '\0';
+		temp = new;
+		new = ft_strjoin(new, additive);
+		free (temp);
 		input->index++;
 	}
 	return (new);
 }
 
-static void	word(t_input *input, int word_len)
+static void	word(t_input *input)
 {
 	char *new;
 	new = word2(input);
-	input->index++;
-	add_token(&input->tokens, init_token_word(word_len, WORD_DOUBLE, new));
-	input->index++;
+	add_token(&input->tokens, init_token_word(WORD_DOUBLE, new));
 }
 
 void extract_token(t_input *input)
@@ -148,6 +153,6 @@ void extract_token(t_input *input)
 		else if (input->full_str[input->index] == '>')
 			add_token(&input->tokens, init_token(input, 1, REDIRECT_OUT));
 		else
-			word(input, 0);
+			word(input);
 	}
 }
