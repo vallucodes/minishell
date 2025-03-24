@@ -2,7 +2,7 @@
 
 static int	is_separator(char c)
 {
-	return(c == '<' || c == '>' || c == '|' || c == '<' || c == '\'' || c == '\"' || ft_isspace(c));
+	return(c == '<' || c == '>' || c == '|' || c == '<' || ft_isspace(c) || c == '\0');
 }
 
 static int	is_quote(char c)
@@ -35,6 +35,21 @@ static t_token *init_token(t_input *input, int len, t_token_type type)
 	new_token->type = type;
 	new_token->next = NULL;
 	input->index += len;
+	return (new_token);
+}
+
+static t_token *init_token_word(int len, t_token_type type, char *word)
+{
+	t_token *new_token;
+
+	new_token = (t_token *)malloc(sizeof(t_token));
+	if (!new_token)
+		return (NULL);
+	new_token->value = &word[0];
+	new_token->len = len;
+	new_token->type = type;
+	new_token->next = NULL;
+	// input->index += len;
 	return (new_token);
 }
 
@@ -72,61 +87,45 @@ int	inquotes(char c, int *in_double, int *in_single)
 {
 	if (c == '\'' && !*in_double)
 		*in_single = !*in_single;
-	else if (c == '"' && !*in_single)
+	else if (c == '\"' && !*in_single)
 		*in_double = !*in_double;
 	return (*in_double || *in_single);
 }
 
-static int	word(t_input *input, int word_len)
+static char	*word2(t_input *input)
 {
-	int	in_double;
-	int	in_single;
+	int		in_double;
+	int		in_single;
+	int		in_quotes;
+	char	*new;
+	char	*str;
 
+	str = input->full_str;
 	in_double = 0;
 	in_single = 0;
-	inquotes(input->full_str[input->index], &in_double, &in_single);
-	if (in_single)
+	in_quotes = 0;
+	new = ft_strdup("");
+	while (input->full_str[input->index] && (!is_separator(input->full_str[input->index] || in_quotes)))
 	{
-		while (input->full_str[input->index + 1 + word_len] != '\'' &&
-				input->full_str[input->index + 1 + word_len])
-			word_len++;
-		if (input->full_str[input->index + 1 + word_len + 1] == '\'' ||
-			input->full_str[input->index + 1 + word_len + 1] == '\"' ||
-			!is_separator(input->full_str[input->index + 1 + word_len + 1]))
-			word_len += word(input, word_len);
-	}
-	else if (in_double)
-	{
-		while (input->full_str[input->index + 1 + word_len] != '\"' &&
-				input->full_str[input->index + 1 + word_len])
-			word_len++;
-		if (input->full_str[input->index + 1 + word_len + 1] == '\'' ||
-			input->full_str[input->index + 1 + word_len + 1] == '\"' ||
-			!is_separator(input->full_str[input->index + 1 + word_len + 1]))
-			word_len += word(input, word_len);
-	}
-	else
-	{
-		printf("index %i, word_len %i, str %s\n", input->index, word_len, input->full_str);
-		while (!is_separator(input->full_str[input->index + 1 + word_len]) &&
-				input->full_str[input->index + 1 + word_len + 1])
-			word_len++;
-		printf("index %i, word_len %i, str %s\n", input->index, word_len, input->full_str);
-		if (input->full_str[input->index + 1 + word_len + 1] == '\'' ||
-			input->full_str[input->index + 1 + word_len + 1] == '\"' ||
-			!is_separator(input->full_str[input->index + 1 + word_len + 1]))
-			word_len += word(input, word_len);
+		in_quotes = inquotes(input->full_str[input->index], &in_double, &in_single);
+		if (!in_quotes && is_quote(str[input->index]))
+		{}
 		else
-			return (word_len);// testing this, coredumping atm
+		{
+			char additive[2] = {str[input->index], '\0'};
+			new = ft_strjoin(new, additive);
+		}
+		input->index++;
 	}
-	return (word_len);
+	return (new);
 }
 
-static void	word2(t_input *input, int word_len)
+static void	word(t_input *input, int word_len)
 {
-	word(input, word_len);
+	char *new;
+	new = word2(input);
 	input->index++;
-	add_token(&input->tokens, init_token(input, word_len, WORD_DOUBLE));
+	add_token(&input->tokens, init_token_word(word_len, WORD_DOUBLE, new));
 	input->index++;
 }
 
