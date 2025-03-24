@@ -17,7 +17,6 @@ MINISHH		= ./inc/minishell.h
 SRC			=	main.c \
 				tokenizer.c \
 				tokens_validation.c \
-				quotes_handle.c \
 				retokenize_words.c \
 				input_validation.c \
 				error.c

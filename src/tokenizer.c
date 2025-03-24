@@ -82,7 +82,7 @@ static int	is_word(t_input *input, int i)
 		return (0);
 }
 
-static int	inquotes(char c, t_quotes *quotes)
+static int	inquotes(char c, t_quotes_helper *quotes)
 {
 	if (c == '\'' && !quotes->in_double)
 		quotes->in_single = !quotes->in_single;
@@ -103,7 +103,7 @@ void	append_char(char *str, char **new, int i)
 	free (temp);
 }
 
-static void	init_quotes(t_quotes *quotes)
+static void	init_quotes(t_quotes_helper *quotes)
 {
 	quotes->in_double = 0;
 	quotes->in_single = 0;
@@ -113,9 +113,9 @@ static void	init_quotes(t_quotes *quotes)
 
 static char	*word2(t_input *input)
 {
-	t_quotes	quotes;
-	char		*new;
-	char		*str;
+	t_quotes_helper	quotes;
+	char			*new;
+	char			*str;
 
 	str = input->full_str;
 	init_quotes(&quotes);
