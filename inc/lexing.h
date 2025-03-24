@@ -1,3 +1,10 @@
+typedef enum e_quotes
+{
+	NONE,
+	SINGLE,
+	DOUBLE,
+}	t_quotes;
+
 typedef enum e_token_type
 {
 	WORD,				// some word in quotes or without quotes
@@ -29,10 +36,10 @@ typedef struct	s_input
 	t_token	*tokens;
 }				t_input;
 
-typedef struct s_quotes
+typedef struct s_quotes_helper
 {
 	int	in_double;
 	int	in_single;
 	int	in_quotes;
 	int	previous_in_quotes;
-}				t_quotes;
+}				t_quotes_helper;
