@@ -6,8 +6,7 @@ static char *get_token_type_name(t_token_type token_type)
 {
 	switch (token_type)
 	{
-		case WORD_SINGLE: return "WORD_S";
-		case WORD_DOUBLE: return "WORD_D";
+		case WORD: return "WORD";
 		case COMMAND: return "COMMAND";
 		case ARG: return "ARG";
 		case FILE_TOKEN: return "FILE";
@@ -49,13 +48,17 @@ int main()
 		add_history(input_str);
 		if (!input_validation(input_str))
 		{
+			// expand(input_str);
+			// concatinate_adjacecnt_quotes(input_str);
 			init_lexer(&input, input_str);
 			extract_token(&input);
 			print_tokens(input.tokens);
-			tokens_validation(input.tokens);
-			retokenize_words(input.tokens);
-			print_tokens(input.tokens);
-			free(input_str);
+			if (tokens_validation(input.tokens) == SUCCESS)
+			{
+				retokenize_words(input.tokens);
+				print_tokens(input.tokens);
+				free(input_str);
+			}
 		}
 	}
 	return (0);

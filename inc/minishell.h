@@ -31,6 +31,7 @@ void	init_lexer(t_input *new_input, char *input_str);
 int		input_validation(char *input);
 int		tokens_validation(t_token *tokens);
 void	retokenize_words(t_token *tokens);
+void	concatinate_adjacecnt_quotes(char *str);
 
 //utils
 int		any_redirect(t_token *current);

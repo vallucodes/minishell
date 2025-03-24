@@ -17,7 +17,7 @@ void	set_commands(t_token *tokens)
 	current = tokens;
 	while (current != NULL)
 	{
-		if (current->type == WORD_SINGLE || current->type == WORD_DOUBLE)
+		if (current->type == WORD)
 		{
 			current->type = COMMAND;
 			current = skip_until_pipe_or_end(current);
@@ -60,7 +60,7 @@ void	set_arguments(t_token *tokens)
 	current = tokens;
 	while (current != NULL)
 	{
-		if (current->type == WORD_SINGLE || current->type == WORD_DOUBLE)
+		if (current->type == WORD)
 			current->type = ARG;
 		current = current->next;
 	}

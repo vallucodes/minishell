@@ -1,5 +1,20 @@
 #include "minishell.h"
 
+static int	is_separator(char c)
+{
+	return(c == '<' || c == '>' || c == '|' || c == '<' || ft_isspace(c) || c == '\0');
+}
+
+static int	is_quote(char c)
+{
+	return (c == '\'' || c == '\"');
+}
+
+static int	is_operator(char c)
+{
+	return (c == '<' || c == '>' || c == '|' || c == '<');
+}
+
 void	init_lexer(t_input *new_input, char *input_str)
 {
 	new_input->full_str = input_str;
@@ -23,6 +38,20 @@ static t_token *init_token(t_input *input, int len, t_token_type type)
 	return (new_token);
 }
 
+static t_token *init_token_word(t_token_type type, char *word)
+{
+	t_token *new_token;
+
+	new_token = (t_token *)malloc(sizeof(t_token));
+	if (!new_token)
+		return (NULL);
+	new_token->value = &word[0];
+	new_token->len = ft_strlen(word);
+	new_token->type = type;
+	new_token->next = NULL;
+	return (new_token);
+}
+
 static void add_token(t_token **head, t_token *new)
 {
 	t_token *last;
@@ -42,49 +71,76 @@ static void add_token(t_token **head, t_token *new)
 static int	is_word(t_input *input, int i)
 {
 	if (input->full_str[input->index + i] &&
-					!ft_isspace(input->full_str[input->index + i]) &&
-					input->full_str[input->index + i] != '|' &&
-					input->full_str[input->index + i] != '<' &&
-					input->full_str[input->index + i] != '>' &&
-					input->full_str[input->index + i] != '\'' &&
-					input->full_str[input->index + i] != '"')
+		!ft_isspace(input->full_str[input->index + i]) &&
+		input->full_str[input->index + i] != '|' &&
+		input->full_str[input->index + i] != '<' &&
+		input->full_str[input->index + i] != '>' &&
+		input->full_str[input->index + i] != '\'' &&
+		input->full_str[input->index + i] != '"')
 		return (1);
 	else
 		return (0);
 }
 
-static void	no_quotes(t_input *input)
+static int	inquotes(char c, t_quotes *quotes)
 {
-	int word_len;
-
-	word_len = 0;
-	while (is_word(input, word_len))
-		word_len++;
-	add_token(&input->tokens, init_token(input, word_len, WORD_DOUBLE)); // maybe we will need this to be separate token like WORD, depending how this is handled later related to expansions and so on
+	if (c == '\'' && !quotes->in_double)
+		quotes->in_single = !quotes->in_single;
+	else if (c == '\"' && !quotes->in_single)
+		quotes->in_double = !quotes->in_double;
+	return (quotes->in_double || quotes->in_single);
 }
 
-static void	double_quotes(t_input *input)
+void	append_char(char *str, char **new, int i)
 {
-	int word_len;
+	char	*temp;
+	char	additive[2];
 
-	word_len = 0;
-	while (input->full_str[input->index + 1 + word_len] != '"')
-		word_len++;
-	input->index++;
-	add_token(&input->tokens, init_token(input, word_len, WORD_DOUBLE));
-	input->index++;
+	additive[0] = str[i];
+	additive[1] = '\0';
+	temp = *new;
+	*new = ft_strjoin(*new, additive);
+	free (temp);
 }
 
-static void	single_quotes(t_input *input)
+static void	init_quotes(t_quotes *quotes)
 {
-	int word_len;
+	quotes->in_double = 0;
+	quotes->in_single = 0;
+	quotes->in_quotes = 0;
+	quotes->previous_in_quotes = 0;
+}
 
-	word_len = 0;
-	while (input->full_str[input->index + 1 + word_len] != '\'')
-		word_len++;
-	input->index++;
-	add_token(&input->tokens, init_token(input, word_len, WORD_SINGLE));
-	input->index++;
+static char	*word2(t_input *input)
+{
+	t_quotes	quotes;
+	char		*new;
+	char		*str;
+
+	str = input->full_str;
+	init_quotes(&quotes);
+	new = ft_strdup("");
+	while (input->full_str[input->index]
+		&& ((!is_separator(input->full_str[input->index]) || quotes.in_quotes)))
+	{
+		quotes.previous_in_quotes = quotes.in_quotes;
+		quotes.in_quotes = inquotes(input->full_str[input->index], &quotes);
+		if (quotes.previous_in_quotes != quotes.in_quotes)
+		{
+			input->index++;
+			continue ;
+		}
+		append_char(str, &new, input->index);
+		input->index++;
+	}
+	return (new);
+}
+
+static void	word(t_input *input)
+{
+	char *new;
+	new = word2(input);
+	add_token(&input->tokens, init_token_word(WORD, new));
 }
 
 void extract_token(t_input *input)
@@ -105,11 +161,7 @@ void extract_token(t_input *input)
 			add_token(&input->tokens, init_token(input, 1, REDIRECT_IN));
 		else if (input->full_str[input->index] == '>')
 			add_token(&input->tokens, init_token(input, 1, REDIRECT_OUT));
-		else if (input->full_str[input->index] == '\'')
-			single_quotes(input);
-		else if (input->full_str[input->index] == '"')
-			double_quotes(input);
 		else
-			no_quotes(input);
+			word(input);
 	}
 }

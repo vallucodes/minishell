@@ -1,14 +1,6 @@
-typedef enum e_quotes
-{
-	NONE,
-	SINGLE,
-	DOUBLE,
-}	t_quotes;
-
 typedef enum e_token_type
 {
-	WORD_DOUBLE,		// some word in double quotes "Something here"
-	WORD_SINGLE,		// some word in single quotes 'Something here'
+	WORD,				// some word in quotes or without quotes
 	COMMAND,			// word classified as command
 	ARG,				// word classified as argument to command
 	FILE_TOKEN,			// word classified as file
@@ -36,3 +28,11 @@ typedef struct	s_input
 	int		len;		// len helps check if end of input is reached
 	t_token	*tokens;
 }				t_input;
+
+typedef struct s_quotes
+{
+	int	in_double;
+	int	in_single;
+	int	in_quotes;
+	int	previous_in_quotes;
+}				t_quotes;
