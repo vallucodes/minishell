@@ -6,8 +6,7 @@ static char *get_token_type_name(t_token_type token_type)
 {
 	switch (token_type)
 	{
-		case WORD_SINGLE: return "WORD_S";
-		case WORD_DOUBLE: return "WORD_D";
+		case WORD: return "WORD";
 		case COMMAND: return "COMMAND";
 		case ARG: return "ARG";
 		case FILE_TOKEN: return "FILE";

@@ -82,46 +82,55 @@ static int	is_word(t_input *input, int i)
 		return (0);
 }
 
-static int	inquotes(char c, int *in_double, int *in_single)
+static int	inquotes(char c, t_quotes *quotes)
 {
-	if (c == '\'' && !*in_double)
-		*in_single = !*in_single;
-	else if (c == '\"' && !*in_single)
-		*in_double = !*in_double;
-	return (*in_double || *in_single);
+	if (c == '\'' && !quotes->in_double)
+		quotes->in_single = !quotes->in_single;
+	else if (c == '\"' && !quotes->in_single)
+		quotes->in_double = !quotes->in_double;
+	return (quotes->in_double || quotes->in_single);
+}
+
+void	append_char(char *str, char **new, int i)
+{
+	char	*temp;
+	char	additive[2];
+
+	additive[0] = str[i];
+	additive[1] = '\0';
+	temp = *new;
+	*new = ft_strjoin(*new, additive);
+	free (temp);
+}
+
+static void	init_quotes(t_quotes *quotes)
+{
+	quotes->in_double = 0;
+	quotes->in_single = 0;
+	quotes->in_quotes = 0;
+	quotes->previous_in_quotes = 0;
 }
 
 static char	*word2(t_input *input)
 {
-	int		in_double;
-	int		in_single;
-	int		in_quotes;
-	int		previous_in_quotes;
-	char	*new;
-	char	*temp;
-	char	*str;
-	char	additive[2];
+	t_quotes	quotes;
+	char		*new;
+	char		*str;
 
 	str = input->full_str;
-	in_double = 0;
-	in_single = 0;
-	in_quotes = 0;
-	previous_in_quotes = 0;
+	init_quotes(&quotes);
 	new = ft_strdup("");
-	while (input->full_str[input->index] && ((!is_separator(input->full_str[input->index]) || in_quotes)))
+	while (input->full_str[input->index]
+		&& ((!is_separator(input->full_str[input->index]) || quotes.in_quotes)))
 	{
-		previous_in_quotes = in_quotes;
-		in_quotes = inquotes(input->full_str[input->index], &in_double, &in_single);
-		if (previous_in_quotes != in_quotes)
+		quotes.previous_in_quotes = quotes.in_quotes;
+		quotes.in_quotes = inquotes(input->full_str[input->index], &quotes);
+		if (quotes.previous_in_quotes != quotes.in_quotes)
 		{
 			input->index++;
 			continue ;
 		}
-		additive[0] = str[input->index];
-		additive[1] = '\0';
-		temp = new;
-		new = ft_strjoin(new, additive);
-		free (temp);
+		append_char(str, &new, input->index);
 		input->index++;
 	}
 	return (new);
@@ -131,7 +140,7 @@ static void	word(t_input *input)
 {
 	char *new;
 	new = word2(input);
-	add_token(&input->tokens, init_token_word(WORD_DOUBLE, new));
+	add_token(&input->tokens, init_token_word(WORD, new));
 }
 
 void extract_token(t_input *input)
