@@ -5,6 +5,7 @@ typedef struct s_ast
 	char			*file;
 	struct s_ast	*next_left;
 	struct s_ast	*next_right;
+	struct s_ast	*previous;
 }	t_ast;
 
 
