@@ -37,8 +37,9 @@ void print_tokens(t_token *tokens)
 
 int main()
 {
-	char *input_str;
-	t_input input;
+	char	*input_str;
+	t_input	input;
+	t_ast	ast;
 
 	while (1)
 	{
@@ -55,7 +56,7 @@ int main()
 			{
 				retokenize_words(input.tokens);
 				print_tokens(input.tokens);
-				build_ast_binary_tree(input.tokens);
+				build_ast_binary_tree(input.tokens, &ast);
 				free(input_str);
 			}
 		}
