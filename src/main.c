@@ -49,14 +49,13 @@ int main()
 		if (!input_validation(input_str))
 		{
 			// expand(input_str);
-			// concatinate_adjacecnt_quotes(input_str);
 			init_lexer(&input, input_str);
 			extract_token(&input);
-			print_tokens(input.tokens);
 			if (tokens_validation(input.tokens) == SUCCESS)
 			{
 				retokenize_words(input.tokens);
 				print_tokens(input.tokens);
+				build_ast_binary_tree(input.tokens);
 				free(input_str);
 			}
 		}

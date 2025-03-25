@@ -37,7 +37,11 @@ void	concatinate_adjacecnt_quotes(char *str);
 int		any_redirect(t_token *current);
 void	print_error(char *msg, char *token);
 
-//developlment fucntions
+//ast
+void	build_ast_binary_tree(t_token *tokens);
+
+//developlment functions
 void print_tokens(t_token *tokens);
+
 
 #endif

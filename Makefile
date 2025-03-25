@@ -15,6 +15,7 @@ LIBFTH		= $(LIBFT_DIR)/inc/libft.h
 MINISHH		= ./inc/minishell.h
 
 SRC			=	main.c \
+				ast.c \
 				tokenizer.c \
 				tokens_validation.c \
 				retokenize_words.c \
