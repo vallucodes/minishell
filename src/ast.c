@@ -132,16 +132,16 @@ t_ast *build_branch(char **cmd, char *file, char *here, t_token_type type)
 void	build_ast_binary_tree(t_token *tokens, t_ast *ast)
 {
 	char	**cmd;
-	t_token	*file;
-	t_token	*here;
+	char	*file;
+	char	*here;
 
 	while (tokens)
 	{
 		cmd = find_cmd_and_compose(tokens);
 		// print_cmd(cmd);
-		file = find_file(tokens);
+		redir_left = find_redir_left(tokens);
 		// print_helper(file, "file");
-		here = find_herestr(tokens);
+		redir_right = find_redir_right(tokens);
 		// print_helper(here, "here");
 		ast = build_branch(cmd, file, here, tokens->type);
 		tokens = skip_to_next_pipe(tokens);
