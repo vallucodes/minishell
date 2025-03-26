@@ -14,7 +14,7 @@ INCLUDES	= -I ./inc -I $(LIBFT_DIR)/inc
 LIBFTH		= $(LIBFT_DIR)/inc/libft.h
 MINISHH		= ./inc/minishell.h
 
-SRC			=	main.c \
+SRC			=	main_hien.c \ #change this before push!
 				tokenizer.c \
 				tokens_validation.c \
 				retokenize_words.c \
