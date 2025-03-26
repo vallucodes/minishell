@@ -25,6 +25,12 @@ typedef enum e_exit
 	FAIL,
 }	t_exit;
 
+typedef struct s_minishell
+{
+	char	**envp;
+	//later add execution, exit code when we are there
+}				t_minishell;
+
 //functions
 void	extract_token(t_input *input);
 void	init_lexer(t_input *new_input, char *input_str);

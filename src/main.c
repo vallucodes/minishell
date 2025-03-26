@@ -48,7 +48,7 @@ int main()
 		add_history(input_str);
 		if (!input_validation(input_str))
 		{
-			// expand(input_str);
+			// expand(input_str);//double quote or single quote expasion
 			// concatinate_adjacecnt_quotes(input_str);
 			init_lexer(&input, input_str);
 			extract_token(&input);
@@ -56,7 +56,9 @@ int main()
 			if (tokens_validation(input.tokens) == SUCCESS)
 			{
 				retokenize_words(input.tokens);
+				//heredoc
 				print_tokens(input.tokens);
+				//ast tree
 				free(input_str); // dont free this before the whole program ends!
 			}
 		}
