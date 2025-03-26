@@ -2,7 +2,7 @@
 
 //For testing purpose
 
-static char *get_token_type_name(t_token_type token_type)
+char *get_token_type_name(t_token_type token_type)
 {
 	switch (token_type)
 	{
@@ -39,7 +39,7 @@ int main()
 {
 	char	*input_str;
 	t_input	input;
-	t_ast	ast;
+	t_ast	*ast;
 
 	while (1)
 	{
@@ -56,7 +56,7 @@ int main()
 			{
 				retokenize_words(input.tokens);
 				print_tokens(input.tokens);
-				build_ast_binary_tree(input.tokens, &ast);
+				ast = build_ast_binary_tree(input.tokens);
 				free(input_str);
 			}
 		}

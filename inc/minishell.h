@@ -39,11 +39,11 @@ int		any_redirect(t_token *current);
 void	print_error(char *msg, char *token);
 
 //ast
-void	build_ast_binary_tree(t_token *tokens, t_ast *ast);
+t_ast	*build_ast_binary_tree(t_token *tokens);
 
 //developlment functions
 void print_tokens(t_token *tokens);
+char *get_token_type_name(t_token_type token_type);
 
 
 #endif
- 

@@ -100,7 +100,7 @@ t_token	*skip_to_next_pipe(t_token *tokens)
 		return (tokens->next);
 }
 
-t_ast *init_node(char **cmd, char *file, char *here, t_token_type type)
+t_ast *init_node(char **cmd, char *file, t_token_type type, int id)
 {
 	t_ast	*new_node;
 
@@ -110,45 +110,112 @@ t_ast *init_node(char **cmd, char *file, char *here, t_token_type type)
 	new_node->type = type;
 	new_node->cmd = cmd;
 	new_node->file = file;
+	new_node->id = id;
 	new_node->next_left = NULL;
 	new_node->next_right = NULL;
-	new_node->next_right = NULL;
+	// new_node->previous = NULL;
 	return (new_node);
 }
 
-t_ast *build_branch(char **cmd, char *file, char *here, t_token_type type)
+void	add_node(t_ast **ast, t_ast *new_node)
 {
-	t_ast *ast;
-	if (type == PIPE)
-		add_node(ast, init_node(NULL, NULL, NULL, PIPE));
-	else if (type == (REDIRECT_APPEND || REDIRECT_IN || REDIRECT_OUT))
-		add_node(ast, init_node(NULL, file, NULL, type));
-	else if (type == (HERE_STRING))
-		add_node(ast, init_node(NULL, NULL, here, HERE_STRING));
-	else if (type == (COMMAND || ARG))
-		add_node(ast, init_node(cmd, NULL, NULL, COMMAND));
-}
+	t_ast *temp;
 
-void	build_ast_binary_tree(t_token *tokens, t_ast *ast)
-{
-	char	**cmd;
-	char	*file;
-	char	*here;
-
-	while (tokens)
+	if (!new_node || !ast)
+		return ;
+	if (!*ast)
+		*ast = new_node;
+	else if (new_node->type == PIPE)
 	{
-		cmd = find_cmd_and_compose(tokens);
-		// print_cmd(cmd);
-		redir_left = find_redir_left(tokens);
-		// print_helper(file, "file");
-		redir_right = find_redir_right(tokens);
-		// print_helper(here, "here");
-		ast = build_branch(cmd, file, here, tokens->type);
-		tokens = skip_to_next_pipe(tokens);
-		// printf("--------------PIPE---------------------\n\n");
-		free(cmd);
-		cmd = NULL;
+		temp = *ast;
+		while (temp->next_right)
+			temp = temp->next_right;
+		temp->next_right = new_node;
+	}
+	else
+	{
+		temp = *ast;
+		while (temp->next_right)
+			temp = temp->next_right;
+		while (temp->next_left)
+			temp = temp->next_left;
+		temp->next_left = new_node;
 	}
 }
 
-//ls -la < file1 | cat -e > file2 | grep filename > file3 | du -s > file4
+void	print_left_side(t_ast *ast)
+{
+	t_ast	*tmp;
+
+	tmp = ast;
+	while (tmp)
+	{
+		printf("Type: %15s id:%i ", get_token_type_name(tmp->type), tmp->id);
+		if (tmp->cmd == NULL)
+			printf("Cmd: NULL ");
+		else
+			printf("Cmd: %s ", tmp->cmd[0]);
+		if (tmp->file == NULL)
+			printf("file: NULL \n");
+		else
+			printf("file: %s\n", tmp->file);
+		tmp = tmp->next_left;
+	}
+}
+
+void	print_whole_tree(t_ast *ast)
+{
+	while (ast)
+	{
+		printf("Type: %15s id:%i ", get_token_type_name(ast->type), ast->id);
+		if (ast->cmd == NULL)
+			printf("Cmd: NULL ");
+		else
+			printf("Cmd: %s ", ast->cmd[0]);
+		if (ast->file == NULL)
+			printf("file: NULL \n");
+		else
+			printf("file: %s\n", ast->file);
+		if (ast->next_left == NULL)
+			ast = ast->next_right;
+		else
+		{
+			print_left_side(ast);
+			ast = ast->next_right;
+		}
+	}
+}
+
+void build_branch(t_ast **ast, t_token *tokens)
+{
+	t_token	*tmp;
+
+	tmp = tokens;
+	while (tmp && tmp->type != PIPE)
+	{
+		if ((tmp->type == REDIRECT_IN) || (tmp->type == REDIRECT_OUT) || (tmp->type == REDIRECT_APPEND))
+			add_node(ast, init_node(NULL, tmp->next->value, tmp->type, 0));
+		tmp = tmp->next;
+	}
+}
+
+t_ast	*build_ast_binary_tree(t_token *tokens)
+{
+	t_ast	*ast;
+
+	ast = NULL;
+	int i = 1;
+	while (tokens)
+	{
+		add_node(&ast, init_node(NULL, NULL, PIPE, i));
+		build_branch(&ast, tokens);
+		tokens = skip_to_next_pipe(tokens);
+		// printf("--------------PIPE---------------------\n\n");
+		// free(cmd);
+		// cmd = NULL;
+	}
+	print_whole_tree(ast);
+	// ast = return_to_head(ast);
+	return (ast);
+}
+//ls -la < file1 > file1.1| cat -e > file2 | grep filename > file3 | du -s > file4
