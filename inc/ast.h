@@ -1,7 +1,6 @@
 typedef struct s_ast
 {
 	t_token_type	type;
-	int				id;
 	char			**cmd;
 	char			*file;
 	struct s_ast	*next_left;
@@ -14,4 +13,10 @@ typedef enum e_order
 	FIRST,
 	NON_FIRST,
 }	t_order;
+
+typedef enum e_branch
+{
+	LAST_BRANCH,
+	NON_LAST_BRANCH,
+}	t_branch;
 

@@ -16,7 +16,7 @@ void print_cmd(char **cmd)
 
         while (cmd[i] && len < CMD_FIELD_WIDTH)
         {
-            int remaining = CMD_FIELD_WIDTH - len;
+            size_t remaining = CMD_FIELD_WIDTH - len;
             int to_copy = (strlen(cmd[i]) < remaining) ? strlen(cmd[i]) : remaining - 1;
             strncat(cmd_str, cmd[i], to_copy);
             strcat(cmd_str, " ");
@@ -29,7 +29,7 @@ void print_cmd(char **cmd)
 
 void print_node(t_ast *node)
 {
-    printf("Type: %15s id:%-3d ", get_token_type_name(node->type), node->id);
+    printf("Type: %15s ", get_token_type_name(node->type));
     print_cmd(node->cmd);
     printf("file: %s\n", node->file ? node->file : "NULL");
 }
