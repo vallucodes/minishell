@@ -41,9 +41,16 @@ void	print_error(char *msg, char *token);
 //ast
 t_ast	*build_ast_binary_tree(t_token *tokens);
 
+//ast utils
+int		count_amount_cmd(t_token *tokens);
+size_t	get_amount_of_pipes(t_token *tokens);
+
 //developlment functions
 void print_tokens(t_token *tokens);
 char *get_token_type_name(t_token_type token_type);
-
+void print_cmd(char **cmd);
+void print_node(t_ast *node);
+void print_left_side(t_ast *ast);
+void print_whole_tree(t_ast *ast);
 
 #endif

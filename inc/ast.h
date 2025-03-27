@@ -9,11 +9,9 @@ typedef struct s_ast
 	// struct s_ast	*previous;
 }	t_ast;
 
+typedef enum e_order
+{
+	FIRST,
+	NON_FIRST,
+}	t_order;
 
-// typedef struct s_token
-// {
-// 	char			*value;
-// 	int				len;
-// 	t_token_type	type;
-// 	struct s_token	*next;
-// }				t_token;

@@ -16,6 +16,8 @@ MINISHH		= ./inc/minishell.h
 
 SRC			=	main.c \
 				ast.c \
+				ast_dev.c \
+				ast_utils.c \
 				tokenizer.c \
 				tokens_validation.c \
 				retokenize_words.c \
