@@ -18,6 +18,7 @@
 # define TOKEN_ERROR "syntax error near unexpected token"
 # define PIPE_ERROR " `|'"
 # define NEWLINE_ERROR " `newline'"
+# define MALLOC "malloc fail"
 
 typedef enum e_exit
 {
@@ -37,7 +38,25 @@ void	concatinate_adjacecnt_quotes(char *str);
 int		any_redirect(t_token *current);
 void	print_error(char *msg, char *token);
 
-//developlment fucntions
+//ast
+t_ast	*build_ast_binary_tree(t_token *tokens);
+void	build_branch(t_ast **ast, t_token *tokens, t_branch branch);
+void	add_node(t_ast **ast, t_ast *new_node, t_order order);
+t_ast	*init_node(char **cmd, char *file, t_token_type type);
+
+//ast utils
+int		count_amount_cmd(t_token *tokens);
+size_t	get_amount_of_pipes(t_token *tokens);
+int		is_any_redirect(t_token_type type);
+int		last_is_pipe(t_ast **ast);
+t_token	*skip_to_next_pipe(t_token *tokens);
+
+//developlment functions
 void print_tokens(t_token *tokens);
+char *get_token_type_name(t_token_type token_type);
+void print_cmd(char **cmd);
+void print_node(t_ast *node);
+void print_left_side(t_ast *ast);
+void print_whole_tree(t_ast *ast);
 
 #endif
