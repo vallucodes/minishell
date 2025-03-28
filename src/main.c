@@ -55,6 +55,7 @@ int main()
 			if (tokens_validation(input.tokens) == SUCCESS)
 			{
 				retokenize_words(input.tokens);
+				// handle_heredoc(input.tokens);
 				print_tokens(input.tokens);
 				ast = build_ast_binary_tree(input.tokens);
 				free(input_str);
@@ -63,3 +64,6 @@ int main()
 	}
 	return (0);
 }
+
+
+// ls -la < file1 > file1.1| cat -e >file2 <<file3 | grep filename >>file4 | du -s > file5

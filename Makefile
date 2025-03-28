@@ -20,6 +20,7 @@ SRC			=	main.c \
 				ast_dev.c \
 				ast_utils.c \
 				tokenizer.c \
+				tokenizer_utils.c \
 				tokens_validation.c \
 				retokenize_words.c \
 				input_validation.c \

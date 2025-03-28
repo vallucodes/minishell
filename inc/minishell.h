@@ -34,6 +34,13 @@ int		tokens_validation(t_token *tokens);
 void	retokenize_words(t_token *tokens);
 void	concatinate_adjacecnt_quotes(char *str);
 
+//tokenizer utils
+int		is_separator(char c);
+int		is_quote(char c);
+int		is_operator(char c);
+int		is_word(t_input *input, int i);
+int		inquotes(char c, t_quotes_helper *quotes);
+
 //utils
 int		any_redirect(t_token *current);
 void	print_error(char *msg, char *token);
