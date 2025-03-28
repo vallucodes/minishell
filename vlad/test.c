@@ -1,196 +1,81 @@
 #include <strings.h>
 #include <stdio.h>
-#include "../lib/libft/inc/libft.h"
+#include "../inc/minishell.h"
 
-static int	is_separator(char c)
+size_t	expand_content(char *str, int fd)
 {
-	return(c == '<' || c == '>' || c == '|' || c == '<' || c == '\'' || c == '\"' || ft_isspace(c));
-}
+	size_t	i;
+	size_t	j;
+	size_t	len;
 
-static int	is_quote(char c)
-{
-	return (c == '\'' || c == '\"');
-}
-
-static int	is_operator(char c)
-{
-	return (c == '<' || c == '>' || c == '|' || c == '<');
-}
-
-int	inquotes(char c, int *in_double, int *in_single)
-{
-	// printf("[BEFORE] Char: %c | in_single: %d | in_double: %d\n", c, *in_single, *in_double);
-	if (c == '\'' && !*in_double)
-		*in_single = !*in_single;
-	else if (c == '"' && !*in_single)
-		*in_double = !*in_double;
-	return (*in_double || *in_single);
-}
-
-char	*set_quotes_around_operators_in_quotes(const char *str)
-{
-	int	i;
-	int	in_single;
-	int	in_double;
-	int	in_quotes;
-	char	*new;
-	char	*temp;
-
-	char additive[6];
+	len = 0;
+	while (str[len] && !ft_isspace(str[len]))
+		len++;
 	i = 0;
-	in_single = 0;
-	in_double = 0;
-	new = ft_strdup("");
-	while (str[i])
+	while(envp[i])
 	{
-		in_quotes = inquotes(str[i], &in_double, &in_single);
-		if (is_operator(str[i]) && in_quotes)
+		j = 0;
+		while (envp[i][j])
 		{
-			if (in_double == 1)
+			if (ft_strncmp(&envp[i][0], &str[1], len - 1) == 0)
 			{
-				additive[0] = '\"';
-				additive[1] = '\"';
-				additive[2] = str[i];
-				additive[3] = '\"';
-				additive[4] = '\"';
-				additive[5] = '\0';
+				while (envp[i][j] != "\"")
+					j++;
+				while (envp[i][j] != "\"")
+					write(fd, envp[j++], 1);
 			}
-			else if (in_single == 1)
-			{
-				additive[0] = '\'';
-				additive[1] = '\'';
-				additive[2] = str[i];
-				additive[3] = '\'';
-				additive[4] = '\'';
-				additive[5] = '\0';
-			}
-			temp = new;
-			new = ft_strjoin(new, additive);
-			free (temp);
-			temp = NULL;
-		}
-		else
-		{
-			char additive[2] = {str[i], '\0'};
-			temp = new;
-			new = ft_strjoin(new, additive);
-			free (temp);
-			temp = NULL;
 		}
 		i++;
 	}
-	return (new);
+	return (len);
 }
 
-char	*set_quotes_around_non_quoted_words(char *new)
+void	save_to_file(char *input, int fd, t_expand expand)
 {
-	int		i;
-	int		in_single;
-	int		in_double;
-	int		in_quotes;
-	char	*temp;
+	size_t	i;
 
-	in_single = 0;
-	in_double = 0;
 	i = 0;
-	char *new2 = ft_strdup("");
-	if (!is_separator(new[i]))
+	if (expand == DONT_EXPAND)
 	{
-		char additive[3] = {'\"', new[i], '\0'};
-		temp = new;
-		new = ft_strjoin(new, additive);
-		free (temp);
-		temp = NULL;
-		i++;
+		while (input[i])
+			write(fd, input[i++], 1);
+		write(fd, "\n", 1);
 	}
-	while (new[i])
+	else
 	{
-		in_quotes = inquotes(new[i], &in_double, &in_single);
-		if (is_separator(new[i]) && !is_separator(new[i + 1]) && !in_quotes && new[i + 1] != '\0')
+		while (input[i])
 		{
-			char additive[3] = {new[i], '\"', '\0'};
-			temp = new2;
-			new2 = ft_strjoin(new2, additive);
-			free (temp);
-			temp = NULL;
+			if (input[i] == '$' && !ft_isspace(input[i + 1]))
+				i += expand_content(&input[i], fd);
+			write(fd, input[i++], 1);
 		}
-		else if (!is_separator(new[i]) && is_separator(new[i + 1]) && !in_quotes)
-		{
-			char additive[3] = {new[i], '\"', '\0'};
-			temp = new2;
-			new2 = ft_strjoin(new2, additive);
-			free (temp);
-			temp = NULL;
-		}
-		else
-		{
-			char additive[2] = {new[i], '\0'};
-			temp = new2;
-			new2 = ft_strjoin(new2, additive);
-			free (temp);
-			temp = NULL;
-		}
-		i++;
+		write(fd, "\n", 1);
 	}
-	return (new2);
 }
 
-char	*remove_adjacent_quotes(char *new2)
+void	read_line(char *eof, t_expand expand)
 {
-	int		i;
-	int		in_single;
-	int		in_double;
-	int		in_quotes;
-	char	*temp;
+	char	*input;
+	int		fd;
 
-	in_single = 0;
-	in_double = 0;
-	i = 0;
-	char *new3 = ft_strdup("");
-	while (new2[i])
+	fd = open("tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	input = readline(">");
+	save_to_file(input, fd, expand);
+	free(input);
+	input = NULL;
+	while (ft_strncmp(eof, input, ft_strlen(eof)) || (ft_strlen(input) != ft_strlen(eof)))
 	{
-		in_quotes = inquotes(new2[i], &in_double, &in_single);
-		if (is_quote(new2[i]) && is_quote(new2[i + 1]) && !in_quotes)
-		{
-			i++;
-			in_quotes = inquotes(new2[i], &in_double, &in_single);
-		}
-		else
-		{
-			char additive[2] = {new2[i], '\0'};
-			temp = new3;
-			new3 = ft_strjoin(new3, additive);
-			free (temp);
-			temp = NULL;
-		}
-		i++;
+		input = readline(">");
+		save_to_file(input, fd, expand);
+		free(input);
+		input = NULL;
 	}
-	return(new3);
+	// save to file
 }
 
-char	*con(const char *str)
+int main(int ac, char **av)
 {
-	// char	*new0;
-	char	*new;
-	char	*new2;
-	char	*new3;
-	new = set_quotes_around_operators_in_quotes(str);
-	new2 = set_quotes_around_non_quoted_words(new);
-	free (new);
-	printf("new2: 	   %s\n", new2);
-	new3 = remove_adjacent_quotes(new2);
-	free (new2);
-	return (new3);
-}
-
-
-int main()
-{
-	// char str[] = "\"asd\"";
-	char str[] = "<asd\'as<<da<sd\'<123> | asdsad \'12\'fd\"s<<\'\'d\"\"asd\"";
-	printf("original:  %s\n", str);
-	char *str2 = con(str);
-	printf("new3: 	   %s\n", str2);
-	printf("should be: <\"asdas<<da<sd\"<\"123\"> | \"asdsad\" \"12fds<<\'\'dasd\"\n");
-	free (str2);
+	if (ac == 2)
+		read_line(av[1], EXPAND);
+	return 0;
 }
