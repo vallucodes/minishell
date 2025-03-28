@@ -1,20 +1,5 @@
 #include "minishell.h"
 
-static int	is_separator(char c)
-{
-	return(c == '<' || c == '>' || c == '|' || c == '<' || ft_isspace(c) || c == '\0');
-}
-
-static int	is_quote(char c)
-{
-	return (c == '\'' || c == '\"');
-}
-
-static int	is_operator(char c)
-{
-	return (c == '<' || c == '>' || c == '|' || c == '<');
-}
-
 void	init_lexer(t_input *new_input, char *input_str)
 {
 	new_input->full_str = input_str;
@@ -68,29 +53,6 @@ static void add_token(t_token **head, t_token *new)
 	}
 }
 
-static int	is_word(t_input *input, int i)
-{
-	if (input->full_str[input->index + i] &&
-		!ft_isspace(input->full_str[input->index + i]) &&
-		input->full_str[input->index + i] != '|' &&
-		input->full_str[input->index + i] != '<' &&
-		input->full_str[input->index + i] != '>' &&
-		input->full_str[input->index + i] != '\'' &&
-		input->full_str[input->index + i] != '"')
-		return (1);
-	else
-		return (0);
-}
-
-static int	inquotes(char c, t_quotes_helper *quotes)
-{
-	if (c == '\'' && !quotes->in_double)
-		quotes->in_single = !quotes->in_single;
-	else if (c == '\"' && !quotes->in_single)
-		quotes->in_double = !quotes->in_double;
-	return (quotes->in_double || quotes->in_single);
-}
-
 void	append_char(char *str, char **new, int i)
 {
 	char	*temp;
@@ -111,15 +73,15 @@ static void	init_quotes(t_quotes_helper *quotes)
 	quotes->previous_in_quotes = 0;
 }
 
-static char	*word2(t_input *input)
+void	word(t_input *input)
 {
 	t_quotes_helper	quotes;
-	char			*new;
-	char			*str;
+	char			*new_str;
+	char			*input_str;
 
-	str = input->full_str;
+	input_str = input->full_str;
 	init_quotes(&quotes);
-	new = ft_strdup("");
+	new_str = ft_strdup("");
 	while (input->full_str[input->index]
 		&& ((!is_separator(input->full_str[input->index]) || quotes.in_quotes)))
 	{
@@ -130,17 +92,10 @@ static char	*word2(t_input *input)
 			input->index++;
 			continue ;
 		}
-		append_char(str, &new, input->index);
+		append_char(input_str, &new_str, input->index);
 		input->index++;
 	}
-	return (new);
-}
-
-static void	word(t_input *input)
-{
-	char *new;
-	new = word2(input);
-	add_token(&input->tokens, init_token_word(WORD, new));
+	add_token(&input->tokens, init_token_word(WORD, new_str));
 }
 
 void extract_token(t_input *input)
