@@ -55,7 +55,7 @@ int main()
 			if (tokens_validation(input.tokens) == SUCCESS)
 			{
 				retokenize_words(input.tokens);
-				// handle_heredoc(input.tokens);
+				handle_heredoc(input.tokens);
 				print_tokens(input.tokens);
 				ast = build_ast_binary_tree(input.tokens);
 				free(input_str);

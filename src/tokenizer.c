@@ -65,7 +65,7 @@ void	append_char(char *str, char **new, int i)
 	free (temp);
 }
 
-static void	init_quotes(t_quotes_helper *quotes)
+void	init_quotes(t_quotes_helper *quotes)
 {
 	quotes->in_double = 0;
 	quotes->in_single = 0;

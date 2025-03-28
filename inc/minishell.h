@@ -1,14 +1,16 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include <unistd.h>
+# include <unistd.h>			//close
 # include <stdlib.h> 			//free
 # include <stdio.h>				//printf
 # include <readline/readline.h>	//readline
 # include <readline/history.h>	//readline
+# include <fcntl.h>				//open
 # include "../lib/libft/inc/libft.h"
 # include "lexing.h"
 # include "ast.h"
+# include "heredoc.h"
 
 # define PROMPT "\001\e[93m\002🦒 >>>\001\e[0m\e[95m\002 Giraffeshell>$ \001\e[0m\002"
 
@@ -44,6 +46,7 @@ int		inquotes(char c, t_quotes_helper *quotes);
 //utils
 int		any_redirect(t_token *current);
 void	print_error(char *msg, char *token);
+void	init_quotes(t_quotes_helper *quotes);
 
 //ast
 t_ast	*build_ast_binary_tree(t_token *tokens);
