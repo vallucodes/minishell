@@ -25,7 +25,9 @@ SRC			=	main.c \
 				tokens_validation.c \
 				retokenize_words.c \
 				input_validation.c \
-				error.c
+				error.c \
+				environment/environment.c \
+				environment/free_env.c
 
 OBJS		= $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
 

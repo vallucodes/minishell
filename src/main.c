@@ -49,16 +49,18 @@ int main()
 		add_history(input_str);
 		if (!input_validation(input_str))
 		{
-			// expand(input_str);
+			// expand(input_str);//double quote or single quote expasion
 			init_lexer(&input, input_str);
 			extract_token(&input);
 			if (tokens_validation(input.tokens) == SUCCESS)
 			{
 				retokenize_words(input.tokens);
 				// handle_heredoc(input.tokens);
+				//heredoc
 				print_tokens(input.tokens);
 				ast = build_ast_binary_tree(input.tokens);
-				free(input_str);
+				//ast tree
+				free(input_str); // dont free this before the whole program ends!
 			}
 		}
 	}
