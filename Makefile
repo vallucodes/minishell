@@ -19,6 +19,7 @@ SRC			=	main.c \
 				ast_branch_building.c \
 				ast_dev.c \
 				ast_utils.c \
+				heredoc.c \
 				tokenizer.c \
 				tokenizer_utils.c \
 				tokens_validation.c \

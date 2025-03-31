@@ -6,7 +6,7 @@
 /*   By: vlopatin <vlopatin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 15:10:38 by vlopatin          #+#    #+#             */
-/*   Updated: 2025/03/17 15:54:53 by vlopatin         ###   ########.fr       */
+/*   Updated: 2025/03/31 13:30:56 by vlopatin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <unistd.h>
 # include <limits.h>
 # include <stdint.h>
-
+# include <stdarg.h>
 typedef struct s_list
 {
 	void			*content;
@@ -64,12 +64,7 @@ size_t	ft_strlen(const char *str);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 char	*ft_strnstr(const char *big, const char *little, size_t len);
 char	*ft_strrchr(const char *s, int c);
-char	*ft_strstr(char *str, char *to_find);
-char	*ft_strtrim(char const *s1, char const *set);
-char	*ft_substr(char const *s, unsigned int start, size_t len);
-char	**ft_split(char const *s, char c);
-
-char	*ft_strmapi(const char *s, char (*f)(unsigned int, char));
+char	*ft_strtrim(char const *s1, char const *set);//printf
 void	ft_striteri(char *s, void (*f)(unsigned int, char*));
 
 void	ft_putchar_fd(char c, int fd);
@@ -87,5 +82,18 @@ void	ft_lstiter(t_list *lst, void (*f)(void *));
 int		ft_lstsize(t_list *lst);
 t_list	*ft_lstlast(t_list *lst);
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
+
+//dprintf
+int		ft_dprintf(int fd, const char *s, ...);
+
+void	ft_putstr(int fd, char *str);
+int		ft_putnbr_base(int fd, unsigned long nbr, char	*base);
+char	*ft_utoa(unsigned int n);
+int		ft_char(int fd, va_list args);
+int		ft_hex(int fd, va_list args, char *case_type);
+int		ft_int(int fd, va_list args);
+int		ft_pointer(int fd, va_list args);
+int		ft_string(int fd, va_list args);
+int		ft_unsigned_int(int fd, va_list args);
 
 #endif

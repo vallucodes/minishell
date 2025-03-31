@@ -48,6 +48,9 @@ int		any_redirect(t_token *current);
 void	print_error(char *msg, char *token);
 void	init_quotes(t_quotes_helper *quotes);
 
+//heredoc
+void	handle_heredoc(t_token *tokens);
+
 //ast
 t_ast	*build_ast_binary_tree(t_token *tokens);
 void	build_branch(t_ast **ast, t_token *tokens, t_branch branch);

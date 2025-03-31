@@ -2,14 +2,19 @@
 #include <stdio.h>
 #include "../inc/minishell.h"
 
+int	is_valid_char(char c)
+{
+	return(ft_isalnum(c) || c == '_');
+}
+
 size_t	expand_content(char **env, char *str, int fd)
 {
 	size_t	i;
 	size_t	j;
 	size_t	len;
 
-	len = 0;
-	while (str[len] && !ft_isspace(str[len]))
+	len = 1;
+	while (str[len] && is_valid_char(str[len]))
 		len++;
 	i = 0;
 	while(env[i])
@@ -19,8 +24,8 @@ size_t	expand_content(char **env, char *str, int fd)
 			j = 0;
 			while (env[i][j])
 			{
-				while (env[i][j] != '=')
-					j++;
+				while (env[i][j++] != '=')
+				j++;
 				while (env[i][j])
 					write(fd, &env[i][j++], 1);
 			}
@@ -47,7 +52,8 @@ void	save_to_file(char **env, char *input, int fd, t_expand expand)
 		{
 			if (input[i] == '$' && !ft_isspace(input[i + 1]))
 				i += expand_content(env, &input[i], fd);
-			write(fd, &input[i++], 1);
+			else
+				write(fd, &input[i++], 1);
 		}
 		write(fd, "\n", 1);
 	}
@@ -59,6 +65,8 @@ void	read_line(char **env, char *eof, t_expand expand)
 	int		fd;
 
 	fd = open("tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	// if (!fd)
+		// exit_error(FILE_ALREADY_EXISTS);
 	input = readline(">");
 	while (ft_strncmp(eof, input, ft_strlen(eof)) || (ft_strlen(input) != ft_strlen(eof)))
 	{
@@ -120,7 +128,6 @@ void	print_env(char **env)
 int main(int ac, char **av)
 {
 	char **env;
-
 	env = fill_env();
 	// print_env(env);
 	if (ac == 2)
