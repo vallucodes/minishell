@@ -14,7 +14,7 @@ INCLUDES	= -I ./inc -I $(LIBFT_DIR)/inc
 LIBFTH		= $(LIBFT_DIR)/inc/libft.h
 MINISHH		= ./inc/minishell.h
 
-SRC			=	main_hien.c \ #change this before push!
+SRC			=	main.c \
 				ast.c \
 				ast_branch_building.c \
 				ast_dev.c \
@@ -24,7 +24,9 @@ SRC			=	main_hien.c \ #change this before push!
 				tokens_validation.c \
 				retokenize_words.c \
 				input_validation.c \
-				error.c
+				error.c \
+				environment/environment.c \
+				environment/free_env.c
 
 OBJS		= $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
 

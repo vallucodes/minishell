@@ -9,6 +9,7 @@
 # include "../lib/libft/inc/libft.h"
 # include "lexing.h"
 # include "ast.h"
+# include "environment.h"
 
 # define PROMPT "\001\e[93m\002🦒 >>>\001\e[0m\e[95m\002 Giraffeshell>$ \001\e[0m\002"
 
@@ -28,7 +29,7 @@ typedef enum e_exit
 
 typedef struct s_minishell
 {
-	char	**envp;
+	t_env	*envp; // env struct
 	//later add execution, exit code when we are there
 }				t_minishell;
 
