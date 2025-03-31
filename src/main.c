@@ -2,7 +2,7 @@
 
 //For testing purpose
 
-static char *get_token_type_name(t_token_type token_type)
+char *get_token_type_name(t_token_type token_type)
 {
 	switch (token_type)
 	{
@@ -37,8 +37,9 @@ void print_tokens(t_token *tokens)
 
 int main()
 {
-	char *input_str;
-	t_input input;
+	char	*input_str;
+	t_input	input;
+	t_ast	*ast;
 
 	while (1)
 	{
@@ -49,15 +50,15 @@ int main()
 		if (!input_validation(input_str))
 		{
 			// expand(input_str);//double quote or single quote expasion
-			// concatinate_adjacecnt_quotes(input_str);
 			init_lexer(&input, input_str);
 			extract_token(&input);
-			print_tokens(input.tokens);
 			if (tokens_validation(input.tokens) == SUCCESS)
 			{
 				retokenize_words(input.tokens);
+				// handle_heredoc(input.tokens);
 				//heredoc
 				print_tokens(input.tokens);
+				ast = build_ast_binary_tree(input.tokens);
 				//ast tree
 				free(input_str); // dont free this before the whole program ends!
 			}
@@ -65,3 +66,6 @@ int main()
 	}
 	return (0);
 }
+
+
+// ls -la < file1 > file1.1| cat -e >file2 <<file3 | grep filename >>file4 | du -s > file5

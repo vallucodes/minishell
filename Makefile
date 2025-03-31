@@ -15,7 +15,12 @@ LIBFTH		= $(LIBFT_DIR)/inc/libft.h
 MINISHH		= ./inc/minishell.h
 
 SRC			=	main_hien.c \ #change this before push!
+				ast.c \
+				ast_branch_building.c \
+				ast_dev.c \
+				ast_utils.c \
 				tokenizer.c \
+				tokenizer_utils.c \
 				tokens_validation.c \
 				retokenize_words.c \
 				input_validation.c \

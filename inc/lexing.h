@@ -7,7 +7,7 @@ typedef enum e_quotes
 
 typedef enum e_token_type
 {
-	WORD,				// some word in quotes or without quotes
+	WORD = 1,			// some word in quotes or without quotes
 	COMMAND,			// word classified as command
 	ARG,				// word classified as argument to command
 	FILE_TOKEN,			// word classified as file

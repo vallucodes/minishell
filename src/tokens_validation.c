@@ -30,7 +30,7 @@ static int	validate_tokens_looping(t_token *current)
 	return (SUCCESS);
 }
 
-static int	validate_tokens(t_token *tokens)
+int	tokens_validation(t_token *tokens)
 {
 	t_token *current;
 
@@ -41,13 +41,6 @@ static int	validate_tokens(t_token *tokens)
 		return (FAIL);
 	}
 	if (validate_tokens_looping(current) == FAIL)
-		return (FAIL);
-	return (SUCCESS);
-}
-
-int tokens_validation(t_token *tokens)
-{
-	if (validate_tokens(tokens) == FAIL)
 		return (FAIL);
 	return (SUCCESS);
 }
