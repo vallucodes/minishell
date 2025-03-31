@@ -56,7 +56,7 @@ void	print_error(char *msg, char *token);
 void	init_quotes(t_quotes_helper *quotes);
 
 //heredoc
-void	handle_heredoc(t_token *tokens);
+void	handle_heredoc(char **env, t_token *tokens);
 
 //ast
 t_ast	*build_ast_binary_tree(t_token *tokens);
