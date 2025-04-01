@@ -25,10 +25,9 @@ int	ft_echo(int argc, char **argv)
 		newline = 0;
 		word_index++;
 	}
-
-// This prints the remaining arguments, separated by spaces.
-// If there's another word after the current one, we add a space.
-// echo hello world → prints "hello" then space, then "world".
+	// This prints the remaining arguments, separated by spaces.
+	// If there's another word after the current one, we add a space.
+	// echo hello world → prints "hello" then space, then "world".
 	while (word_index < argc)
 	{
 		printf("%s", argv[word_index]);

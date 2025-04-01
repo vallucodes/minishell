@@ -68,17 +68,20 @@ OBJS	= $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	ar -rcs $@ $?
+	@ar -rcs $@ $?
+	@echo "\033[0;32mLibft created successfully ✅\033[0m"
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c
 	@mkdir -p $(dir $@)
-	$(CC) -c $(CFLAGS) $< -o $@ $(HEADERS)
+	@$(CC) -c $(CFLAGS) $< -o $@ $(HEADERS)
 
 clean:
 	@rm -rf $(OBJ_DIR)
+	@echo "\033[0;32mLibft cleaned successfully ✅\033[0m"
+
 
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
 
 re: fclean all
 

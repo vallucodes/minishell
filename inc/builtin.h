@@ -12,8 +12,10 @@ typedef struct s_minishell t_minishell;
 // 	char			**cmd;         // command and args
 // }	t_ast_test;
 
+int execute_builtins(t_minishell *mshell, t_ast *ast);
 int ft_env(t_env **my_env, char **args);
 int ft_pwd(void);
+int	ft_echo(int argc, char **argv);
 
 //int ft_cd(t_env *env, char **args);
 //int execute_builtin(t_minishell *mshell, t_ast_test *ast);

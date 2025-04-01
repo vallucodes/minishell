@@ -30,30 +30,35 @@ SRC			=	main.c \
 				error.c \
 				environment/environment.c \
 				environment/free_env.c \
+				builtins/execute_builtins.c \
 				builtins/ft_env.c \
 				builtins/ft_pwd.c \
+				builtins/ft_echo.c
 
 OBJS		= $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
 
 all: $(NAME)
 
 $(LIBFT):
-	$(MAKE) -C $(LIBFT_DIR)
+	@$(MAKE) --no-print-directory -C $(LIBFT_DIR)
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c $(MINISHH) $(LIBFTH)
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -o $@ -c $< $(INCLUDES)
+	@$(CC) $(CFLAGS) -o $@ -c $< $(INCLUDES)
 
 $(NAME): $(LIBFT) $(OBJS) $(MINISHH) $(LIBFTH)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME) $(LDFLAGS)
+	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME) $(LDFLAGS)
+	@echo "\033[0;32mMinishell built successfully ✅\033[0m"
+
 
 clean:
-	rm -rf $(OBJ_DIR)
-	$(MAKE) -C $(LIBFT_DIR) clean
+	@rm -rf $(OBJ_DIR)
+	@$(MAKE) --no-print-directory -C $(LIBFT_DIR) clean
+	@echo "\033[0;32mMinishell cleaned successfully ✅\033[0m"
+
 
 fclean: clean
-	rm -f $(NAME)
-	$(MAKE) -C $(LIBFT_DIR) fclean
+	@rm -f $(NAME) $(LIBFT)
 
 re: fclean all
 

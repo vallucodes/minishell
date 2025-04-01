@@ -33,6 +33,18 @@ void print_tokens(t_token *tokens)
 	}
 	printf("\n");
 }
+
+static int is_all_whitespace(const char *str)
+{
+	while (*str)
+	{
+		if (!isspace((unsigned char)*str))
+			return (0);
+		str++;
+	}
+	return (1);
+}
+
 //Testing ends
 # include <stdio.h>
 int main(int ac, char **av, char **envp)
@@ -42,7 +54,7 @@ int main(int ac, char **av, char **envp)
 	t_ast		*ast;
 	t_minishell	mshell;
 
-	
+	(void) av;
 
 	if (ac != 1)
 		return (FAIL);
@@ -55,6 +67,12 @@ int main(int ac, char **av, char **envp)
 		input_str = readline(PROMPT);
 		if (!input_str)
 			break ;
+		//guard for empty str "" OR "     "
+		if (input_str[0] == '\0' || is_all_whitespace(input_str))
+		{
+			free(input_str);
+			continue;
+		}
 		add_history(input_str);
 		if (!input_validation(input_str))
 		{
@@ -66,14 +84,9 @@ int main(int ac, char **av, char **envp)
 				retokenize_words(input.tokens);
 				handle_heredoc(mshell.envp->envp, input.tokens);
 				print_tokens(input.tokens);
-				//ast = build_ast_binary_tree(input.tokens);
-				char *ast_cmd[] = {"pwd", "foo", "bar", NULL};
-				if (ft_strcmp(ast_cmd[0], "env") == 0)
-					ft_env(&mshell.envp, ast_cmd);
-				if (ft_strcmp(ast_cmd[0], "pwd") == 0)
-					ft_pwd();
-				if (ft_strcmp(ast_cmd[0], "echo") == 0)
-					ft_echo(ac, av);
+				ast = build_ast_binary_tree(input.tokens);
+				execute_builtins(&mshell, ast);
+
 				free(input_str); // dont free this before the whole program ends!
 			}
 		}
