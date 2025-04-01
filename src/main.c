@@ -35,12 +35,19 @@ void print_tokens(t_token *tokens)
 }
 //Testing ends
 
-int main()
+int main(int ac, char **av, char **envp)
 {
-	char	*input_str;
-	t_input	input;
-	t_ast	*ast;
+	char		*input_str;
+	t_input		input;
+	t_ast		*ast;
+	t_minishell	mshell;
 
+	if (ac != 1)
+		return (FAIL);
+		// exit_error(AC ERROR)
+	if (init_minishell(&mshell, envp))
+		return (FAIL);
+		// exit_error(init_issue)
 	while (1)
 	{
 		input_str = readline(PROMPT);
@@ -55,17 +62,14 @@ int main()
 			if (tokens_validation(input.tokens) == SUCCESS)
 			{
 				retokenize_words(input.tokens);
-				// handle_heredoc(input.tokens);
-				//heredoc
+				handle_heredoc(mshell.envp->envp, input.tokens);
 				print_tokens(input.tokens);
-				ast = build_ast_binary_tree(input.tokens);
-				//ast tree
+				// ast = build_ast_binary_tree(input.tokens);
 				free(input_str); // dont free this before the whole program ends!
 			}
 		}
 	}
 	return (0);
 }
-
 
 // ls -la < file1 > file1.1| cat -e >file2 <<file3 | grep filename >>file4 | du -s > file5

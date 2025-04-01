@@ -8,7 +8,7 @@ typedef struct s_env
 	unsigned int	len;                   // how many are actually used
 }	t_env;
 
-int	copy_env(t_minishell *mshell, char **envp);
+int	copy_env(t_env *mshell, char **envp);
 void free_env(t_env *env);
 void free_partial_env(char **envp, int up_to);
 

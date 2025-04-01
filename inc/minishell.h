@@ -1,14 +1,16 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include <unistd.h>
+# include <unistd.h>			//close
 # include <stdlib.h> 			//free
 # include <stdio.h>				//printf
 # include <readline/readline.h>	//readline
 # include <readline/history.h>	//readline
+# include <fcntl.h>				//open
 # include "../lib/libft/inc/libft.h"
 # include "lexing.h"
 # include "ast.h"
+# include "heredoc.h"
 # include "environment.h"
 
 # define PROMPT "\001\e[93m\002🦒 >>>\001\e[0m\e[95m\002 Giraffeshell>$ \001\e[0m\002"
@@ -48,9 +50,15 @@ int		is_operator(char c);
 int		is_word(t_input *input, int i);
 int		inquotes(char c, t_quotes_helper *quotes);
 
-//utils
+//global utils
 int		any_redirect(t_token *current);
 void	print_error(char *msg, char *token);
+void	init_quotes(t_quotes_helper *quotes);
+
+//heredoc
+void	handle_heredoc(char **env, t_token *tokens);
+char	*create_tmp_file(int *fd);
+void	save_to_file(char **env, char *input, int fd, t_expand expand);
 
 //ast
 t_ast	*build_ast_binary_tree(t_token *tokens);
