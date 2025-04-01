@@ -3,7 +3,7 @@
 
 int	init_minishell(t_minishell *mshell, char **envp)
 {
-	if (copy_env(mshell->envp, envp) != 0)
+	if (copy_env(&mshell->envp, envp) != 0)
 	{
 		dprintf(2, "Environment copy fail");
 		return (1);

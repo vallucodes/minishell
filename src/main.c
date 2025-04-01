@@ -42,6 +42,8 @@ int main(int ac, char **av, char **envp)
 	t_ast		*ast;
 	t_minishell	mshell;
 
+	(void) av;
+
 	if (ac != 1)
 		return (FAIL);
 		// exit_error(AC ERROR)
@@ -64,7 +66,7 @@ int main(int ac, char **av, char **envp)
 				retokenize_words(input.tokens);
 				handle_heredoc(mshell.envp->envp, input.tokens);
 				print_tokens(input.tokens);
-				// ast = build_ast_binary_tree(input.tokens);
+				ast = build_ast_binary_tree(input.tokens);
 				free(input_str); // dont free this before the whole program ends!
 			}
 		}

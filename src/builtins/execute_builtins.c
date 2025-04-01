@@ -18,7 +18,7 @@ int	ft_strtestcmp( char *s1, const char *s2)
 }
 // -------------------- end TEST --------------------
 
-int execute_builtin(t_minishell *mshell, t_ast_test *ast)
+int execute_builtin(t_minishell *mshell, t_ast *ast)
 {
 	if (!ast || !ast->cmd || !ast->cmd[0])
 		return (FAIL);

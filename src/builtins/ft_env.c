@@ -1,6 +1,6 @@
 #include "../../inc/minishell.h"
 
-int ft_env(t_env *my_env, char **args)
+int copy_env(t_env **env, char **envp)
 {
 	unsigned int	i;
 
