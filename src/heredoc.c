@@ -57,25 +57,79 @@ static void	save_to_file(char **env, char *input, int fd, t_expand expand)
 	}
 }
 
+void	next_temp_file(char *file, int nb)
+{
+	char	*char_nb;
+	int		i;
+	int		j;
+
+	file[0] = 't';
+	file[1] = 'm';
+	file[2] = 'p';
+	char_nb = ft_itoa(nb);
+	// if (!char_nb)
+		// exit_error(MALLOC);
+	i = 3;
+	j = 0;
+	while (char_nb[j])
+	{
+		file[i] = char_nb[j];
+		i++;
+		j++;
+	}
+	file[i] = '\0';
+	free(char_nb);
+}
+
+
+int	create_tmp_file()
+{
+	int		fd;
+	char	file[256];
+	int		index;
+
+	index = 1;
+	while (1)
+	{
+		ft_bzero(file, 256);
+		next_temp_file(file, index);
+		if (access (file, F_OK) != 0)
+			break ;
+		index++;
+		// if (index > 1000)
+			// exit_error(TOO MANY TEMP FILES)
+	}
+	fd = open(file, O_WRONLY | O_CREAT | O_EXCL, 0644);
+	// if (fd < 0)
+		// exit_error(TMP_FILE_CREATION_FAILED);
+	return (fd);
+}
+
 static void	read_line(char **env, char *eof, t_expand expand)
 {
 	char	*input;
 	int		fd;
 
-	fd = open("tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	// if (!fd)
-		// exit_error(FILE_ALREADY_EXISTS);
+	fd = create_tmp_file();
 	input = readline(">");
 	while (ft_strncmp(eof, input, ft_strlen(eof)) || (ft_strlen(input) != ft_strlen(eof)))
 	{
 		save_to_file(env, input, fd, expand);
 		free(input);
 		input = NULL;
-		input = readline(">");
+		input = readline("> ");
 	}
 	free(input);
 	input = NULL;
-	// save to file
+}
+
+void	replace_token(t_token *current)
+{
+	current->value++;
+	current->len = 1;
+	current->type = REDIRECT_IN;
+	current->next->type = FILE_TOKEN;
+	// current->next->value = tmp;
 }
 
 void	handle_heredoc(char **env, t_token *tokens)
@@ -87,8 +141,8 @@ void	handle_heredoc(char **env, t_token *tokens)
 	{
 		if (current->type == HERE_STRING)
 		{
-			read_line(env, current->value, EXPAND);
-			// replace token
+			read_line(env, current->next->value, EXPAND);
+			replace_token(current);
 		}
 		current = current->next;
 	}
