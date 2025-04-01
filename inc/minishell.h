@@ -41,6 +41,8 @@ int		input_validation(char *input);
 int		tokens_validation(t_token *tokens);
 void	retokenize_words(t_token *tokens);
 void	concatinate_adjacecnt_quotes(char *str);
+int		init_minishell(t_minishell *mshell, char **envp);
+
 
 //tokenizer utils
 int		is_separator(char c);
