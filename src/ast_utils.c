@@ -14,6 +14,8 @@ int	last_is_pipe(t_ast **ast)
 {
 	t_ast *temp;
 
+	if (!*ast)
+		return (0);
 	temp = *ast;
 	while (temp->next_right)
 		temp = temp->next_right;
