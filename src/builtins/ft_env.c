@@ -16,7 +16,7 @@ int ft_env(t_env *my_env, char **args)
 	i = 0;
 	while(i < my_env->len)
 	{
-		if (my_env->envp[i] && (ft_strchr(my_env->envp[i], '='))) // change!
+		if (my_env->envp[i] && (ft_strchr(my_env->envp[i], '=')))
 			printf("%s\n", my_env->envp[i]);
 		i++;
 	}

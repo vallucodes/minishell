@@ -41,6 +41,7 @@ int main()
 	t_input	input;
 	t_ast	*ast;
 
+
 	while (1)
 	{
 		input_str = readline(PROMPT);
@@ -60,10 +61,12 @@ int main()
 				print_tokens(input.tokens);
 				ast = build_ast_binary_tree(input.tokens);
 				//ast tree
+				//execute_command(&mshell, ast);
 				free(input_str); // dont free this before the whole program ends!
 			}
 		}
 	}
+	//free_env(&mshell.env); // must free environment here after loop end
 	return (0);
 }
 

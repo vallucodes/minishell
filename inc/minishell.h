@@ -30,6 +30,7 @@ typedef enum e_exit
 typedef struct s_minishell
 {
 	t_env	*envp; // env struct
+	int		exitcode; //exitcode assignment after exe
 	//later add execution, exit code when we are there
 }				t_minishell;
 
