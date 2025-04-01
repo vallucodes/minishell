@@ -6,7 +6,7 @@
 /*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 15:10:38 by vlopatin          #+#    #+#             */
-/*   Updated: 2025/04/01 14:45:24 by hiennguy         ###   ########.fr       */
+/*   Updated: 2025/04/01 22:41:58 by hiennguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ int		ft_isprint(int c);
 int		ft_isspace(int c);
 int		ft_toupper(int c);
 int		ft_tolower(int c);
+int		ft_is_all_whitespace(const char *s);
 
 // memory
 void	ft_bzero(void *s, size_t n);
@@ -84,7 +85,7 @@ int		ft_lstsize(t_list *lst);
 t_list	*ft_lstlast(t_list *lst);
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 
-//dprintf
+//ft_dprintf
 int		ft_dprintf(int fd, const char *s, ...);
 
 void	ft_putstr(int fd, char *str);

@@ -33,7 +33,8 @@ SRC			=	main.c \
 				builtins/execute_builtins.c \
 				builtins/ft_env.c \
 				builtins/ft_pwd.c \
-				builtins/ft_echo.c
+				builtins/ft_echo.c \
+				builtins/ft_exit.c \
 
 OBJS		= $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
 

@@ -5,8 +5,8 @@ int	init_minishell(t_minishell *mshell, char **envp)
 {
 	if (copy_env(&mshell->envp, envp) != 0)
 	{
-		dprintf(2, "Environment copy fail");
-		return (1);
+		ft_dprintf(2, "Environment copy fail");
+		return (FAIL);
 	}
 	mshell->exitcode = 0;
 	// if (init_ast(&mshell->ast) != 0)
@@ -24,13 +24,3 @@ int	init_minishell(t_minishell *mshell, char **envp)
 	return (0);
 }
 
-
-//main() later can do sth liek
-
-// int code = init_minishell(&mshell, envp);
-// if (code != INIT_SUCCESS)
-// {
-// 	fprintf(stderr, "Initialization failed: code %d\n", code);
-//need to write own fprintf
-// 	return (code);
-// }

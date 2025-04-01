@@ -11,9 +11,12 @@ static int count_args(char **args)
 
 int execute_builtins(t_minishell *mshell, t_ast *ast)
 {
-	if (!ast || !ast->cmd || !ast->cmd[0])
-		return (FAIL);
-
+	if (!mshell || !ast || !ast->cmd || !ast->cmd[0])
+	{
+		ft_dprintf(2, "minishell: builtin execution error\n");
+		mshell->exitcode = FAIL;
+		return (mshell->exitcode);
+	}
 	if (ft_strcmp(ast->cmd[0], "env") == 0)
 	{
 		mshell->exitcode = ft_env(&mshell->envp, &ast->cmd[1]);
@@ -27,6 +30,11 @@ int execute_builtins(t_minishell *mshell, t_ast *ast)
 	if (ft_strcmp(ast->cmd[0], "echo") == 0)
 	{
 		mshell->exitcode = ft_echo(count_args(ast->cmd), ast->cmd);
+		return (mshell->exitcode);
+	}
+	if (ft_strcmp(ast->cmd[0], "exit") == 0)
+	{
+		mshell->exitcode = ft_exit(mshell);
 		return (mshell->exitcode);
 	}
 	return (FAIL); //no built-in matched

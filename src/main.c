@@ -34,17 +34,6 @@ void print_tokens(t_token *tokens)
 	printf("\n");
 }
 
-static int is_all_whitespace(const char *str)
-{
-	while (*str)
-	{
-		if (!isspace((unsigned char)*str))
-			return (0);
-		str++;
-	}
-	return (1);
-}
-
 //Testing ends
 # include <stdio.h>
 int main(int ac, char **av, char **envp)
@@ -68,7 +57,7 @@ int main(int ac, char **av, char **envp)
 		if (!input_str)
 			break ;
 		//guard for empty str "" OR "     "
-		if (input_str[0] == '\0' || is_all_whitespace(input_str))
+		if (input_str[0] == '\0' || ft_is_all_whitespace(input_str))
 		{
 			free(input_str);
 			continue;

@@ -1,6 +1,5 @@
 #include "../../inc/minishell.h"
 
-
 int ft_env(t_env **my_env, char **ast_cmd)
 {
 	unsigned int i;
@@ -10,7 +9,7 @@ int ft_env(t_env **my_env, char **ast_cmd)
 
 	if (ast_cmd && ast_cmd[1])
 	{
-		dprintf(STDERR_FILENO, "env: too many arguments\n");
+		ft_dprintf(STDERR_FILENO, "env: too many arguments\n");
 		return (1);
 	}
 
