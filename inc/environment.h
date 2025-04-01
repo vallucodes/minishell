@@ -9,8 +9,8 @@ typedef struct s_env
 }	t_env;
 
 int		copy_env(t_env **env, char **envp);
-void free_env(t_env *env);
-void free_partial_env(char **envp, int up_to);
+void	free_env(t_env *env);
+void	free_partial_env(char **envp, int up_to);
 
 
 #endif

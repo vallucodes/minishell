@@ -12,6 +12,7 @@
 # include "ast.h"
 # include "heredoc.h"
 # include "environment.h"
+# include "builtin.h"
 
 # define PROMPT "\001\e[93m\002🦒 >>>\001\e[0m\e[95m\002 Giraffeshell>$ \001\e[0m\002"
 

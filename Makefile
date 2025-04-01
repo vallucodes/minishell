@@ -29,7 +29,9 @@ SRC			=	main.c \
 				input_validation.c \
 				error.c \
 				environment/environment.c \
-				environment/free_env.c
+				environment/free_env.c \
+				builtins/ft_env.c \
+				builtins/ft_pwd.c \
 
 OBJS		= $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
 

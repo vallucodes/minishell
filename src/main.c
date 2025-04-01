@@ -34,7 +34,7 @@ void print_tokens(t_token *tokens)
 	printf("\n");
 }
 //Testing ends
-
+# include <stdio.h>
 int main(int ac, char **av, char **envp)
 {
 	char		*input_str;
@@ -42,7 +42,7 @@ int main(int ac, char **av, char **envp)
 	t_ast		*ast;
 	t_minishell	mshell;
 
-	(void) av;
+	
 
 	if (ac != 1)
 		return (FAIL);
@@ -66,7 +66,14 @@ int main(int ac, char **av, char **envp)
 				retokenize_words(input.tokens);
 				handle_heredoc(mshell.envp->envp, input.tokens);
 				print_tokens(input.tokens);
-				ast = build_ast_binary_tree(input.tokens);
+				//ast = build_ast_binary_tree(input.tokens);
+				char *ast_cmd[] = {"pwd", "foo", "bar", NULL};
+				if (ft_strcmp(ast_cmd[0], "env") == 0)
+					ft_env(&mshell.envp, ast_cmd);
+				if (ft_strcmp(ast_cmd[0], "pwd") == 0)
+					ft_pwd();
+				if (ft_strcmp(ast_cmd[0], "echo") == 0)
+					ft_echo(ac, av);
 				free(input_str); // dont free this before the whole program ends!
 			}
 		}
