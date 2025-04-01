@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vlopatin <vlopatin@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 15:10:38 by vlopatin          #+#    #+#             */
-/*   Updated: 2025/03/31 13:30:56 by vlopatin         ###   ########.fr       */
+/*   Updated: 2025/04/01 14:45:24 by hiennguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ char	*ft_strjoin(char const *s1, char const *s2);
 size_t	ft_strlcat(char *dst, const char *src, size_t size);
 size_t	ft_strlcpy(char *dst, const char *src, size_t size);
 size_t	ft_strlen(const char *str);
+int		ft_strcmp(const char *s1, const char *s2);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 char	*ft_strnstr(const char *big, const char *little, size_t len);
 char	*ft_strrchr(const char *s, int c);
@@ -95,5 +96,8 @@ int		ft_int(int fd, va_list args);
 int		ft_pointer(int fd, va_list args);
 int		ft_string(int fd, va_list args);
 int		ft_unsigned_int(int fd, va_list args);
+
+
+//fprintf
 
 #endif

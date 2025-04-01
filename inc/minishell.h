@@ -32,6 +32,7 @@ typedef enum e_exit
 typedef struct s_minishell
 {
 	t_env	*envp; // env struct
+	int		exitcode; //exitcode assignment after exe
 	//later add execution, exit code when we are there
 }				t_minishell;
 
@@ -42,6 +43,8 @@ int		input_validation(char *input);
 int		tokens_validation(t_token *tokens);
 void	retokenize_words(t_token *tokens);
 void	concatinate_adjacecnt_quotes(char *str);
+int		init_minishell(t_minishell *mshell, char **envp);
+
 
 //tokenizer utils
 int		is_separator(char c);
