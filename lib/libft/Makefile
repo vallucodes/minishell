@@ -58,6 +58,10 @@ SRC	= \
 			ft_substr.c \
 			ft_tolower.c \
 			ft_toupper.c \
+			dprintf/printf.c \
+ 			dprintf/printf_types.c \
+			dprintf/printf_types2.c \
+			dprintf/printf_utils.c
 
 OBJS	= $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
 
