@@ -35,13 +35,6 @@ void print_tokens(t_token *tokens)
 }
 //Testing ends
 
-int init_minishell(t_minishell *mshell, char **envp)
-{
-	if (copy_env(mshell->envp, envp))
-		return (FAIL);
-	return (SUCCESS);
-}
-
 int main(int ac, char **av, char **envp)
 {
 	char		*input_str;
