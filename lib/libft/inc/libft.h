@@ -6,7 +6,7 @@
 /*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 15:10:38 by vlopatin          #+#    #+#             */
-/*   Updated: 2025/04/01 22:41:58 by hiennguy         ###   ########.fr       */
+/*   Updated: 2025/04/02 15:18:08 by hiennguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ int		ft_isspace(int c);
 int		ft_toupper(int c);
 int		ft_tolower(int c);
 int		ft_is_all_whitespace(const char *s);
+int		ft_is_numeric(const char *str);
 
 // memory
 void	ft_bzero(void *s, size_t n);
