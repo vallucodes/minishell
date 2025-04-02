@@ -13,8 +13,8 @@ static t_token *init_token(t_input *input, int len, t_token_type type)
 	t_token *new_token;
 
 	new_token = (t_token *)malloc(sizeof(t_token));
-	if (!new_token)
-		return (NULL);
+	// if (!new_token)
+		// exit_error(MALLOC);
 	new_token->value = &input->full_str[input->index];
 	new_token->len = len;
 	new_token->type = type;
@@ -28,8 +28,8 @@ static t_token *init_token_word(t_token_type type, char *word)
 	t_token *new_token;
 
 	new_token = (t_token *)malloc(sizeof(t_token));
-	if (!new_token)
-		return (NULL);
+	// if (!new_token)
+		// exit_error(MALLOC);
 	new_token->value = &word[0];
 	new_token->len = ft_strlen(word);
 	new_token->type = type;

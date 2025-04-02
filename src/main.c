@@ -33,6 +33,80 @@ void print_tokens(t_token *tokens)
 	}
 	printf("\n");
 }
+
+#include <stdlib.h>
+#include <string.h>
+#include <stddef.h>
+#include <stdint.h>
+
+typedef struct ArenaBlock {
+    struct ArenaBlock *next;
+    size_t capacity;
+    size_t used;
+    uint8_t data[];
+} ArenaBlock;
+
+typedef struct {
+    ArenaBlock *first;
+    ArenaBlock *current;
+    size_t default_block_size;
+} Arena;
+
+// Initialize arena with default block size
+Arena arena_create(size_t initial_size) {
+    ArenaBlock *first = malloc(sizeof(ArenaBlock) + initial_size);
+    first->next = NULL;
+    first->capacity = initial_size;
+    first->used = 0;
+
+    return (Arena){
+        .first = first,
+        .current = first,
+        .default_block_size = initial_size
+    };
+}
+
+// Allocate memory from arena (automatically grows)
+void *arena_alloc(Arena *a, size_t size, size_t alignment) {
+    ArenaBlock *block = a->current;
+
+    // Calculate aligned offset
+    uintptr_t ptr = (uintptr_t)block->data + block->used;
+    uintptr_t aligned = (ptr + (alignment - 1)) & ~(alignment - 1);
+    size_t actual_size = (aligned - ptr) + size;
+
+    // Allocate new block if needed (exponential growth)
+    if (block->used + actual_size > block->capacity) {
+        size_t new_size = a->default_block_size;
+        while (new_size < size) new_size *= 2;
+
+        ArenaBlock *new_block = malloc(sizeof(ArenaBlock) + new_size);
+        new_block->next = NULL;
+        new_block->capacity = new_size;
+        new_block->used = 0;
+
+        a->current->next = new_block;
+        a->current = new_block;
+        a->default_block_size *= 2;  // Exponential growth
+        block = new_block;
+    }
+
+    void *result = block->data + block->used;
+    block->used += actual_size;
+    return result;
+}
+
+// Free all arena blocks
+void arena_destroy(Arena *a) {
+    ArenaBlock *block = a->first;
+    while (block) {
+        ArenaBlock *next = block->next;
+        free(block);
+        block = next;
+    }
+    a->first = a->current = NULL;
+}
+
 //Testing ends
 
 int main(int ac, char **av, char **envp)
