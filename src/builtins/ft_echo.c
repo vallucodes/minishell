@@ -15,12 +15,12 @@ static int	is_valid_n_flag(const char *arg)
 	return (1);
 }
 
-int	ft_echo(int argc, char **argv)
+int	ft_echo(int cmds_count, char **argv)
 {
 	int word_index = 1;
 	int newline = 1; // first always print nl at end
 
-	while (word_index < argc && is_valid_n_flag(argv[word_index]))
+	while (word_index < cmds_count && is_valid_n_flag(argv[word_index]))
 	{
 		newline = 0;
 		word_index++;
@@ -28,10 +28,10 @@ int	ft_echo(int argc, char **argv)
 	// This prints the remaining arguments, separated by spaces.
 	// If there's another word after the current one, we add a space.
 	// echo hello world → prints "hello" then space, then "world".
-	while (word_index < argc)
+	while (word_index < cmds_count)
 	{
 		printf("%s", argv[word_index]);
-		if (word_index + 1 < argc)
+		if (word_index + 1 < cmds_count)
 			printf(" ");
 		word_index++;
 	}

@@ -1,10 +1,10 @@
 #include "../../inc/minishell.h"
 #include "../../inc/builtin.h"
 
-static int count_args(char **args)
+int count_cmds(char **cmds)
 {
 	int count = 0;
-	while (args && args[count])
+	while (cmds && cmds[count])
 		count++;
 	return count;
 }
@@ -19,7 +19,9 @@ int execute_builtins(t_minishell *mshell, t_ast *ast)
 	}
 	if (ft_strcmp(ast->cmd[0], "env") == 0)
 	{
-		mshell->exitcode = ft_env(&mshell->envp, &ast->cmd[1]);
+		//mshell->exitcode = ft_env(&mshell->envp, &ast->cmd[1]);
+		mshell->exitcode = ft_env(&mshell->envp, ast->cmd);
+
 		return (mshell->exitcode);
 	}
 	if (ft_strcmp(ast->cmd[0], "pwd") == 0)
@@ -29,12 +31,17 @@ int execute_builtins(t_minishell *mshell, t_ast *ast)
 	}
 	if (ft_strcmp(ast->cmd[0], "echo") == 0)
 	{
-		mshell->exitcode = ft_echo(count_args(ast->cmd), ast->cmd);
+		mshell->exitcode = ft_echo(count_cmds(ast->cmd), ast->cmd);
 		return (mshell->exitcode);
 	}
 	if (ft_strcmp(ast->cmd[0], "exit") == 0)
 	{
 		ft_exit(ast->cmd, mshell);
+		return (mshell->exitcode);
+	}
+	if (ft_strcmp(ast->cmd[0], "unset") == 0)
+	{
+		ft_unset(ast->cmd, mshell->envp);
 		return (mshell->exitcode);
 	}
 	return (FAIL); //no built-in matched

@@ -1,24 +1,20 @@
 #include "../../inc/minishell.h"
 
-void	ft_exit(char **args, t_minishell *minishell)
+void	ft_exit(char **ast_cmds, t_minishell *minishell)
 {
 	long	code;
-	int		arg_count;
+	int		cmd_count;
 
-	arg_count = 0;
-	while (args[arg_count])
-		arg_count++;
-
+	cmd_count = count_cmds(ast_cmds);
 	write(STDERR_FILENO, "exit\n", 5);
-
-	if (arg_count == 1)
+	if (cmd_count == 1)
 		exit(minishell->exitcode);
-	if (!ft_atol(args[1], &code))
+	if (!ft_atol(ast_cmds[1], &code))
 	{
-		fprintf(stderr, "minishell: exit: %s: numeric argument required\n", args[1]);
+		fprintf(stderr, "minishell: exit: %s: numeric argument required\n", ast_cmds[1]);
 		exit(255);
 	}
-	if (arg_count > 2)
+	if (cmd_count > 2)
 	{
 		fprintf(stderr, "minishell: exit: too many arguments\n");
 		minishell->exitcode = 1;
