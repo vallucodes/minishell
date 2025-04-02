@@ -33,8 +33,9 @@ void print_tokens(t_token *tokens)
 	}
 	printf("\n");
 }
-//Testing ends
 
+//Testing ends
+# include <stdio.h>
 int main(int ac, char **av, char **envp)
 {
 	char		*input_str;
@@ -55,6 +56,12 @@ int main(int ac, char **av, char **envp)
 		input_str = readline(PROMPT);
 		if (!input_str)
 			break ;
+		//guard for empty str "" OR "     "
+		if (input_str[0] == '\0' || ft_is_all_whitespace(input_str))
+		{
+			free(input_str);
+			continue;
+		}
 		add_history(input_str);
 		if (!input_validation(input_str))
 		{
@@ -67,6 +74,8 @@ int main(int ac, char **av, char **envp)
 				handle_heredoc(mshell.envp->envp, input.tokens);
 				print_tokens(input.tokens);
 				ast = build_ast_binary_tree(input.tokens);
+				execute_builtins(&mshell, ast);
+
 				free(input_str); // dont free this before the whole program ends!
 			}
 		}
