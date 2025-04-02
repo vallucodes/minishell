@@ -6,13 +6,13 @@
 /*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 15:16:25 by hiennguy          #+#    #+#             */
-/*   Updated: 2025/04/02 15:17:06 by hiennguy         ###   ########.fr       */
+/*   Updated: 2025/04/02 15:36:31 by hiennguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int ft_is_numeric(const char *str)
+int	ft_is_numeric(const char *str)
 {
 	int	i;
 

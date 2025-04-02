@@ -34,7 +34,7 @@ int execute_builtins(t_minishell *mshell, t_ast *ast)
 	}
 	if (ft_strcmp(ast->cmd[0], "exit") == 0)
 	{
-		mshell->exitcode = ft_exit(mshell);
+		ft_exit(ast->cmd, mshell);
 		return (mshell->exitcode);
 	}
 	return (FAIL); //no built-in matched

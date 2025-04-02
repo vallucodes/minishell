@@ -6,13 +6,13 @@
 /*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 15:03:01 by hiennguy          #+#    #+#             */
-/*   Updated: 2025/04/02 15:16:33 by hiennguy         ###   ########.fr       */
+/*   Updated: 2025/04/02 15:44:30 by hiennguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int		check_overflow(long result, int digit, int sign)
+static int	check_atol_overflow(long result, int digit, int sign)
 {
 	if (sign == 1 && result > (LONG_MAX - digit) / 10)
 		return (1);
@@ -21,36 +21,44 @@ int		check_overflow(long result, int digit, int sign)
 	return (0);
 }
 
-long	handle_overflow(int sign)
+static int	handle_sign(const char **str)
 {
-	if (sign == 1)
-		return (LONG_MAX);
-	return (LONG_MIN);
+	int	sign;
+
+	sign = 1;
+	if (**str == '-' || **str == '+')
+	{
+		if (**str == '-')
+			sign = -1;
+		(*str)++;
+	}
+	return (sign);
 }
 
-long	ft_atol(const char *str)
+int	ft_atol(const char *str, long *out)
 {
 	long	result;
 	int		sign;
 	int		digit;
 
 	result = 0;
-	sign = 1;
+	if (!str || !str[0])
+		return (0);
 	while (*str == ' ' || (*str >= 9 && *str <= 13))
 		str++;
-	if (*str == '-' || *str == '+')
-	{
-		if (*str == '-')
-			sign = -1;
-		str++;
-	}
+	sign = handle_sign(&str);
+	if (*str < '0' || *str > '9')
+		return (0);
 	while (*str >= '0' && *str <= '9')
 	{
 		digit = *str - '0';
-		if (check_overflow(result, digit, sign))
-			return (handle_overflow(sign));
+		if (check_atol_overflow(result, digit, sign))
+			return (0);
 		result = result * 10 + digit;
 		str++;
 	}
-	return (result * sign);
+	if (*str != '\0')
+		return (0);
+	*out = result * sign;
+	return (1);
 }

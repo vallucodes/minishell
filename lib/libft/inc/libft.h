@@ -6,7 +6,7 @@
 /*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 15:10:38 by vlopatin          #+#    #+#             */
-/*   Updated: 2025/04/02 15:18:08 by hiennguy         ###   ########.fr       */
+/*   Updated: 2025/04/02 15:44:46 by hiennguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ typedef struct s_list
 
 // numbers
 int		ft_atoi(const char *str);
+int		ft_atol(const char *str, long *out);
 int32_t	ft_atoi_base(char *str, int base);
 char	*ft_itoa(int n);
 
