@@ -7,11 +7,13 @@
 # include <readline/readline.h>	//readline
 # include <readline/history.h>	//readline
 # include <fcntl.h>				//open
+# include <stdalign.h>			//alignof
 # include "../lib/libft/inc/libft.h"
 # include "lexing.h"
 # include "ast.h"
 # include "heredoc.h"
 # include "environment.h"
+# include "memory_arena.h"
 
 # define PROMPT "\001\e[93m\002🦒 >>>\001\e[0m\e[95m\002 Giraffeshell>$ \001\e[0m\002"
 
@@ -75,6 +77,11 @@ size_t	get_amount_of_pipes(t_token *tokens);
 int		is_any_redirect(t_token_type type);
 int		last_is_pipe(t_ast **ast);
 t_token	*skip_to_next_pipe(t_token *tokens);
+
+//memory-arena
+t_arena	arena_create(size_t initial_size);
+void	*arena_alloc(t_arena *a, size_t size, size_t alignment);
+void	arena_destroy(t_arena *a);
 
 //developlment functions
 void print_tokens(t_token *tokens);

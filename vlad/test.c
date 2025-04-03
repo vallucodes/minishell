@@ -1,5 +1,5 @@
 // #include <strings.h>
-// #include <stdio.h>
+#include <stdio.h>
 // #include <stdalign.h>
 // #include "../inc/minishell.h"
 
@@ -40,7 +40,6 @@ typedef struct t_arena
 	size_t			default_block_size;
 }	t_arena;
 
-// Initialize arena with default block size
 t_arena arena_create(size_t initial_size)
 {
 	t_arena			arena;
@@ -58,45 +57,62 @@ t_arena arena_create(size_t initial_size)
 	return (arena);
 }
 
-size_t	calc_actual_size(t_arena *a, size_t size, size_t alignment)
-{
-	t_arenablock	*block;
-	size_t			actual_size;
-	uintptr_t		ptr;
-	uintptr_t		aligned;
+size_t calc_actual_size(t_arena *a, size_t size, size_t alignment) {
+    t_arenablock *block = a->current;
+    uintptr_t ptr = (uintptr_t)block->data + block->used;
 
-	block = a->current;
-	ptr = (uintptr_t)block->data + block->used;
-	aligned = (ptr + (alignment - 1)) & ~(alignment - 1);
-	actual_size = (aligned - ptr) + size;
-	return (actual_size);
+    // Debugging output
+    // printf("\n--- calc_actual_size ---\n");
+    // printf("block->data address: %p\n", block->data);
+    // printf("block->used: %zu\n", block->used);
+    // printf("ptr (block->data + used): %p\n", (void *)ptr);
+    // printf("alignment: %zu\n", alignment);
+
+    uintptr_t aligned = (ptr + (alignment - 1)) & ~(alignment - 1);
+    size_t padding = aligned - ptr;
+    size_t actual_size = padding + size;
+
+    // More debugging output
+    // printf("aligned address: %p\n", (void *)aligned);
+    // printf("padding: %zu\n", padding);
+    // printf("actual_size: %zu\n", actual_size);
+
+    return actual_size;
 }
 
-// Allocate memory from arena (automatically grows)
 void	*arena_alloc(t_arena *a, size_t size, size_t alignment)
 {
 	t_arenablock	*block;
 	t_arenablock	*new_block;
 	size_t			actual_size;
+	size_t			new_size;
+	void			*result;
 
-	// Calculate aligned offset
 	actual_size = calc_actual_size(a, size, alignment);
+	printf("actual size needed %li\n", actual_size);
 	block = a->current;
-	// Allocate new block if needed (exponential growth)
 	if (block->used + actual_size > block->capacity)
 	{
-		new_block = malloc(sizeof(t_arenablock) + a->default_block_size);
+		new_size = a->default_block_size;
+
+		while (new_size <= actual_size)
+		{
+			new_size *= 2;
+			// printf("new size iteration %li\n", new_size);
+		}
+		new_block = malloc(sizeof(t_arenablock) + new_size);
+		// printf("allocated block with size %li\n", new_size);
 		// if (!new_block)
 		// 	exit_error(MALLOC);
 		new_block->next = NULL;
-		new_block->capacity = a->default_block_size;
+		new_block->capacity = new_size;
 		new_block->used = 0;
 
 		a->current->next = new_block;
 		a->current = new_block;
 		block = new_block;
 	}
-	void *result = block->data + block->used;
+	result = block->data + block->used;
 	block->used += actual_size;
 	return (result);
 }
@@ -122,7 +138,8 @@ void	arena_destroy(t_arena *a)
 #include <stdlib.h>
 #include <stdalign.h>
 
-int main() {
+int main()
+{
     // Step 1: Create an arena with an initial block size of 1024 bytes
     t_arena arena = arena_create(1024);
     printf("Arena created with initial block size: %zu bytes\n", arena.default_block_size);
@@ -181,14 +198,24 @@ int main() {
 
     // Step 5: Test dynamic growth of the arena
     size_t large_size = arena.default_block_size * 2;
-    void *large_alloc = arena_alloc(&arena, large_size, alignof(max_align_t));
+    void *large_alloc = arena_alloc(&arena, large_size, 16);
     if (!large_alloc) {
         fprintf(stderr, "Failed to allocate large block of size %zu\n", large_size);
         return EXIT_FAILURE;
     }
     printf("Successfully allocated a large block of size %zu bytes\n", large_size);
 
-    // Step 6: Destroy the arena and free all blocks
+	// Step 7: Test dynamic growth of the arena very large
+	size_t large_size2 = 6854;
+	void *large_alloc2 = arena_alloc(&arena, large_size2, 17);
+	if (!large_alloc)
+	{
+        fprintf(stderr, "Failed to allocate large block of size %zu\n", large_size2);
+        return EXIT_FAILURE;
+	}
+	printf("Successfully allocated a large block of size %zu bytes\n", large_size2);
+
+    // Step 99: Destroy the arena and free all blocks
     arena_destroy(&arena);
     printf("Arena destroyed and all blocks freed\n");
 
