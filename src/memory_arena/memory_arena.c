@@ -14,6 +14,7 @@ t_arena	arena_create(size_t initial_size)
 	arena.first = first;
 	arena.current = first;
 	arena.default_block_size = initial_size;
+	printf("Created arena block: first=%p, capacity=%zu\n", (void *)first, initial_size);
 	return (arena);
 }
 
@@ -91,4 +92,17 @@ void	arena_destroy(t_arena *a)
 		block = next;
 	}
 	a->first = a->current = NULL;
+}
+
+void	init_arena(t_arena **arena)
+{
+	size_t	initial_size;
+
+	initial_size = 1024;
+	*arena = malloc(sizeof(t_arena));
+	// if (!*arena)
+		// exit_error(MALLOC);
+	**arena = arena_create(initial_size);
+	printf("Arena initialized: first=%p, current=%p, default_block_size=%zu\n",
+           (void *)(*arena)->first, (void *)(*arena)->current, (*arena)->default_block_size);
 }

@@ -46,6 +46,8 @@ int main(int ac, char **av, char **envp)
 
 	if (ac != 1)
 		return (FAIL);
+	init_arena(&mshell.arena);
+	printf("Created arena block: first=%p, capacity=%zu\n", mshell.arena->first, mshell.arena->default_block_size);
 		// exit_error(AC ERROR)
 	if (init_minishell(&mshell, envp))
 		return (FAIL);
@@ -60,7 +62,7 @@ int main(int ac, char **av, char **envp)
 		{
 			// expand(input_str);//double quote or single quote expasion
 			init_lexer(&input, input_str);
-			extract_token(&input);
+			extract_token(&mshell, &input);
 			if (tokens_validation(input.tokens) == SUCCESS)
 			{
 				retokenize_words(input.tokens);

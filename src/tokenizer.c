@@ -8,11 +8,12 @@ void	init_lexer(t_input *new_input, char *input_str)
 	new_input->tokens = NULL;
 }
 
-static t_token *init_token(t_input *input, int len, t_token_type type)
+static t_token *init_token(t_minishell *mshell, t_input *input, int len, t_token_type type)
 {
 	t_token *new_token;
 
-	new_token = (t_token *)malloc(sizeof(t_token));
+	// new_token = (t_token *)malloc(sizeof(t_token));
+	new_token = arena_alloc(mshell->arena, sizeof(t_token), alignof(t_token));
 	// if (!new_token)
 		// exit_error(MALLOC);
 	new_token->value = &input->full_str[input->index];
@@ -23,11 +24,12 @@ static t_token *init_token(t_input *input, int len, t_token_type type)
 	return (new_token);
 }
 
-static t_token *init_token_word(t_token_type type, char *word)
+static t_token *init_token_word(t_minishell *mshell, t_token_type type, char *word)
 {
 	t_token *new_token;
 
-	new_token = (t_token *)malloc(sizeof(t_token));
+	// new_token = (t_token *)malloc(sizeof(t_token));
+	new_token = arena_alloc(mshell->arena, sizeof(t_token), alignof(t_token));
 	// if (!new_token)
 		// exit_error(MALLOC);
 	new_token->value = &word[0];
@@ -73,7 +75,7 @@ void	init_quotes(t_quotes_helper *quotes)
 	quotes->previous_in_quotes = 0;
 }
 
-void	word(t_input *input)
+void	word(t_minishell *mshell, t_input *input)
 {
 	t_quotes_helper	quotes;
 	char			*new_str;
@@ -82,8 +84,7 @@ void	word(t_input *input)
 	input_str = input->full_str;
 	init_quotes(&quotes);
 	new_str = ft_strdup("");
-	while (input->full_str[input->index]
-		&& ((!is_separator(input->full_str[input->index]) || quotes.in_quotes)))
+	while (input->full_str[input->index] && ((!is_separator(input->full_str[input->index]) || quotes.in_quotes)))
 	{
 		quotes.previous_in_quotes = quotes.in_quotes;
 		quotes.in_quotes = inquotes(input->full_str[input->index], &quotes);
@@ -95,10 +96,10 @@ void	word(t_input *input)
 		append_char(input_str, &new_str, input->index);
 		input->index++;
 	}
-	add_token(&input->tokens, init_token_word(WORD, new_str));
+	add_token(&input->tokens, init_token_word(mshell, WORD, new_str));
 }
 
-void extract_token(t_input *input)
+void extract_token(t_minishell *mshell, t_input *input)
 {
 	while (input->index < input->len)
 	{
@@ -107,16 +108,16 @@ void extract_token(t_input *input)
 		if (input->full_str[input->index] == '\0')
 			break ;
 		if (ft_strncmp(&input->full_str[input->index], "<<", 2) == 0)
-			add_token(&input->tokens, init_token(input, 2, HERE_STRING));
+			add_token(&input->tokens, init_token(mshell, input, 2, HERE_STRING));
 		else if (ft_strncmp(&input->full_str[input->index], ">>", 2) == 0)
-			add_token(&input->tokens, init_token(input, 2, REDIRECT_APPEND));
+			add_token(&input->tokens, init_token(mshell, input, 2, REDIRECT_APPEND));
 		else if (input->full_str[input->index] == '|')
-			add_token(&input->tokens, init_token(input, 1, PIPE));
+			add_token(&input->tokens, init_token(mshell, input, 1, PIPE));
 		else if (input->full_str[input->index] == '<')
-			add_token(&input->tokens, init_token(input, 1, REDIRECT_IN));
+			add_token(&input->tokens, init_token(mshell, input, 1, REDIRECT_IN));
 		else if (input->full_str[input->index] == '>')
-			add_token(&input->tokens, init_token(input, 1, REDIRECT_OUT));
+			add_token(&input->tokens, init_token(mshell, input, 1, REDIRECT_OUT));
 		else
-			word(input);
+			word(mshell, input);
 	}
 }

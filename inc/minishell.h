@@ -33,13 +33,14 @@ typedef enum e_exit
 
 typedef struct s_minishell
 {
+	t_arena	*arena;
 	t_env	*envp; // env struct
 	int		exitcode; //exitcode assignment after exe
 	//later add execution, exit code when we are there
 }				t_minishell;
 
 //functions
-void	extract_token(t_input *input);
+void	extract_token(t_minishell *mshell, t_input *input);
 void	init_lexer(t_input *new_input, char *input_str);
 int		input_validation(char *input);
 int		tokens_validation(t_token *tokens);
@@ -82,6 +83,7 @@ t_token	*skip_to_next_pipe(t_token *tokens);
 t_arena	arena_create(size_t initial_size);
 void	*arena_alloc(t_arena *a, size_t size, size_t alignment);
 void	arena_destroy(t_arena *a);
+void	init_arena(t_arena **arena);
 
 //developlment functions
 void print_tokens(t_token *tokens);
