@@ -1,39 +1,50 @@
 #include "../../inc/minishell.h"
 #include "../../inc/builtin.h"
 
-
-// -------------------- MAIN TEST --------------------
-int	ft_strtestcmp( char *s1, const char *s2)
+int count_cmds(char **cmds)
 {
-	size_t			i;
-	unsigned char	*str1;
-	unsigned char	*str2;
-
-	str1 = (unsigned char *) s1;
-	str2 = (unsigned char *) s2;
-	i = 0;
-	while (str1[i] == str2[i] && str1[i])
-		i++;
-	return (str1[i] - str2[i]);
+	int count = 0;
+	while (cmds && cmds[count])
+		count++;
+	return count;
 }
-// -------------------- end TEST --------------------
 
-int execute_builtin(t_minishell *mshell, t_ast *ast)
+int execute_builtins(t_minishell *mshell, t_ast *ast)
 {
-	if (!ast || !ast->cmd || !ast->cmd[0])
-		return (FAIL);
-
-	printf("DEBUG: cmd[0] in exe_built = %s\n", ast->cmd[0]);
-	printf("DEBUG: strcmp = %d\n", ft_strtestcmp(ast->cmd[0], "env"));
-
-	if (ft_strcmp(ast->cmd[0], "env") == 0)
+	if (!mshell || !ast || !ast->cmd || !ast->cmd[0])
 	{
-		mshell->exitcode = ft_env(mshell->envp, &ast->cmd[1]);
-		//printf ("go in this loop");
-		//fprintf(stderr, "[builtin env exit code: %d]\n", mshell->exitcode);
+		ft_dprintf(2, "minishell: builtin execution error\n");
+		mshell->exitcode = FAIL;
 		return (mshell->exitcode);
 	}
-	return (0);
+	if (ft_strcmp(ast->cmd[0], "env") == 0)
+	{
+		//mshell->exitcode = ft_env(&mshell->envp, &ast->cmd[1]);
+		mshell->exitcode = ft_env(&mshell->envp, ast->cmd);
 
+		return (mshell->exitcode);
+	}
+	if (ft_strcmp(ast->cmd[0], "pwd") == 0)
+	{
+		mshell->exitcode = ft_pwd();
+		return (mshell->exitcode);
+	}
+	if (ft_strcmp(ast->cmd[0], "echo") == 0)
+	{
+		mshell->exitcode = ft_echo(count_cmds(ast->cmd), ast->cmd);
+		return (mshell->exitcode);
+	}
+	if (ft_strcmp(ast->cmd[0], "exit") == 0)
+	{
+		ft_exit(ast->cmd, mshell);
+		return (mshell->exitcode);
+	}
+	if (ft_strcmp(ast->cmd[0], "unset") == 0)
+	{
+		ft_unset(ast->cmd, mshell->envp);
+		return (mshell->exitcode);
+	}
+	return (FAIL); //no built-in matched
 }
+
 

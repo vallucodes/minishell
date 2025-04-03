@@ -57,7 +57,7 @@ static int init_env_storage(t_env *env, char **envp)
 	env->envp = malloc(sizeof(char *) * (var_amount + 1));
 	if (!env->envp)
 	{
-		dprintf(2, "malloc error\n");
+		ft_dprintf(2, "malloc error\n");
 		return (1);
 	}
 	env->allocated_capacity = var_amount + 1;
@@ -78,7 +78,7 @@ int copy_env(t_env *env, char **envp)
 		env->envp[i] = strdup(envp[i]);
 		if (!env->envp[i])
 		{
-			dprintf(2, "malloc error\n");
+			ft_dprintf(2, "malloc error\n");
 			free_partial_env(env->envp, i);
 			return (1);
 		}
@@ -104,7 +104,7 @@ int main(int argc, char **argv, char **envp)
 	// Set up environment
 	if (copy_env(&mshell.envp, envp) != 0)
 	{
-		dprintf(2, "Failed to copy environment\n");
+		ft_dprintf(2, "Failed to copy environment\n");
 		return (1);
 	}
 

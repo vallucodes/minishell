@@ -12,7 +12,7 @@ static int init_env_storage(t_env *env, char **envp)
 	env->envp = malloc(sizeof(char *) * (var_amount + 1));
 	if (!env->envp)
 	{
-		dprintf(2, "malloc error\n");
+		ft_dprintf(2, "malloc error\n");
 		return (FAIL);
 	}
 	env->allocated_capacity = var_amount + 1;
@@ -27,7 +27,7 @@ int copy_env(t_env **env, char **envp)
 	*env = malloc(sizeof(t_env));
 	if (!*env)
 	{
-		dprintf(2, "malloc error\n");
+		ft_dprintf(2, "malloc error\n");
 		return (FAIL);
 	}
 
@@ -43,7 +43,7 @@ int copy_env(t_env **env, char **envp)
 		(*env)->envp[i] = ft_strdup(envp[i]);
 		if (!(*env)->envp[i])
 		{
-			dprintf(2, "malloc error\n");
+			ft_dprintf(2, "malloc error\n");
 			free_partial_env((*env)->envp, i);
 			free(*env);
 			return (FAIL);

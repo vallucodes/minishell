@@ -6,6 +6,7 @@ file*
 *copy*
 .vscode
 .DS_Store
+draft.c
 
 # Object files
 *.o

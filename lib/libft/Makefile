@@ -9,6 +9,7 @@ HEADERS	= -I ./inc
 SRC	= \
 			ft_atoi_base.c \
 			ft_atoi.c \
+			ft_atol.c \
 			ft_bzero.c \
 			ft_calloc.c \
 			ft_isalnum.c \
@@ -17,6 +18,8 @@ SRC	= \
 			ft_isdigit.c \
 			ft_isprint.c \
 			ft_isspace.c \
+			ft_is_numeric.c \
+			ft_is_all_whitespace.c \
 			ft_itoa.c \
 			ft_lstadd_back.c \
 			ft_lstadd_front.c \
@@ -68,17 +71,20 @@ OBJS	= $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	ar -rcs $@ $?
+	@ar -rcs $@ $?
+	@echo "\033[0;32mLibft created successfully ✅\033[0m"
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c
 	@mkdir -p $(dir $@)
-	$(CC) -c $(CFLAGS) $< -o $@ $(HEADERS)
+	@$(CC) -c $(CFLAGS) $< -o $@ $(HEADERS)
 
 clean:
 	@rm -rf $(OBJ_DIR)
+	@echo "\033[0;32mLibft cleaned successfully ✅\033[0m"
+
 
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
 
 re: fclean all
 
