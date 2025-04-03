@@ -11,12 +11,12 @@ void	ft_exit(char **ast_cmds, t_minishell *minishell)
 		exit(minishell->exitcode);
 	if (!ft_atol(ast_cmds[1], &code))
 	{
-		fprintf(stderr, "minishell: exit: %s: numeric argument required\n", ast_cmds[1]);
+		ft_dprintf(2, "minishell: exit: %s: numeric argument required\n", ast_cmds[1]);
 		exit(255);
 	}
 	if (cmd_count > 2)
 	{
-		fprintf(stderr, "minishell: exit: too many arguments\n");
+		ft_dprintf(2, "minishell: exit: too many arguments\n");
 		minishell->exitcode = 1;
 		return ;
 	}
