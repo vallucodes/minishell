@@ -33,7 +33,7 @@ static char	**find_cmd_and_compose(t_token *tokens)
 	return (cmd);
 }
 
-static void	build_branch_add_redirects(t_ast **ast, t_token *tokens, t_branch branch)
+static void	build_branch_add_redirects(t_arena **arena, t_ast **ast, t_token *tokens, t_branch branch)
 {
 	t_token	*tmp;
 
@@ -44,7 +44,7 @@ static void	build_branch_add_redirects(t_ast **ast, t_token *tokens, t_branch br
 		{
 			if (is_any_redirect(tmp->type))
 			{
-				add_node(ast, init_node(NULL, tmp->next->value, tmp->type), FIRST);
+				add_node(ast, init_node(arena, NULL, tmp->next->value, tmp->type), FIRST);
 				tmp = tmp->next;
 				break ;
 			}
@@ -54,12 +54,12 @@ static void	build_branch_add_redirects(t_ast **ast, t_token *tokens, t_branch br
 	while (tmp && tmp->type != PIPE)
 	{
 		if (is_any_redirect(tmp->type))
-			add_node(ast, init_node(NULL, tmp->next->value, tmp->type), NON_FIRST);
+			add_node(ast, init_node(arena, NULL, tmp->next->value, tmp->type), NON_FIRST);
 		tmp = tmp->next;
 	}
 }
 
-static void	build_branch_add_command(t_ast **ast, t_token *tokens, t_branch branch)
+static void	build_branch_add_command(t_arena **arena, t_ast **ast, t_token *tokens, t_branch branch)
 {
 	t_token	*tmp;
 	char	**cmd;
@@ -71,16 +71,16 @@ static void	build_branch_add_command(t_ast **ast, t_token *tokens, t_branch bran
 		{
 			cmd = find_cmd_and_compose(tmp);
 			if (branch == LAST_BRANCH && last_is_pipe(ast))
-				add_node(ast, init_node(cmd, NULL, tmp->type), FIRST);
+				add_node(ast, init_node(arena, cmd, NULL, tmp->type), FIRST);
 			else
-				add_node(ast, init_node(cmd, NULL, tmp->type), NON_FIRST);
+				add_node(ast, init_node(arena, cmd, NULL, tmp->type), NON_FIRST);
 		}
 		tmp = tmp->next;
 	}
 }
 
-void	build_branch(t_ast **ast, t_token *tokens, t_branch branch)
+void	build_branch(t_arena **arena, t_ast **ast, t_token *tokens, t_branch branch)
 {
-	build_branch_add_redirects(ast, tokens, branch);
-	build_branch_add_command(ast, tokens, branch);
+	build_branch_add_redirects(arena, ast, tokens, branch);
+	build_branch_add_command(arena, ast, tokens, branch);
 }

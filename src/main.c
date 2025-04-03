@@ -35,7 +35,7 @@ void print_tokens(t_token *tokens)
 }
 
 //Testing ends
-# include <stdio.h>
+
 int main(int ac, char **av, char **envp)
 {
 	char		*input_str;
@@ -47,9 +47,8 @@ int main(int ac, char **av, char **envp)
 
 	if (ac != 1)
 		return (FAIL);
-	init_arena(&mshell.arena);
-	printf("Created arena block: first=%p, capacity=%zu\n", mshell.arena->first, mshell.arena->default_block_size);
 		// exit_error(AC ERROR)
+	init_arena(&mshell.arena);
 	if (init_minishell(&mshell, envp))
 		return (FAIL);
 		// exit_error(init_issue)
@@ -59,7 +58,7 @@ int main(int ac, char **av, char **envp)
 		if (!input_str)
 			break ;
 		//guard for empty str "" OR "     "
-		if (input_str[0] == '\0' || ft_is_all_whitespace(input_str))
+		if (input_str[0] == '\0' || ft_is_all_whitespace(input_str)) // maybe include this in input validation, this seem like patch. Also this thing should be added to history
 		{
 			free(input_str);
 			continue;
@@ -75,7 +74,7 @@ int main(int ac, char **av, char **envp)
 				retokenize_words(input.tokens);
 				handle_heredoc(mshell.envp->envp, input.tokens);
 				print_tokens(input.tokens);
-				ast = build_ast_binary_tree(input.tokens);
+				ast = build_ast_binary_tree(&mshell.arena, input.tokens);
 				execute_builtins(&mshell, ast);
 
 				free(input_str); // dont free this before the whole program ends!

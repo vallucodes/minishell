@@ -14,7 +14,6 @@ t_arena	arena_create(size_t initial_size)
 	arena.first = first;
 	arena.current = first;
 	arena.default_block_size = initial_size;
-	printf("Created arena block: first=%p, capacity=%zu\n", (void *)first, initial_size);
 	return (arena);
 }
 
@@ -51,7 +50,6 @@ void	*arena_alloc(t_arena *a, size_t size, size_t alignment)
 	void			*result;
 
 	actual_size = calc_actual_size(a, size, alignment);
-	printf("actual size needed %li\n", actual_size);
 	block = a->current;
 	if (block->used + actual_size > block->capacity)
 	{
@@ -63,6 +61,7 @@ void	*arena_alloc(t_arena *a, size_t size, size_t alignment)
 			// printf("new size iteration %li\n", new_size);
 		}
 		new_block = malloc(sizeof(t_arenablock) + new_size);
+		printf("Arena allocation  %li\n", new_size);
 		// printf("allocated block with size %li\n", new_size);
 		// if (!new_block)
 		// 	exit_error(MALLOC);
@@ -98,11 +97,9 @@ void	init_arena(t_arena **arena)
 {
 	size_t	initial_size;
 
-	initial_size = 1024;
+	initial_size = 2;
 	*arena = malloc(sizeof(t_arena));
 	// if (!*arena)
 		// exit_error(MALLOC);
 	**arena = arena_create(initial_size);
-	printf("Arena initialized: first=%p, current=%p, default_block_size=%zu\n",
-           (void *)(*arena)->first, (void *)(*arena)->current, (*arena)->default_block_size);
 }
