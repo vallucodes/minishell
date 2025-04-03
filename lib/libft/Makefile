@@ -61,6 +61,7 @@ SRC	= \
 			ft_substr.c \
 			ft_tolower.c \
 			ft_toupper.c \
+			ft_free_2d.c \
 			dprintf/printf.c \
  			dprintf/printf_types.c \
 			dprintf/printf_types2.c \
