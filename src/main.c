@@ -12,12 +12,12 @@ int main(int ac, char **av, char **envp)
 	if (ac != 1)
 		return (FAIL);
 		// exit_error(AC ERROR)
-	init_arena(&mshell.arena);
 	if (init_minishell(&mshell, envp))
 		return (FAIL);
 		// exit_error(init_issue)
 	while (1)
 	{
+		init_arena(&mshell.arena);
 		input_str = readline(PROMPT);
 		if (!input_str)
 			break ;
