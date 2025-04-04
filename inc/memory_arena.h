@@ -1,6 +1,7 @@
 #ifndef MEMORY_ARENA_H
 # define MEMORY_ARENA_H
 
+# define INITIAL_SIZE 512
 typedef struct	t_arenablock
 {
 	struct	t_arenablock *next;

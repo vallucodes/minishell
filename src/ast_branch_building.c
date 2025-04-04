@@ -11,14 +11,15 @@ static char	*add_command(t_token *tokens)
 	return (NULL);
 }
 
-static char	**find_cmd_and_compose(t_token *tokens)
+static char	**find_cmd_and_compose(t_arena **arena, t_token *tokens)
 {
 	char	*arg;
 	char	**cmd;
 	int		i;
 
 	i = 0;
-	cmd = (char **)malloc((count_amount_cmd(tokens) + 1) * sizeof(char *));
+	cmd = arena_alloc(*arena, (count_amount_cmd(tokens) + 1) * sizeof(char *), alignof(char *));
+	// cmd = (char **)malloc((count_amount_cmd(tokens) + 1) * sizeof(char *));
 	// if (!cmd)
 	// 	exit_error(MALLOC); to-do
 	cmd[i] = add_command(tokens);
@@ -69,7 +70,7 @@ static void	build_branch_add_command(t_arena **arena, t_ast **ast, t_token *toke
 	{
 		if (tmp->type == COMMAND)
 		{
-			cmd = find_cmd_and_compose(tmp);
+			cmd = find_cmd_and_compose(arena, tmp);
 			if (branch == LAST_BRANCH && last_is_pipe(ast))
 				add_node(ast, init_node(arena, cmd, NULL, tmp->type), FIRST);
 			else

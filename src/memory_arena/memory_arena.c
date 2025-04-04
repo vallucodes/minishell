@@ -1,19 +1,20 @@
 #include "../inc/minishell.h"
 
-t_arena	arena_create(size_t initial_size)
+t_arena	arena_create(void)
 {
 	t_arena			arena;
 	t_arenablock	*first;
 
-	first =  malloc(sizeof(t_arenablock) + initial_size);
+	first =  malloc(sizeof(t_arenablock) + INITIAL_SIZE);
+	printf("Arena allocation  %i\n", INITIAL_SIZE);
 	// if (!first)
 	// 	exit_error(MALLOC);
 	first->next = NULL;
-	first->capacity = initial_size;
+	first->capacity = INITIAL_SIZE;
 	first->used = 0;
 	arena.first = first;
 	arena.current = first;
-	arena.default_block_size = initial_size;
+	arena.default_block_size = INITIAL_SIZE;
 	return (arena);
 }
 
@@ -51,20 +52,18 @@ void	*arena_alloc(t_arena *a, size_t size, size_t alignment)
 
 	actual_size = calc_actual_size(a, size, alignment);
 	block = a->current;
+	printf("capacity atm %li, used atm %li, needed %li\n", block->capacity, block->used, actual_size);
 	if (block->used + actual_size > block->capacity)
 	{
 		new_size = a->default_block_size;
 
 		while (new_size <= actual_size)
-		{
 			new_size *= 2;
-			// printf("new size iteration %li\n", new_size);
-		}
 		new_block = malloc(sizeof(t_arenablock) + new_size);
-		printf("Arena allocation  %li\n", new_size);
 		// printf("allocated block with size %li\n", new_size);
 		// if (!new_block)
 		// 	exit_error(MALLOC);
+		printf("Arena allocation  %li\n", new_size);
 		new_block->next = NULL;
 		new_block->capacity = new_size;
 		new_block->used = 0;
@@ -78,28 +77,28 @@ void	*arena_alloc(t_arena *a, size_t size, size_t alignment)
 	return (result);
 }
 
-void	arena_destroy(t_arena *a)
+void	arena_destroy(t_arena **a)
 {
-	t_arenablock *block;
-	t_arenablock *next;
+	t_arenablock	*block;
+	t_arenablock	*next;
 
-	block = a->first;
+	if (!a || !*a)
+		return ;
+	block = (*a)->first;
 	while (block)
 	{
 		next = block->next;
 		free(block);
 		block = next;
 	}
-	a->first = a->current = NULL;
+	free(*a);
+	*a = NULL;
 }
 
 void	init_arena(t_arena **arena)
 {
-	size_t	initial_size;
-
-	initial_size = 2;
 	*arena = malloc(sizeof(t_arena));
 	// if (!*arena)
 		// exit_error(MALLOC);
-	**arena = arena_create(initial_size);
+	**arena = arena_create();
 }

@@ -81,13 +81,13 @@ static void	next_temp_file(char *file, int nb)
 	free(char_nb);
 }
 
-
-char	*create_tmp_file(int *fd)
+char	*create_tmp_file(t_arena **arena, int *fd)
 {
 	char	*file;
 	int		index;
 
-	file = malloc(256);
+	// file = malloc(256);
+	file = arena_alloc(*arena, 10, alignof(char));
 	// if (!file)
 		// exit_error(MALLOC);
 	index = 1;

@@ -63,8 +63,8 @@ void	print_error(char *msg, char *token);
 void	init_quotes(t_quotes_helper *quotes);
 
 //heredoc
-void	handle_heredoc(char **env, t_token *tokens);
-char	*create_tmp_file(int *fd);
+void	handle_heredoc(t_arena **arena, char **env, t_token *tokens);
+char	*create_tmp_file(t_arena **arena, int *fd);
 void	save_to_file(char **env, char *input, int fd, t_expand expand);
 
 //ast
@@ -81,9 +81,9 @@ int		last_is_pipe(t_ast **ast);
 t_token	*skip_to_next_pipe(t_token *tokens);
 
 //memory-arena
-t_arena	arena_create(size_t initial_size);
+t_arena	arena_create();
 void	*arena_alloc(t_arena *a, size_t size, size_t alignment);
-void	arena_destroy(t_arena *a);
+void	arena_destroy(t_arena **a);
 void	init_arena(t_arena **arena);
 
 //developlment functions
