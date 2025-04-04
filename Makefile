@@ -15,7 +15,9 @@ LIBFTH		= $(LIBFT_DIR)/inc/libft.h
 MINISHH		= ./inc/minishell.h
 
 SRC			=	main.c \
-				init_minishell.c\
+				print_development.c \
+				init_minishell.c \
+				memory_arena/memory_arena.c \
 				ast.c \
 				ast_branch_building.c \
 				ast_dev.c \
