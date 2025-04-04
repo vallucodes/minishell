@@ -37,11 +37,10 @@ int main(int ac, char **av, char **envp)
 				retokenize_words(input.tokens);
 				handle_heredoc(&mshell.arena, mshell.envp->envp, input.tokens);
 				// print_tokens(input.tokens);
-				// expand(input_str);//double quote or single quote expasion
-				// remove quotes
+				expand_remove_quotes(mshell.envp->envp, input.tokens); //double quote or single quote expasion
+				print_tokens(input.tokens);
 				ast = build_ast_binary_tree(&mshell.arena, input.tokens);
 				execute_builtins(&mshell, ast);
-
 				free(input_str); // dont free this before the whole program ends!
 			}
 		}

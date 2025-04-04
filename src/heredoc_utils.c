@@ -1,6 +1,6 @@
 #include "../inc/minishell.h"
 
-static int	is_valid_char(char c)
+int	is_valid_char_expansion(char c)
 {
 	return(ft_isalnum(c) || c == '_');
 }
@@ -12,7 +12,7 @@ static size_t	expand_content(char **env, char *str, int fd)
 	size_t	len;
 
 	len = 1;
-	while (str[len] && is_valid_char(str[len]))
+	while (str[len] && is_valid_char_expansion(str[len]))
 		len++;
 	i = 0;
 	while(env[i])
@@ -48,7 +48,7 @@ void	save_to_file(char **env, char *input, int fd, t_expand expand)
 	{
 		while (input[i])
 		{
-			if (input[i] == '$' && !ft_isspace(input[i + 1]))
+			if (input[i] == '$' && is_valid_char_expansion(input[i + 1]))
 				i += expand_content(env, &input[i], fd);
 			else
 				write(fd, &input[i++], 1);

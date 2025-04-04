@@ -52,7 +52,7 @@ void	*arena_alloc(t_arena *a, size_t size, size_t alignment)
 
 	actual_size = calc_actual_size(a, size, alignment);
 	block = a->current;
-	printf("capacity atm %li, used atm %li, needed %li\n", block->capacity, block->used, actual_size);
+	// printf("capacity atm %li, used atm %li, needed %li\n", block->capacity, block->used, actual_size);
 	if (block->used + actual_size > block->capacity)
 	{
 		new_size = a->default_block_size;
@@ -63,7 +63,7 @@ void	*arena_alloc(t_arena *a, size_t size, size_t alignment)
 		// printf("allocated block with size %li\n", new_size);
 		// if (!new_block)
 		// 	exit_error(MALLOC);
-		printf("Arena allocation  %li\n", new_size);
+		// printf("Arena allocation  %li\n", new_size);
 		new_block->next = NULL;
 		new_block->capacity = new_size;
 		new_block->used = 0;

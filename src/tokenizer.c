@@ -24,7 +24,7 @@ static t_token *init_token(t_minishell *mshell, t_input *input, int len, t_token
 	return (new_token);
 }
 
-static t_token *init_token_word(t_minishell *mshell, t_token_type type, char *word)
+static t_token *init_token_word(t_minishell *mshell, char *word, t_token_type type)
 {
 	t_token *new_token;
 
@@ -55,6 +55,14 @@ static void add_token(t_token **head, t_token *new)
 	}
 }
 
+void	init_quotes(t_quotes_helper *quotes)
+{
+	quotes->in_double = 0;
+	quotes->in_single = 0;
+	quotes->in_quotes = 0;
+	quotes->previous_in_quotes = 0;
+}
+
 void	append_char(char *str, char **new, int i)
 {
 	char	*temp;
@@ -67,36 +75,23 @@ void	append_char(char *str, char **new, int i)
 	free (temp);
 }
 
-void	init_quotes(t_quotes_helper *quotes)
-{
-	quotes->in_double = 0;
-	quotes->in_single = 0;
-	quotes->in_quotes = 0;
-	quotes->previous_in_quotes = 0;
-}
-
 void	word(t_minishell *mshell, t_input *input)
 {
 	t_quotes_helper	quotes;
-	char			*new_str;
 	char			*input_str;
+	char			*new_str;
 
 	input_str = input->full_str;
 	init_quotes(&quotes);
 	new_str = ft_strdup("");
 	while (input->full_str[input->index] && ((!is_separator(input->full_str[input->index]) || quotes.in_quotes)))
 	{
-		quotes.previous_in_quotes = quotes.in_quotes;
+		// quotes.previous_in_quotes = quotes.in_quotes;
 		quotes.in_quotes = inquotes(input->full_str[input->index], &quotes);
-		if (quotes.previous_in_quotes != quotes.in_quotes)
-		{
-			input->index++;
-			continue ;
-		}
 		append_char(input_str, &new_str, input->index);
 		input->index++;
 	}
-	add_token(&input->tokens, init_token_word(mshell, WORD, new_str));
+	add_token(&input->tokens, init_token_word(mshell, new_str, WORD));
 }
 
 void extract_token(t_minishell *mshell, t_input *input)
@@ -121,3 +116,5 @@ void extract_token(t_minishell *mshell, t_input *input)
 			word(mshell, input);
 	}
 }
+
+// ls -la<file1>fi"le"1.1| "c"a't' -e >fi""'le2' <<file3 | grep fi"l"en'am'e >>file4 | du -s > file5
