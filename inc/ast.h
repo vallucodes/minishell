@@ -1,3 +1,5 @@
+#ifndef AST_H
+# define AST_H
 typedef struct s_ast
 {
 	t_token_type	type;
@@ -20,3 +22,4 @@ typedef enum e_branch
 	NON_LAST_BRANCH,
 }	t_branch;
 
+#endif

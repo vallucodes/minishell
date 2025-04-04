@@ -7,11 +7,13 @@
 # include <readline/readline.h>	//readline
 # include <readline/history.h>	//readline
 # include <fcntl.h>				//open
+# include <stdalign.h>			//alignof
 # include "../lib/libft/inc/libft.h"
 # include "lexing.h"
 # include "ast.h"
 # include "heredoc.h"
 # include "environment.h"
+# include "memory_arena.h"
 # include "builtin.h"
 
 # define PROMPT "\001\e[93m\002🦒 >>>\001\e[0m\e[95m\002 Giraffeshell>$ \001\e[0m\002"
@@ -32,13 +34,14 @@ typedef enum e_exit
 
 typedef struct s_minishell
 {
+	t_arena	*arena;
 	t_env	*envp; // env struct
 	int		exitcode; //exitcode assignment after exe
 	//later add execution, exit code when we are there
 }				t_minishell;
 
 //functions
-void	extract_token(t_input *input);
+void	extract_token(t_minishell *mshell, t_input *input);
 void	init_lexer(t_input *new_input, char *input_str);
 int		input_validation(char *input);
 int		tokens_validation(t_token *tokens);
@@ -60,15 +63,15 @@ void	print_error(char *msg, char *token);
 void	init_quotes(t_quotes_helper *quotes);
 
 //heredoc
-void	handle_heredoc(char **env, t_token *tokens);
-char	*create_tmp_file(int *fd);
+void	handle_heredoc(t_arena **arena, char **env, t_token *tokens);
+char	*create_tmp_file(t_arena **arena, int *fd);
 void	save_to_file(char **env, char *input, int fd, t_expand expand);
 
 //ast
-t_ast	*build_ast_binary_tree(t_token *tokens);
-void	build_branch(t_ast **ast, t_token *tokens, t_branch branch);
+t_ast	*build_ast_binary_tree(t_arena **arena, t_token *tokens);
+void	build_branch(t_arena **arena, t_ast **ast, t_token *tokens, t_branch branch);
 void	add_node(t_ast **ast, t_ast *new_node, t_order order);
-t_ast	*init_node(char **cmd, char *file, t_token_type type);
+t_ast	*init_node(t_arena **arena, char **cmd, char *file, t_token_type type);
 
 //ast utils
 int		count_amount_cmd(t_token *tokens);
@@ -76,6 +79,12 @@ size_t	get_amount_of_pipes(t_token *tokens);
 int		is_any_redirect(t_token_type type);
 int		last_is_pipe(t_ast **ast);
 t_token	*skip_to_next_pipe(t_token *tokens);
+
+//memory-arena
+t_arena	arena_create();
+void	*arena_alloc(t_arena *a, size_t size, size_t alignment);
+void	arena_destroy(t_arena **a);
+void	init_arena(t_arena **arena);
 
 //developlment functions
 void print_tokens(t_token *tokens);

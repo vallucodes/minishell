@@ -1,3 +1,6 @@
+#ifndef LEXING_H
+# define LEXING_H
+
 typedef enum e_quotes
 {
 	NONE,
@@ -43,3 +46,5 @@ typedef struct s_quotes_helper
 	int	in_quotes;
 	int	previous_in_quotes;
 }				t_quotes_helper;
+
+#endif

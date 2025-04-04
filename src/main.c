@@ -1,41 +1,5 @@
 #include "../inc/minishell.h"
 
-//For testing purpose
-
-char *get_token_type_name(t_token_type token_type)
-{
-	switch (token_type)
-	{
-		case WORD: return "WORD";
-		case COMMAND: return "COMMAND";
-		case ARG: return "ARG";
-		case FILE_TOKEN: return "FILE";
-		case HERE_TOKEN: return "HERE_WORD";
-		case PIPE: return "PIPE";
-		case REDIRECT_IN: return "REDIRECT_IN";
-		case REDIRECT_OUT: return "REDIRECT_OUT";
-		case REDIRECT_APPEND: return "REDIRECT_APPEND";
-		case HERE_STRING: return "HERE_STRING";
-		case ENV_VAR: return "ENV_VAR";
-		default: return "UNKNOWN";
-	}
-}
-
-void print_tokens(t_token *tokens)
-{
-	while (tokens)
-	{
-		if (tokens->value)
-		{
-			printf("Type: %15s, Length of token: %d, Value: %.*s\n", get_token_type_name(tokens->type), tokens->len, tokens->len, tokens->value);
-		}
-		tokens = tokens->next;
-	}
-	printf("\n");
-}
-
-//Testing ends
-# include <stdio.h>
 int main(int ac, char **av, char **envp)
 {
 	char		*input_str;
@@ -48,6 +12,7 @@ int main(int ac, char **av, char **envp)
 	if (ac != 1)
 		return (FAIL);
 		// exit_error(AC ERROR)
+	init_arena(&mshell.arena);
 	if (init_minishell(&mshell, envp))
 		return (FAIL);
 		// exit_error(init_issue)
@@ -57,7 +22,7 @@ int main(int ac, char **av, char **envp)
 		if (!input_str)
 			break ;
 		//guard for empty str "" OR "     "
-		if (input_str[0] == '\0' || ft_is_all_whitespace(input_str))
+		if (input_str[0] == '\0' || ft_is_all_whitespace(input_str)) // maybe include this in input validation, this seem like patch. Also this thing should be added to history
 		{
 			free(input_str);
 			continue;
@@ -65,15 +30,16 @@ int main(int ac, char **av, char **envp)
 		add_history(input_str);
 		if (!input_validation(input_str))
 		{
-			// expand(input_str);//double quote or single quote expasion
 			init_lexer(&input, input_str);
-			extract_token(&input);
+			extract_token(&mshell, &input);
 			if (tokens_validation(input.tokens) == SUCCESS)
 			{
 				retokenize_words(input.tokens);
-				handle_heredoc(mshell.envp->envp, input.tokens);
-				print_tokens(input.tokens);
-				ast = build_ast_binary_tree(input.tokens);
+				handle_heredoc(&mshell.arena, mshell.envp->envp, input.tokens);
+				// print_tokens(input.tokens);
+				// expand(input_str);//double quote or single quote expasion
+				// remove quotes
+				ast = build_ast_binary_tree(&mshell.arena, input.tokens);
 				execute_builtins(&mshell, ast);
 
 				free(input_str); // dont free this before the whole program ends!
@@ -81,6 +47,7 @@ int main(int ac, char **av, char **envp)
 		}
 	}
 	//free_env(&mshell.env); // must free environment here after loop end
+	// arena_destroy(&mshell.arena);
 	return (0);
 }
 
