@@ -2,9 +2,9 @@
 
 void		print_sorted_export(t_env *env);
 static int	handle_export_arg(t_env *env, char *arg);
-static int	export_update_or_add(t_env *env, char *arg, size_t key_len, int has_value);
-static int	export_update(t_env *env, const char *arg, const char *key, int has_value);
-static int	export_add(t_env *env, const char *arg, const char *key, size_t key_len, int has_value);
+static int	export_update_or_add(t_env *env, char *arg, size_t key_len, int key_has_value);
+static int	export_update(t_env *env, const char *arg, const char *key, int key_has_value);
+static int	export_add(t_env *env, const char *arg, const char *key, size_t key_len, int key_has_value);
 
 int	ft_export(char **args, t_env *env)
 {
@@ -39,10 +39,10 @@ void print_sorted_export(t_env *env)
 		char *equal = ft_strchr(sorted[i], '=');
 		if (equal)
 		{
-			size_t key_len = equal - sorted[i];
-			ft_dprintf(STDOUT_FILENO, "declare -x ");
-			write(STDOUT_FILENO, sorted[i], key_len + 1); // print KEY=
-			ft_dprintf(STDOUT_FILENO, "\"%s\"\n", equal + 1); // print "VALUE"
+			key_len = equal - sorted[i];
+			ft_dprintf(2, "declare -x ");
+			write(2, sorted[i], key_len + 1); // print KEY=
+			ft_dprintf(2, "\"%s\"\n", equal + 1); // print "VALUE"
 		}
 		else
 		{
@@ -53,19 +53,15 @@ void print_sorted_export(t_env *env)
 	ft_free_2d(sorted);
 }
 
-
-
-
-
 static int	handle_export_arg(t_env *env, char *arg)
 {
 	char	*equal_sign;
 	size_t	key_len;
-	int		has_value;
+	int		key_has_value;
 
 	equal_sign = ft_strchr(arg, '=');
-	has_value = (equal_sign != NULL);
-	if (has_value)
+	key_has_value = (equal_sign != NULL);
+	if (key_has_value)
 		key_len = (size_t)(equal_sign - arg);
 	else
 		key_len = ft_strlen(arg);
@@ -74,12 +70,12 @@ static int	handle_export_arg(t_env *env, char *arg)
 		ft_dprintf(2, "minishell: export: `%s`: not a valid identifier\n", arg);
 		return (0); // invalid
 	}
-	if (!export_update_or_add(env, arg, key_len, has_value))
+	if (!export_update_or_add(env, arg, key_len, key_has_value))
 		return (0); // malloc fail
 	return (1);
 }
 
-static int	export_update_or_add(t_env *env, char *arg, size_t key_len, int has_value)
+static int	export_update_or_add(t_env *env, char *arg, size_t key_len, int key_has_value)
 {
 	char *key = ft_substr(arg, 0, key_len);
 	if (!key)
@@ -87,9 +83,9 @@ static int	export_update_or_add(t_env *env, char *arg, size_t key_len, int has_v
 		ft_dprintf(2, "minishell: export: malloc failed\n");
 		return (0);
 	}
-	if (!export_update(env, arg, key, has_value))
+	if (!export_update(env, arg, key, key_has_value))
 	{
-		if (!export_add(env, arg, key, key_len, has_value))
+		if (!export_add(env, arg, key, key_len, key_has_value))
 		{
 			free(key);
 			return (0);
@@ -99,7 +95,7 @@ static int	export_update_or_add(t_env *env, char *arg, size_t key_len, int has_v
 	return (1);
 }
 
-static int	export_update(t_env *env, const char *arg, const char *key, int has_value)
+static int	export_update(t_env *env, const char *arg, const char *key, int key_has_value)
 {
 	size_t i = 0;
 
@@ -107,7 +103,7 @@ static int	export_update(t_env *env, const char *arg, const char *key, int has_v
 	{
 		if (match_env_key(env->envp[i], key))
 		{
-			if (has_value)
+			if (key_has_value)
 			{
 				free(env->envp[i]);
 				env->envp[i] = ft_strdup(arg);
@@ -119,14 +115,14 @@ static int	export_update(t_env *env, const char *arg, const char *key, int has_v
 	return (0); // not found
 }
 
-static int	export_add(t_env *env, const char *arg, const char *key, size_t key_len, int has_value)
+static int	export_add(t_env *env, const char *arg, const char *key, size_t key_len, int key_has_value)
 {
 	if (!realloc_env_capacity(env))
 	{
 		ft_dprintf(2, "minishell: export: malloc failed\n");
 		return (0);
 	}
-	if (has_value)
+	if (key_has_value)
 	{
 		env->envp[env->len] = ft_strdup(arg);
 		if (!env->envp[env->len])
