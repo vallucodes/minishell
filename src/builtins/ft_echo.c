@@ -1,25 +1,14 @@
 #include "../../inc/minishell.h"
 
-static int	is_valid_n_flag(const char *arg)
-{
-	int	i = 1;
-
-	if (arg[0] != '-')
-		return (0);
-	while (arg[i])
-	{
-		if (arg[i] != 'n')
-			return (0);
-		i++;
-	}
-	return (1);
-}
+static int	is_valid_n_flag(const char *arg);
 
 int	ft_echo(int cmds_count, char **argv)
 {
-	int word_index = 1;
-	int newline = 1; // first always print nl at end
+	int word_index;
+	int newline;
 
+	word_index = 1;
+	newline = 1; // first always print nl at end
 	while (word_index < cmds_count && is_valid_n_flag(argv[word_index]))
 	{
 		newline = 0;
@@ -40,4 +29,20 @@ int	ft_echo(int cmds_count, char **argv)
 		printf("\n");
 
 	return (0);
+}
+
+static int	is_valid_n_flag(const char *arg)
+{
+	int	i;
+
+	i = 1;
+	if (arg[0] != '-')
+		return (0);
+	while (arg[i])
+	{
+		if (arg[i] != 'n')
+			return (0);
+		i++;
+	}
+	return (1);
 }
