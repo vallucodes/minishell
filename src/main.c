@@ -40,7 +40,9 @@ int main(int ac, char **av, char **envp)
 				// expand(input_str);//double quote or single quote expasion
 				// remove quotes
 				ast = build_ast_binary_tree(&mshell.arena, input.tokens);
-				execute_builtins(&mshell, ast);
+				//execution(&mshell);
+				//execute_builtins(&mshell, ast);
+				traverse(ast);
 
 				free(input_str); // dont free this before the whole program ends!
 			}

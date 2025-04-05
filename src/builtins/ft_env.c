@@ -21,7 +21,6 @@ int ft_env(t_env **my_env, char **ast_cmd)
             printf("%s\n", (*my_env)->envp[i]);
         i++;
     }
-
     return (0);
 }
 

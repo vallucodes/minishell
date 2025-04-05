@@ -10,17 +10,17 @@ typedef enum e_quotes
 
 typedef enum e_token_type
 {
-	WORD = 1,			// some word in quotes or without quotes
-	COMMAND,			// word classified as command
-	ARG,				// word classified as argument to command
-	FILE_TOKEN,			// word classified as file
-	HERE_TOKEN,			// word classified as heredoc
-	PIPE,				// |
-	REDIRECT_IN,		// <
-	REDIRECT_OUT,		// >
-	REDIRECT_APPEND,	// >>
-	HERE_STRING,		// <<
-	ENV_VAR,			// $
+	WORD = 1,			//1 some word in quotes or without quotes
+	COMMAND,			//2 word classified as command
+	ARG,				//3 word classified as argument to command
+	FILE_TOKEN,			//4 word classified as file
+	HERE_TOKEN,			//5 word classified as heredoc
+	PIPE,				//6 |
+	REDIRECT_IN,		//7 <
+	REDIRECT_OUT,		//8 >
+	REDIRECT_APPEND,	//9 >>
+	HERE_STRING,		//10 <<
+	ENV_VAR,			//11 $
 }	t_token_type;
 
 typedef struct s_token

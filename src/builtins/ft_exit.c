@@ -12,7 +12,7 @@ void	ft_exit(char **ast_cmds, t_minishell *minishell)
 	if (!ft_atol(ast_cmds[1], &code))
 	{
 		ft_dprintf(2, "minishell: exit: %s: numeric argument required\n", ast_cmds[1]);
-		exit(255);
+		exit(2);
 	}
 	if (cmd_count > 2)
 	{

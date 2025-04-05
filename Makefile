@@ -40,7 +40,8 @@ SRC			=	main.c \
 				builtins/ft_unset.c \
 				builtins/ft_export.c \
 				builtins/utils_builtins.c \
-				builtins/ft_export_sort_env.c
+				builtins/ft_export_sort_env.c \
+				execution/traverse.c
 
 OBJS		= $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
 

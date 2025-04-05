@@ -34,7 +34,7 @@ int match_env_key(const char *env_entry, const char *key)
 
 	key_len = ft_strlen(key);
 	match = ft_strncmp(env_entry, key, key_len);
-	if (match == 0 && env_entry[key_len] == '=') //last char must be =
+	if (match == 0 && (env_entry[key_len] == '=' || env_entry[key_len] == '\0')) //last char must be = OR \0
 		return (1);
 	else
 		return (0);
