@@ -44,9 +44,9 @@ int main(int ac, char **av, char **envp)
 				free(input_str); // dont free this before the whole program ends!
 			}
 		}
+		arena_destroy(&mshell.arena);
 	}
 	//free_env(&mshell.env); // must free environment here after loop end
-	// arena_destroy(&mshell.arena);
 	return (0);
 }
 
