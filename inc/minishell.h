@@ -56,16 +56,19 @@ int		is_quote(char c);
 int		is_operator(char c);
 int		is_word(t_input *input, int i);
 int		inquotes(char c, t_quotes_helper *quotes);
+void	append_char(char *str, char **new, int i);
 
 //global utils
 int		any_redirect(t_token *current);
 void	print_error(char *msg, char *token);
 void	init_quotes(t_quotes_helper *quotes);
+void	replace_content_of_token(t_token *current, char *new_str);
 
 //heredoc
 void	handle_heredoc(t_arena **arena, char **env, t_token *tokens);
 char	*create_tmp_file(t_arena **arena, int *fd);
 void	save_to_file(char **env, char *input, int fd, t_expand expand);
+int		is_valid_char_expansion(char c);
 
 //ast
 t_ast	*build_ast_binary_tree(t_arena **arena, t_token *tokens);
@@ -85,6 +88,9 @@ t_arena	arena_create();
 void	*arena_alloc(t_arena *a, size_t size, size_t alignment);
 void	arena_destroy(t_arena **a);
 void	init_arena(t_arena **arena);
+
+//remove quotes
+void	expand_remove_quotes(char **env, t_token *tokens);
 
 //developlment functions
 void print_tokens(t_token *tokens);

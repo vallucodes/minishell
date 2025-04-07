@@ -30,18 +30,51 @@ static void	replace_token(t_token *current, char *file)
 	current->next->len = ft_strlen(file);
 }
 
+int	check_quotes(t_token *current)
+{
+	t_quotes_helper	quotes;
+	char			*new_str;
+	char			*input_str;
+	size_t			i;
+	char			expansion_flag;
+
+	i = 0;
+	expansion_flag = EXPAND;
+	input_str = current->value;
+	init_quotes(&quotes);
+	new_str = ft_strdup("");
+	while (input_str[i])
+	{
+		quotes.previous_in_quotes = quotes.in_quotes;
+		quotes.in_quotes = inquotes(input_str[i], &quotes);
+		if (quotes.in_quotes)
+			expansion_flag = DONT_EXPAND;
+		if (quotes.previous_in_quotes != quotes.in_quotes)
+		{
+			i++;
+			continue ;
+		}
+		append_char(input_str, &new_str, i);
+		i++;
+	}
+	replace_content_of_token(current, new_str);
+	return (expansion_flag);
+}
+
 void	handle_heredoc(t_arena **arena, char **env, t_token *tokens)
 {
-	t_token *current;
-	char	*file;
+	t_token		*current;
+	char		*file;
+	t_expand	expansion_flag;
 
-
+	expansion_flag = EXPAND;
 	current = tokens;
 	while (current)
 	{
 		if (current->type == HERE_STRING)
 		{
-			file = read_line(arena, env, current->next->value, EXPAND);
+			expansion_flag = check_quotes(current->next);
+			file = read_line(arena, env, current->next->value, expansion_flag);
 			replace_token(current, file);
 		}
 		current = current->next;

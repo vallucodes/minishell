@@ -12,12 +12,12 @@ int main(int ac, char **av, char **envp)
 	if (ac != 1)
 		return (FAIL);
 		// exit_error(AC ERROR)
-	init_arena(&mshell.arena);
 	if (init_minishell(&mshell, envp))
 		return (FAIL);
 		// exit_error(init_issue)
 	while (1)
 	{
+		init_arena(&mshell.arena);
 		input_str = readline(PROMPT);
 		if (!input_str)
 			break ;
@@ -37,18 +37,17 @@ int main(int ac, char **av, char **envp)
 				retokenize_words(input.tokens);
 				handle_heredoc(&mshell.arena, mshell.envp->envp, input.tokens);
 				// print_tokens(input.tokens);
-				// expand(input_str);//double quote or single quote expasion
-				// remove quotes
+				expand_remove_quotes(mshell.envp->envp, input.tokens); //double quote or single quote expasion
+				print_tokens(input.tokens);
 				ast = build_ast_binary_tree(&mshell.arena, input.tokens);
 				execute_builtins(&mshell, ast);
-
 				free(input_str); // dont free this before the whole program ends!
 			}
 		}
+		arena_destroy(&mshell.arena);
 	}
 	//free_env(&mshell.env); // must free environment here after loop end
-	// arena_destroy(&mshell.arena);
 	return (0);
 }
 
-// ls -la < file1 > file1.1| cat -e >file2 <<file3 | grep filename >>file4 | du -s > file5
+// "l"s -la<file1>fi"le"1.1| "c"a't' -e >fi""l'e2' <<file3 | grep fi"l"en'am'e >>file4 | du -s > file5
