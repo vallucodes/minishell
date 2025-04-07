@@ -50,4 +50,4 @@ int main(int ac, char **av, char **envp)
 	return (0);
 }
 
-// ls -la < file1 > file1.1| cat -e >file2 <<file3 | grep filename >>file4 | du -s > file5
+// "l"s -la<file1>fi"le"1.1| "c"a't' -e >fi""l'e2' <<file3 | grep fi"l"en'am'e >>file4 | du -s > file5

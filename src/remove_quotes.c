@@ -5,6 +5,12 @@ int	is_any_word(t_token_type type)
 	return ((type == COMMAND) || (type == ARG) || (type == FILE_TOKEN));
 }
 
+void	replace_content_of_token(t_token *current, char *new_str)
+{
+	current->value = new_str;
+	current->len = ft_strlen(new_str);
+}
+
 static size_t	expand_content(char **env, char *str, char **new_str)
 {
 	size_t	i;
@@ -33,7 +39,7 @@ static size_t	expand_content(char **env, char *str, char **new_str)
 	return (len);
 }
 
-void	loop_through_word(char **env, t_token *current)
+static void	loop_through_word(char **env, t_token *current)
 {
 	t_quotes_helper	quotes;
 	char			*new_str;
@@ -58,7 +64,7 @@ void	loop_through_word(char **env, t_token *current)
 		append_char(input_str, &new_str, i);
 		i++;
 	}
-	// replace_content_of_token(new_str);
+	replace_content_of_token(current, new_str);
 }
 
 void	expand_remove_quotes(char **env, t_token *tokens)

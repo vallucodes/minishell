@@ -62,7 +62,7 @@ t_ast	*build_ast_binary_tree(t_arena **arena, t_token *tokens)
 		i++;
 	}
 	build_branch(arena, &ast, tokens, LAST_BRANCH);
-	print_whole_tree(ast);
+	// print_whole_tree(ast);
 	return (ast);
 }
 //ls -la < file1 > file1.1| cat -e > file2 | grep filename > file3 | du -s > file4
