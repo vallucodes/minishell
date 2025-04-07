@@ -1,13 +1,6 @@
 #include "../../inc/minishell.h"
 #include "../../inc/builtin.h"
 
-int count_cmds(char **cmds)
-{
-	int count = 0;
-	while (cmds && cmds[count])
-		count++;
-	return count;
-}
 
 int execute_builtins(t_minishell *mshell, t_ast *ast)
 {
@@ -19,9 +12,7 @@ int execute_builtins(t_minishell *mshell, t_ast *ast)
 	}
 	if (ft_strcmp(ast->cmd[0], "env") == 0)
 	{
-		//mshell->exitcode = ft_env(&mshell->envp, &ast->cmd[1]);
 		mshell->exitcode = ft_env(&mshell->envp, ast->cmd);
-
 		return (mshell->exitcode);
 	}
 	if (ft_strcmp(ast->cmd[0], "pwd") == 0)
@@ -42,6 +33,11 @@ int execute_builtins(t_minishell *mshell, t_ast *ast)
 	if (ft_strcmp(ast->cmd[0], "unset") == 0)
 	{
 		ft_unset(ast->cmd, mshell->envp);
+		return (mshell->exitcode);
+	}
+	if (ft_strcmp(ast->cmd[0], "export") == 0)
+	{
+		ft_export(ast->cmd, mshell->envp);
 		return (mshell->exitcode);
 	}
 	return (FAIL); //no built-in matched
