@@ -32,7 +32,6 @@ SRC			=	main.c \
 				error.c \
 				environment/environment.c \
 				environment/free_env.c \
-				builtins/execute_builtins.c \
 				builtins/ft_env.c \
 				builtins/ft_pwd.c \
 				builtins/ft_echo.c \
@@ -41,7 +40,10 @@ SRC			=	main.c \
 				builtins/ft_export.c \
 				builtins/utils_builtins.c \
 				builtins/ft_export_sort_env.c \
-				execution/traverse.c
+				execution/execute_builtin.c \
+				execution/exec_utils.c \
+				execution/execution.c
+#execution/traverse.c \
 
 OBJS		= $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
 

@@ -14,7 +14,6 @@ int		is_valid_identifier_range(const char *str, size_t len);
 int		match_env_key(const char *env_entry, const char *key);
 
 int		count_cmds(char **cmds);
-int		execute_builtins(t_minishell *mshell, t_ast *ast);
 int		realloc_env_capacity(t_env *env);
 char	**dup_and_sort_env(t_env *env);
 

@@ -40,10 +40,10 @@ int main(int ac, char **av, char **envp)
 				// expand(input_str);//double quote or single quote expasion
 				// remove quotes
 				ast = build_ast_binary_tree(&mshell.arena, input.tokens);
-				//execution(&mshell);
-				//execute_builtins(&mshell, ast);
-				traverse(ast);
-
+				// if (!mshell->ast) -- check if ast is valid
+				// 	return ;
+				//traverse(ast);
+				execute_ast(&mshell, ast);;
 				free(input_str); // dont free this before the whole program ends!
 			}
 		}
