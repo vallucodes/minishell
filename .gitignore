@@ -1,6 +1,9 @@
 tmp*
 file*
 
+# Swap
+*.swp
+
 # Prerequisites
 *.d
 *copy*
