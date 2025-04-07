@@ -51,3 +51,4 @@ int main(int ac, char **av, char **envp)
 }
 
 // "l"s -la<file1>fi"le"1.1| "c"a't' -e >fi""l'e2' <<file3 | grep fi"l"en'am'e >>file4 | du -s > file5
+// 123"$HOME"456
