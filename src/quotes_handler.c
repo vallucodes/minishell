@@ -30,34 +30,6 @@ void	replace_content_of_token(t_token *current, char *new_str)
 	current->len = ft_strlen(new_str);
 }
 
-static size_t	expand_content(char **env, char *str, char **new_str)
-{
-	size_t	i;
-	size_t	j;
-	size_t	len;
-
-	len = 1;
-	while (str[len] && is_valid_char_expansion(str[len]))
-		len++;
-	i = 0;
-	while(env[i])
-	{
-		if (expandable_exists(len, env, i, str))
-		{
-			j = 0;
-			while (env[i][j])
-			{
-				while (env[i][j++] != '=')
-				j++;
-				while (env[i][j++])
-					append_char(env[i], new_str, j);
-			}
-		}
-		i++;
-	}
-	return (len);
-}
-
 static void	loop_through_word(char **env, t_token *current)
 {
 	t_quotes_helper	quotes;
@@ -74,7 +46,7 @@ static void	loop_through_word(char **env, t_token *current)
 		update_quote_state(input_str[i], &quotes);
 		if (is_valid_expandable(quotes, &input_str[i]))
 		{
-			i += expand_content(env, &input_str[i], &new_str);
+			i += expand_content(env, &input_str[i], 0, &new_str);
 			continue ;
 		}
 		if (there_is_quote_state_change(quotes))

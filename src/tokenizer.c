@@ -1,5 +1,11 @@
 #include "minishell.h"
 
+int	is_valid_word(t_quotes_helper	*quotes, t_input *input)
+{
+	return (input->full_str[input->index] &&
+		((!is_separator(input->full_str[input->index]) || quotes->in_quotes)));
+}
+
 void	init_lexer(t_input *new_input, char *input_str)
 {
 	new_input->full_str = input_str;
@@ -84,7 +90,7 @@ void	word(t_minishell *mshell, t_input *input)
 	input_str = input->full_str;
 	init_quotes(&quotes);
 	new_str = ft_strdup("");
-	while (input->full_str[input->index] && ((!is_separator(input->full_str[input->index]) || quotes.in_quotes)))
+	while (is_valid_word(&quotes, input))
 	{
 		update_quote_state(input->full_str[input->index], &quotes);
 		append_char(input_str, &new_str, input->index);
@@ -117,3 +123,4 @@ void	create_tokens(t_minishell *mshell, t_input *input)
 }
 
 // ls -la<file1>fi"le"1.1| "c"a't' -e >fi""'le2' <<'fi'le3 | grep fi"l"en'am'e >>file4 | du -s > $HOME'/path'
+// ls -la<file1>fi"le"1.1| "c"a't' -e >fi""'le2' <<'fi'le3 | grep fi"l"en'am'e >>file4 | du -s > "$HO'ME"'/path'

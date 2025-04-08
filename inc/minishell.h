@@ -68,6 +68,8 @@ int		any_redirect(t_token *current);
 void	print_error(char *msg, char *token, t_token_type type);
 void	init_quotes(t_quotes_helper *quotes);
 void	replace_content_of_token(t_token *current, char *new_str);
+int		expandable_exists(int len, char **env, int i, char *str);
+size_t	expand_content(char **env, char *str, int fd, char **new_str);
 
 //heredoc
 void	handle_heredoc(t_arena **arena, char **env, t_token *tokens);
