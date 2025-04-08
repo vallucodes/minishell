@@ -102,7 +102,7 @@ void extract_token(t_minishell *mshell, t_input *input)
 		if (input->full_str[input->index] == '\0')
 			break ;
 		if (ft_strncmp(&input->full_str[input->index], "<<", 2) == 0)
-			add_token(&input->tokens, init_token(mshell, input, 2, HERE_STRING));
+			add_token(&input->tokens, init_token(mshell, input, 2, HERE_DOCUMENT));
 		else if (ft_strncmp(&input->full_str[input->index], ">>", 2) == 0)
 			add_token(&input->tokens, init_token(mshell, input, 2, REDIRECT_APPEND));
 		else if (input->full_str[input->index] == '|')

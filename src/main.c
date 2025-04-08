@@ -21,10 +21,11 @@ int main(int ac, char **av, char **envp)
 		input_str = readline(PROMPT);
 		// if (!input_str)
 			// exit_error(readline);
-		if (input_str[0] == '\0' || ft_is_all_whitespace(input_str)) // maybe include this in input validation, this seem like patch. Also this thing should be added to history
+		if (input_str[0] == '\0')
 		{
 			free(input_str);
-			continue;
+			arena_destroy(&mshell.arena);
+			continue ;
 		}
 		add_history(input_str);
 		if (!input_validation(input_str))

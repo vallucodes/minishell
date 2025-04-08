@@ -59,7 +59,7 @@ int input_validation(char *input)
 	int	balanced;
 
 	balanced = 1;
-	if (!input)
+	if (!input || ft_is_all_whitespace(input))
 		return(FAIL);
 	quote_validation(input, NONE, &balanced);
 	if(!balanced)

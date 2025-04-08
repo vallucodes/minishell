@@ -19,7 +19,7 @@ typedef enum e_token_type
 	REDIRECT_IN,		// <
 	REDIRECT_OUT,		// >
 	REDIRECT_APPEND,	// >>
-	HERE_STRING,		// <<
+	HERE_DOCUMENT,		// <<
 	ENV_VAR,			// $
 }	t_token_type;
 

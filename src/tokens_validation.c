@@ -5,7 +5,7 @@ int	any_redirect(t_token *current)
 	return(current->type == REDIRECT_IN ||
 			current->type == REDIRECT_OUT ||
 			current->type == REDIRECT_APPEND ||
-			current->type == HERE_STRING);
+			current->type == HERE_DOCUMENT);
 }
 
 static int	validate_tokens_looping(t_token *current)
