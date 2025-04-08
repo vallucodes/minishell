@@ -45,11 +45,10 @@ int	check_quotes(t_token *current)
 	new_str = ft_strdup("");
 	while (input_str[i])
 	{
-		quotes.previous_in_quotes = quotes.in_quotes;
-		quotes.in_quotes = inquotes(input_str[i], &quotes);
+		update_quote_state(input_str[i], &quotes);
 		if (quotes.in_quotes)
 			expansion_flag = DONT_EXPAND;
-		if (quotes.previous_in_quotes != quotes.in_quotes)
+		if (is_quote_state_change(quotes))
 		{
 			i++;
 			continue ;

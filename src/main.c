@@ -19,9 +19,8 @@ int main(int ac, char **av, char **envp)
 	{
 		init_arena(&mshell.arena);
 		input_str = readline(PROMPT);
-		if (!input_str)
-			break ;
-		//guard for empty str "" OR "     "
+		// if (!input_str)
+			// exit_error(readline);
 		if (input_str[0] == '\0' || ft_is_all_whitespace(input_str)) // maybe include this in input validation, this seem like patch. Also this thing should be added to history
 		{
 			free(input_str);
@@ -50,4 +49,4 @@ int main(int ac, char **av, char **envp)
 	return (0);
 }
 
-// "l"s -la<file1>fi"le"1.1| "c"a't' -e >fi""l'e2' <<file3 | grep fi"l"en'am'e >>file4 | du -s > file5
+// ls -la<file1>fi"le"1.1| "c"a't' -e >fi""'le2' <<'fi'le3 | grep fi"l"en'am'e >>file4 | du -s > $HOME'/path'

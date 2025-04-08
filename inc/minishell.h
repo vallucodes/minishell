@@ -55,7 +55,7 @@ int		is_separator(char c);
 int		is_quote(char c);
 int		is_operator(char c);
 int		is_word(t_input *input, int i);
-int		inquotes(char c, t_quotes_helper *quotes);
+void	update_quote_state(char c, t_quotes_helper *quotes);
 void	append_char(char *str, char **new, int i);
 
 //global utils
@@ -91,6 +91,8 @@ void	init_arena(t_arena **arena);
 
 //remove quotes
 void	expand_remove_quotes(char **env, t_token *tokens);
+//helper
+int		is_quote_state_change(t_quotes_helper quotes);
 
 //developlment functions
 void print_tokens(t_token *tokens);

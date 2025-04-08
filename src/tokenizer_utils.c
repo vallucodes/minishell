@@ -29,11 +29,12 @@ int	is_word(t_input *input, int i)
 		return (0);
 }
 
-int	inquotes(char c, t_quotes_helper *quotes)
+void	update_quote_state(char c, t_quotes_helper *quotes)
 {
+	quotes->previous_in_quotes = quotes->in_quotes;
 	if (c == '\'' && !quotes->in_double)
 		quotes->in_single = !quotes->in_single;
 	else if (c == '\"' && !quotes->in_single)
 		quotes->in_double = !quotes->in_double;
-	return (quotes->in_double || quotes->in_single);
+	quotes->in_quotes = (quotes->in_double || quotes->in_single);
 }
