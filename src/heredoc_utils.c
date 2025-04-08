@@ -5,7 +5,7 @@ int	is_valid_char_expansion(char c)
 	return(ft_isalnum(c) || c == '_' || c == '$');
 }
 
-size_t	expand_content(char **env, char *str, int fd, char **new_str)
+size_t	expand_content(char **env, char *str, int fd, char **new_str) //make this shorter
 {
 	size_t	i;
 	size_t	j;
