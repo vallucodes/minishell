@@ -19,9 +19,8 @@ int main(int ac, char **av, char **envp)
 	{
 		init_arena(&mshell.arena);
 		input_str = readline(PROMPT);
-		if (!input_str)
-			break ;
-		//guard for empty str "" OR "     "
+		// if (!input_str)
+			// exit_error(readline);
 		if (input_str[0] == '\0' || ft_is_all_whitespace(input_str)) // maybe include this in input validation, this seem like patch. Also this thing should be added to history
 		{
 			free(input_str);
