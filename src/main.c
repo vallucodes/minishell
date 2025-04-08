@@ -24,22 +24,20 @@ int main(int ac, char **av, char **envp)
 		if (input_str[0] == '\0' && (free(input_str), 1))
 			continue ;
 		add_history(input_str);
-		if (!input_validation(input_str))
-		{
-			init_arena(&mshell.arena);
-			init_lexer(&input, input_str);
-			extract_token(&mshell, &input);
-			if (tokens_validation(input.tokens) == SUCCESS)
-			{
-				retokenize_words(input.tokens);
-				handle_heredoc(&mshell.arena, mshell.envp->envp, input.tokens);
-				expand_remove_quotes(mshell.envp->envp, input.tokens);
-				print_tokens(input.tokens);
-				ast = build_ast_binary_tree(&mshell.arena, input.tokens);
-				execute_builtins(&mshell, ast);
-				free(input_str); // dont free this before the whole program ends!
-			}
-		}
+		if (input_validation(input_str))
+			continue ;
+		init_arena(&mshell.arena);
+		init_lexer(&input, input_str);
+		create_tokens(&mshell, &input);
+		if (tokens_validation(input.tokens) == FAIL)
+			continue ;
+		retokenize_words(input.tokens);
+		handle_heredoc(&mshell.arena, mshell.envp->envp, input.tokens);
+		expand_remove_quotes(mshell.envp->envp, input.tokens);
+		print_tokens(input.tokens);
+		ast = build_ast_binary_tree(&mshell.arena, input.tokens); //change to send the adress of ast
+		execute_builtins(&mshell, ast);
+		free(input_str); // dont free this before the whole program ends!
 		arena_destroy(&mshell.arena);
 	}
 	//free_env(&mshell.env); // must free environment here after loop end

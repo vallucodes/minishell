@@ -93,7 +93,7 @@ void	word(t_minishell *mshell, t_input *input)
 	add_token(&input->tokens, init_token_word(mshell, new_str, WORD));
 }
 
-void extract_token(t_minishell *mshell, t_input *input)
+void	create_tokens(t_minishell *mshell, t_input *input)
 {
 	while (input->index < input->len)
 	{

@@ -48,7 +48,7 @@ int	check_quotes(t_token *current)
 		update_quote_state(input_str[i], &quotes);
 		if (quotes.in_quotes)
 			expansion_flag = DONT_EXPAND;
-		if (is_quote_state_change(quotes))
+		if (there_is_quote_state_change(quotes))
 		{
 			i++;
 			continue ;

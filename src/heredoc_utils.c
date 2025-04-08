@@ -2,7 +2,7 @@
 
 int	is_valid_char_expansion(char c)
 {
-	return(ft_isalnum(c) || c == '_');
+	return(ft_isalnum(c) || c == '_' || c == '$');
 }
 
 static size_t	expand_content(char **env, char *str, int fd)

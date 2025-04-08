@@ -46,7 +46,7 @@ typedef struct s_minishell
 }				t_minishell;
 
 //functions
-void	extract_token(t_minishell *mshell, t_input *input);
+void	create_tokens(t_minishell *mshell, t_input *input);
 void	init_lexer(t_input *new_input, char *input_str);
 int		input_validation(char *input);
 int		tokens_validation(t_token *tokens);
@@ -97,7 +97,7 @@ void	init_arena(t_arena **arena);
 //remove quotes
 void	expand_remove_quotes(char **env, t_token *tokens);
 //helper
-int		is_quote_state_change(t_quotes_helper quotes);
+int		there_is_quote_state_change(t_quotes_helper quotes);
 
 //developlment functions
 void print_tokens(t_token *tokens);
