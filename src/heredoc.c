@@ -70,7 +70,7 @@ void	handle_heredoc(t_arena **arena, char **env, t_token *tokens)
 	current = tokens;
 	while (current)
 	{
-		if (current->type == HERE_STRING)
+		if (current->type == HERE_DOCUMENT)
 		{
 			expansion_flag = check_quotes(current->next);
 			file = read_line(arena, env, current->next->value, expansion_flag);

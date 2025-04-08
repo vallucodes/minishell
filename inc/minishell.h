@@ -22,7 +22,12 @@
 # define BALANCE "quotes or brackets unbalanced"
 # define REDIRECT "redirections invalid"
 # define TOKEN_ERROR "syntax error near unexpected token"
+# define UNREACHABLE "This is unreachable code, something is wrong with error handling\n"
 # define PIPE_ERROR " `|'"
+# define INFILE_ERROR " `<'"
+# define OUTFILE_ERROR " `>'"
+# define APPENDFILE_ERROR " `>>'"
+# define HEREDOC_ERROR " `<<'"
 # define NEWLINE_ERROR " `newline'"
 # define MALLOC "malloc fail"
 
@@ -60,7 +65,7 @@ void	append_char(char *str, char **new, int i);
 
 //global utils
 int		any_redirect(t_token *current);
-void	print_error(char *msg, char *token);
+void	print_error(char *msg, char *token, t_token_type type);
 void	init_quotes(t_quotes_helper *quotes);
 void	replace_content_of_token(t_token *current, char *new_str);
 

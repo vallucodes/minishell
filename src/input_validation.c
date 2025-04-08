@@ -1,31 +1,5 @@
 #include "../inc/minishell.h"
 
-static int	redirection_validation(char *input)
-{
-	int	i;
-	int	in_double;
-	int	in_single;
-
-	i = 0;
-	in_double = 0;
-	in_single = 0;
-	while (input[i])
-	{
-		if (input[i] == '\'' && !in_double)
-			in_single = !in_single;
-		else if (input[i] == '"' && !in_single)
-			in_double = !in_double;
-		else if (!in_single && !in_double)
-		{
-			if (ft_strnstr(&input[i], "<>", 2) || ft_strnstr(&input[i], "<<<", 3) ||
-			ft_strnstr(&input[i], "><", 2) || ft_strnstr(&input[i], ">>>", 3))
-			return (FAIL);
-		}
-		i++;
-	}
-	return (SUCCESS);
-}
-
 static int	quote_validation(char *input, t_quotes type, int *balanced)
 {
 	int	i;
@@ -64,12 +38,7 @@ int input_validation(char *input)
 	quote_validation(input, NONE, &balanced);
 	if(!balanced)
 	{
-		print_error(BALANCE, NULL);
-		return (FAIL);
-	}
-	if (redirection_validation(input))
-	{
-		print_error(REDIRECT, NULL);
+		print_error(BALANCE, NULL, 0);
 		return (FAIL);
 	}
 	return (SUCCESS);

@@ -34,7 +34,7 @@ void	set_redirects(t_token *tokens)
 	current = tokens;
 	while (current != NULL && current->next != NULL)
 	{
-		if (any_redirect(current) && current->type != HERE_STRING)
+		if (any_redirect(current) && current->type != HERE_DOCUMENT)
 			current->next->type = FILE_TOKEN;
 		current = current->next;
 	}
@@ -47,7 +47,7 @@ void	set_heredocs(t_token *tokens)
 	current = tokens;
 	while (current != NULL && current->next != NULL)
 	{
-		if (current->type == HERE_STRING)
+		if (current->type == HERE_DOCUMENT)
 			current->next->type = HERE_TOKEN;
 		current = current->next;
 	}

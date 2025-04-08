@@ -17,27 +17,23 @@ int main(int ac, char **av, char **envp)
 		// exit_error(init_issue)
 	while (1)
 	{
-		init_arena(&mshell.arena);
 		input_str = readline(PROMPT);
 		// if (!input_str)
+			// free(envp);
 			// exit_error(readline);
-		if (input_str[0] == '\0')
-		{
-			free(input_str);
-			arena_destroy(&mshell.arena);
+		if (input_str[0] == '\0' && (free(input_str), 1))
 			continue ;
-		}
 		add_history(input_str);
 		if (!input_validation(input_str))
 		{
+			init_arena(&mshell.arena);
 			init_lexer(&input, input_str);
 			extract_token(&mshell, &input);
 			if (tokens_validation(input.tokens) == SUCCESS)
 			{
 				retokenize_words(input.tokens);
 				handle_heredoc(&mshell.arena, mshell.envp->envp, input.tokens);
-				// print_tokens(input.tokens);
-				expand_remove_quotes(mshell.envp->envp, input.tokens); //double quote or single quote expasion
+				expand_remove_quotes(mshell.envp->envp, input.tokens);
 				print_tokens(input.tokens);
 				ast = build_ast_binary_tree(&mshell.arena, input.tokens);
 				execute_builtins(&mshell, ast);
