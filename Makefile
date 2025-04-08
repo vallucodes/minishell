@@ -28,7 +28,7 @@ SRC			=	main.c \
 				tokenizer_utils.c \
 				tokens_validation.c \
 				retokenize_words.c \
-				remove_quotes.c \
+				quotes_handler.c \
 				input_validation.c \
 				error.c \
 				environment/environment.c \

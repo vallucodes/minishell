@@ -1,5 +1,18 @@
 #include "../inc/minishell.h"
 
+int	is_valid_expandable(t_quotes_helper quotes, char *input_str)
+{
+	int	i;
+
+	i = 0;
+	return (!quotes.in_single && input_str[i] == '$' && is_valid_char_expansion(input_str[i + 1]));
+}
+
+int	is_quote_state_change(t_quotes_helper quotes)
+{
+	return (quotes.previous_in_quotes != quotes.in_quotes);
+}
+
 int	is_any_word(t_token_type type)
 {
 	return ((type == COMMAND) || (type == ARG) || (type == FILE_TOKEN));
@@ -48,21 +61,22 @@ static void	loop_through_word(char **env, t_token *current)
 
 	i = 0;
 	input_str = current->value;
-	init_quotes(&quotes);
 	new_str = ft_strdup("");
+	init_quotes(&quotes);
 	while (input_str[i])
 	{
-		quotes.previous_in_quotes = quotes.in_quotes;
-		quotes.in_quotes = inquotes(input_str[i], &quotes);
-		if (!quotes.in_single && input_str[i] == '$' && is_valid_char_expansion(input_str[i + 1]))
-			i += expand_content(env, &input_str[i], &new_str); //under work
-		if (quotes.previous_in_quotes != quotes.in_quotes)
+		update_quote_state(input_str[i], &quotes);
+		if (is_valid_expandable(quotes, &input_str[i]))
+		{
+			i += expand_content(env, &input_str[i], &new_str);
+			continue ;
+		}
+		if (is_quote_state_change(quotes))
 		{
 			i++;
 			continue ;
 		}
-		append_char(input_str, &new_str, i);
-		i++;
+		append_char(input_str, &new_str, i++);
 	}
 	replace_content_of_token(current, new_str);
 }

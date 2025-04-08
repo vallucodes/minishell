@@ -86,8 +86,7 @@ void	word(t_minishell *mshell, t_input *input)
 	new_str = ft_strdup("");
 	while (input->full_str[input->index] && ((!is_separator(input->full_str[input->index]) || quotes.in_quotes)))
 	{
-		// quotes.previous_in_quotes = quotes.in_quotes;
-		quotes.in_quotes = inquotes(input->full_str[input->index], &quotes);
+		update_quote_state(input->full_str[input->index], &quotes);
 		append_char(input_str, &new_str, input->index);
 		input->index++;
 	}
@@ -117,4 +116,4 @@ void extract_token(t_minishell *mshell, t_input *input)
 	}
 }
 
-// ls -la<file1>fi"le"1.1| "c"a't' -e >fi""'le2' <<file3 | grep fi"l"en'am'e >>file4 | du -s > file5
+// ls -la<file1>fi"le"1.1| "c"a't' -e >fi""'le2' <<'fi'le3 | grep fi"l"en'am'e >>file4 | du -s > $HOME'/path'
