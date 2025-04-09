@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	is_valid_word(t_quotes_helper	*quotes, t_input *input)
+int	is_valid_word(t_quotes_helper *quotes, t_input *input)
 {
 	return (input->full_str[input->index] &&
 		((!is_separator(input->full_str[input->index]) || quotes->in_quotes)));
@@ -99,7 +99,7 @@ void	word(t_minishell *mshell, t_input *input)
 	add_token(&input->tokens, init_token_word(mshell, new_str, WORD));
 }
 
-void	create_tokens(t_minishell *mshell, t_input *input)
+static void	create_tokens(t_minishell *mshell, t_input *input)
 {
 	while (input->index < input->len)
 	{
@@ -122,5 +122,14 @@ void	create_tokens(t_minishell *mshell, t_input *input)
 	}
 }
 
+int	tokenizer(t_minishell *mshell, t_input *input, char *input_str)
+{
+	init_lexer(input, input_str);
+	create_tokens(mshell, input);
+	if (tokens_validation(input->tokens) == FAIL)
+		return (FAIL);
+	retokenize_words(input->tokens);
+	return (SUCCESS);
+}
 // ls -la<file1>fi"le"1.1| "c"a't' -e >fi""'le2' <<'fi'le3 | grep fi"l"en'am'e >>file4 | du -s > $HOME'/path'
 // ls -la<file1>fi"le"1.1| "c"a't' -e >fi""'le2' <<'fi'le3 | grep fi"l"en'am'e >>file4 | du -s > "$HO'ME"'/path'

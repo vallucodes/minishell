@@ -46,14 +46,13 @@ typedef struct s_minishell
 }				t_minishell;
 
 //functions
-void	create_tokens(t_minishell *mshell, t_input *input);
+int		tokenizer(t_minishell *mshell, t_input *input, char *input_str);
 void	init_lexer(t_input *new_input, char *input_str);
 int		input_validation(char *input);
 int		tokens_validation(t_token *tokens);
 void	retokenize_words(t_token *tokens);
 void	concatinate_adjacecnt_quotes(char *str);
 int		init_minishell(t_minishell *mshell, char **envp);
-
 
 //tokenizer utils
 int		is_separator(char c);

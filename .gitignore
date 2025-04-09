@@ -3,6 +3,7 @@ file*
 
 # Swap
 *.swp
+*.sh
 
 # Prerequisites
 *.d

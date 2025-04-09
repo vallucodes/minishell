@@ -2,16 +2,28 @@
 
 int	is_valid_char_expansion(char c)
 {
-	return(ft_isalnum(c) || c == '_' || c == '$');
+	return(ft_isalnum(c) || c == '_');
 }
 
-size_t	expand_content(char **env, char *str, int fd, char **new_str) //make this shorter
+static int	skip_to_start_of_expandable(char *env_row)
+{
+	int	i;
+
+	i = 0;
+	while (env_row[i] && env_row[i] != '=')
+		i++;
+	i++;
+	return (i);
+}
+
+size_t	expand_content(char **env, char *str, int fd, char **new_str)
 {
 	size_t	i;
 	size_t	j;
 	size_t	len;
 
 	len = 1;
+	// create exception case for $$ expandable maybe here?
 	while (str[len] && is_valid_char_expansion(str[len]))
 		len++;
 	i = 0;
@@ -19,19 +31,14 @@ size_t	expand_content(char **env, char *str, int fd, char **new_str) //make this
 	{
 		if (expandable_exists(len, env, i, str))
 		{
-			j = 0;
+			j = skip_to_start_of_expandable(env[i]);
 			while (env[i][j])
 			{
-				while (env[i][j++] != '=')
-					j++;
-				while (env[i][j])
-				{
-					if (fd)
-						write(fd, &env[i][j], 1);
-					else if (new_str)
-						append_char(env[i], new_str, j);
-					j++;
-				}
+				if (fd)
+					write(fd, &env[i][j], 1);
+				else if (new_str)
+					append_char(env[i], new_str, j);
+				j++;
 			}
 		}
 		i++;
