@@ -97,6 +97,7 @@ void	init_arena(t_arena **arena);
 
 //remove quotes
 void	expand_remove_quotes(char **env, t_token *tokens);
+size_t	expand_pid(int fd, char **new_str);
 //helper
 int		there_is_quote_state_change(t_quotes_helper quotes);
 

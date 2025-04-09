@@ -46,16 +46,13 @@ static void	loop_through_word(char **env, t_token *current)
 	{
 		update_quote_state(input_str[i], &quotes);
 		if (is_valid_expandable(quotes, &input_str[i]))
-		{
 			i += expand_content(env, &input_str[i], 0, &new_str);
-			continue ;
-		}
-		if (there_is_quote_state_change(quotes))
-		{
+		else if ((!quotes.in_single && input_str[i] == '$' && input_str[i + 1] == '$'))
+			i += expand_pid(0, &new_str);
+		else if (there_is_quote_state_change(quotes))
 			i++;
-			continue ;
-		}
-		append_char(input_str, &new_str, i++);
+		else
+			append_char(input_str, &new_str, i++);
 	}
 	replace_content_of_token(current, new_str);
 }
