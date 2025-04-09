@@ -2,6 +2,7 @@
 
 int safe_open_redirect(const char *filepath, int flags, int mode)
 {
+	//close can happen
 	int fd = open(filepath, flags, mode);
 	if (fd == -1)
 		perror(filepath);

@@ -14,11 +14,16 @@ typedef struct s_execution
 	char 	**cmd_args;   // Command and its arguments
 	int		fd[2];        // fd[FD_IN] = input, fd[FD_OUT] = output
 	int		temp_fd[2];   // Temporary fds (e.g., for saving stdin/stdout)
+	int 	pid;		//s
+	int		prev_fd;
+	int		pipefd[2];
+	int		has_next_pipe;
+
 }				t_execution;
 
 
 void	traverse(t_ast *ast);
-int		execute_builtin(t_minishell *mshell, t_ast *ast);
+int		execute_builtin(t_minishell *mshell, char **cmd_args);
 void	execute_ast(t_minishell *mshell, t_ast *ast);
 int		safe_open_redirect(const char *filepath, int flags, int mode);
 
