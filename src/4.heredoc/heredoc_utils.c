@@ -5,34 +5,6 @@ int	is_valid_char_expansion(char c)
 	return(ft_isalnum(c) || c == '_');
 }
 
-static size_t	expand_content(char **env, char *str, int fd)
-{
-	size_t	i;
-	size_t	j;
-	size_t	len;
-
-	len = 1;
-	while (str[len] && is_valid_char_expansion(str[len]))
-		len++;
-	i = 0;
-	while(env[i])
-	{
-		if (ft_strncmp(&env[i][0], &str[1], len - 1) == 0)
-		{
-			j = 0;
-			while (env[i][j])
-			{
-				while (env[i][j++] != '=')
-				j++;
-				while (env[i][j])
-					write(fd, &env[i][j++], 1);
-			}
-		}
-		i++;
-	}
-	return (len);
-}
-
 void	save_to_file(char **env, char *input, int fd, t_expand expand)
 {
 	size_t	i;
@@ -49,7 +21,10 @@ void	save_to_file(char **env, char *input, int fd, t_expand expand)
 		while (input[i])
 		{
 			if (input[i] == '$' && is_valid_char_expansion(input[i + 1]))
-				i += expand_content(env, &input[i], fd);
+				i += expand_content(env, &input[i], fd, NULL);
+			else if (input[i] == '$' && input[i + 1] == '$')
+				i += expand_pid(fd, NULL);
+			// else if ($ and ?)
 			else
 				write(fd, &input[i++], 1);
 		}

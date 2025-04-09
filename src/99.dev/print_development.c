@@ -13,7 +13,7 @@ char *get_token_type_name(t_token_type token_type)
 		case REDIRECT_IN: return "REDIRECT_IN";
 		case REDIRECT_OUT: return "REDIRECT_OUT";
 		case REDIRECT_APPEND: return "REDIRECT_APPEND";
-		case HERE_STRING: return "HERE_STRING";
+		case HERE_DOCUMENT: return "HERE_STRING";
 		case ENV_VAR: return "ENV_VAR";
 		default: return "UNKNOWN";
 	}

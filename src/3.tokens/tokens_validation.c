@@ -5,7 +5,7 @@ int	any_redirect(t_token *current)
 	return(current->type == REDIRECT_IN ||
 			current->type == REDIRECT_OUT ||
 			current->type == REDIRECT_APPEND ||
-			current->type == HERE_STRING);
+			current->type == HERE_DOCUMENT);
 }
 
 static int	validate_tokens_looping(t_token *current)
@@ -16,14 +16,19 @@ static int	validate_tokens_looping(t_token *current)
 		{
 			if (current->next == NULL)
 			{
-				print_error(TOKEN_ERROR, NEWLINE_ERROR);
+				print_error(TOKEN_ERROR, NEWLINE_ERROR, 0);
 				return (FAIL);
 			}
 			else if (current->next->type == PIPE)
 			{
-				print_error(TOKEN_ERROR, PIPE_ERROR);
+				print_error(TOKEN_ERROR, NULL, current->next->type);
 				return (FAIL);
 			}
+		}
+		if (any_redirect(current) && !(current->next->type == WORD))
+		{
+			print_error(TOKEN_ERROR, NULL, current->next->type);
+			return (FAIL);
 		}
 		current = current->next;
 	}
@@ -37,7 +42,7 @@ int	tokens_validation(t_token *tokens)
 	current = tokens;
 	if (current->type == PIPE)
 	{
-		print_error(TOKEN_ERROR, PIPE_ERROR);
+		print_error(TOKEN_ERROR, PIPE_ERROR, 0);
 		return (FAIL);
 	}
 	if (validate_tokens_looping(current) == FAIL)

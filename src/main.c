@@ -17,32 +17,29 @@ int main(int ac, char **av, char **envp)
 		// exit_error(init_issue)
 	while (1)
 	{
-		init_arena(&mshell.arena);
 		input_str = readline(PROMPT);
 		// if (!input_str)
+			// free(envp);
 			// exit_error(readline);
-		if (input_str[0] == '\0' || ft_is_all_whitespace(input_str)) // maybe include this in input validation, this seem like patch. Also this thing should be added to history
+		if (input_str[0] == '\0' && (free(input_str), 1))
+			continue ;
+		add_history(input_str);
+		if (input_validation(input_str) && (free(input_str), 1))
+			continue ;
+		init_arena(&mshell.arena);
+		if (tokenizer(&mshell, &input, input_str) == FAIL)
 		{
 			free(input_str);
-			continue;
+			arena_destroy(&mshell.arena);
+			continue ;
 		}
-		add_history(input_str);
-		if (!input_validation(input_str))
-		{
-			init_lexer(&input, input_str);
-			extract_token(&mshell, &input);
-			if (tokens_validation(input.tokens) == SUCCESS)
-			{
-				retokenize_words(input.tokens);
-				handle_heredoc(&mshell.arena, mshell.envp->envp, input.tokens);
-				// print_tokens(input.tokens);
-				expand_remove_quotes(mshell.envp->envp, input.tokens); //double quote or single quote expasion
-				print_tokens(input.tokens);
-				ast = build_ast_binary_tree(&mshell.arena, input.tokens);
-				execute_builtins(&mshell, ast);
-				free(input_str); // dont free this before the whole program ends!
-			}
-		}
+		handle_heredoc(&mshell.arena, mshell.envp->envp, input.tokens);
+		expand_remove_quotes(mshell.envp->envp, input.tokens);
+		print_tokens(input.tokens);
+		ast = build_ast_binary_tree(&mshell.arena, input.tokens); //change to send the adress of ast
+		print_whole_tree(ast);
+		execute_builtins(&mshell, ast);
+		free(input_str); // dont free this before the whole program ends!
 		arena_destroy(&mshell.arena);
 	}
 	//free_env(&mshell.env); // must free environment here after loop end
