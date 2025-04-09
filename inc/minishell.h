@@ -68,7 +68,6 @@ void	print_error(char *msg, char *token, t_token_type type);
 void	init_quotes(t_quotes_helper *quotes);
 void	replace_content_of_token(t_token *current, char *new_str);
 int		expandable_exists(int len, char **env, int i, char *str);
-size_t	expand_content(char **env, char *str, int fd, char **new_str);
 
 //heredoc
 void	handle_heredoc(t_arena **arena, char **env, t_token *tokens);
@@ -95,11 +94,19 @@ void	*arena_alloc(t_arena *a, size_t size, size_t alignment);
 void	arena_destroy(t_arena **a);
 void	init_arena(t_arena **arena);
 
-//remove quotes
+//quote handler
 void	expand_remove_quotes(char **env, t_token *tokens);
-size_t	expand_pid(int fd, char **new_str);
-//helper
+
+//quote utils
+int		is_valid_expandable(t_quotes_helper quotes, char *input_str);
 int		there_is_quote_state_change(t_quotes_helper quotes);
+int		is_any_word(t_token_type type);
+int		expandable_exists(int len, char **env, int i, char *str);
+void	replace_content_of_token(t_token *current, char *new_str);
+
+//expansion
+size_t	expand_pid(int fd, char **new_str);
+size_t	expand_content(char **env, char *str, int fd, char **new_str);
 
 //developlment functions
 void print_tokens(t_token *tokens);
