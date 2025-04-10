@@ -22,10 +22,12 @@ SRC			=	main.c \
 				1.environment/environment.c \
 				1.environment/free_env.c \
 				2.input_validation/input_validation.c \
-				3.tokens/tokenizer.c \
-				3.tokens/tokenizer_utils.c \
-				3.tokens/tokens_validation.c \
+				3.tokens/create_tokens.c \
+				3.tokens/init_lexer.c \
 				3.tokens/retokenize_words.c \
+				3.tokens/tokenizer_utils.c \
+				3.tokens/tokenizer.c \
+				3.tokens/tokens_validation.c \
 				4.heredoc/heredoc.c \
 				4.heredoc/heredoc_utils.c \
 				5.quotes_handle/quotes_handler.c \

@@ -51,6 +51,7 @@ typedef struct s_minishell t_minishell;
 
 //tokenizer
 void	init_lexer(t_input *new_input, char *input_str);
+void	create_tokens(t_minishell *mshell, t_input *input);
 int		tokenizer(t_minishell *mshell, t_input *input, char *input_str);
 int		tokens_validation(t_token *tokens);
 void	retokenize_words(t_token *tokens);
