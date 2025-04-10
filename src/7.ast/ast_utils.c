@@ -55,8 +55,3 @@ size_t	get_amount_of_pipes(t_token *tokens)
 	}
 	return (amount);
 }
-
-int	is_any_redirect(t_token_type type)
-{
-	return ((type == REDIRECT_IN) || (type == REDIRECT_OUT) || (type == REDIRECT_APPEND));
-}

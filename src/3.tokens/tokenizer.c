@@ -1,11 +1,5 @@
 #include "minishell.h"
 
-int	is_valid_word(t_quotes_helper *quotes, t_input *input)
-{
-	return (input->full_str[input->index] &&
-		((!is_separator(input->full_str[input->index]) || quotes->in_quotes)));
-}
-
 void	init_lexer(t_input *new_input, char *input_str)
 {
 	new_input->full_str = input_str;
@@ -90,7 +84,7 @@ void	word(t_minishell *mshell, t_input *input)
 	input_str = input->full_str;
 	init_quotes(&quotes);
 	new_str = ft_strdup("");
-	while (is_valid_word(&quotes, input))
+	while (is_valid_char(&quotes, input))
 	{
 		update_quote_state(input->full_str[input->index], &quotes);
 		append_char(input_str, &new_str, input->index);

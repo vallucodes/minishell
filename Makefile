@@ -29,6 +29,7 @@ SRC			=	main.c \
 				4.heredoc/heredoc_utils.c \
 				5.quotes_handle/quotes_handler.c \
 				5.quotes_handle/quotes_handler_utils.c \
+				5.quotes_handle/quotes_handler_utils2.c \
 				6.expansion/expansion.c \
 				7.ast/ast.c \
 				7.ast/ast_branch_building.c \

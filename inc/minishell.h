@@ -10,10 +10,10 @@
 # include <stdalign.h>			//alignof
 # include "../lib/libft/inc/libft.h"
 # include "lexing.h"
+# include "memory_arena.h"
 # include "ast.h"
 # include "heredoc.h"
 # include "environment.h"
-# include "memory_arena.h"
 # include "builtin.h"
 
 # define PROMPT "\001\e[93m\002🦒 >>>\001\e[0m\e[95m\002 Giraffeshell>$ \001\e[0m\002"
@@ -45,29 +45,31 @@ typedef struct s_minishell
 	//later add execution, exit code when we are there
 }				t_minishell;
 
+//error handling
+void	print_error(char *msg, char *token, t_token_type type);
+
+//global utils
+void	append_char(char *str, char **new, int i);
+int		is_any_redirect(t_token *current);
+void	init_quotes(t_quotes_helper *quotes);
+void	replace_content_of_token(t_token *current, char *new_str);
+
 //functions
-int		tokenizer(t_minishell *mshell, t_input *input, char *input_str);
-void	init_lexer(t_input *new_input, char *input_str);
 int		input_validation(char *input);
 int		tokens_validation(t_token *tokens);
-void	retokenize_words(t_token *tokens);
-void	concatinate_adjacecnt_quotes(char *str);
 int		init_minishell(t_minishell *mshell, char **envp);
+
+//tokenizer
+void	init_lexer(t_input *new_input, char *input_str);
+int		tokenizer(t_minishell *mshell, t_input *input, char *input_str);
+void	retokenize_words(t_token *tokens);
 
 //tokenizer utils
 int		is_separator(char c);
 int		is_quote(char c);
 int		is_operator(char c);
-int		is_word(t_input *input, int i);
+int		is_valid_char(t_quotes_helper *quotes, t_input *input);
 void	update_quote_state(char c, t_quotes_helper *quotes);
-void	append_char(char *str, char **new, int i);
-
-//global utils
-int		any_redirect(t_token *current);
-void	print_error(char *msg, char *token, t_token_type type);
-void	init_quotes(t_quotes_helper *quotes);
-void	replace_content_of_token(t_token *current, char *new_str);
-int		expandable_exists(int len, char **env, int i, char *str);
 
 //heredoc
 void	handle_heredoc(t_arena **arena, char **env, t_token *tokens);
@@ -75,38 +77,22 @@ char	*create_tmp_file(t_arena **arena, int *fd);
 void	save_to_file(char **env, char *input, int fd, t_expand expand);
 int		is_valid_char_expansion(char c);
 
-//ast
-t_ast	*build_ast_binary_tree(t_arena **arena, t_token *tokens);
-void	build_branch(t_arena **arena, t_ast **ast, t_token *tokens, t_branch branch);
-void	add_node(t_ast **ast, t_ast *new_node, t_order order);
-t_ast	*init_node(t_arena **arena, char **cmd, char *file, t_token_type type);
-
-//ast utils
-int		count_amount_cmd(t_token *tokens);
-size_t	get_amount_of_pipes(t_token *tokens);
-int		is_any_redirect(t_token_type type);
-int		last_is_pipe(t_ast **ast);
-t_token	*skip_to_next_pipe(t_token *tokens);
-
-//memory-arena
-t_arena	arena_create();
-void	*arena_alloc(t_arena *a, size_t size, size_t alignment);
-void	arena_destroy(t_arena **a);
-void	init_arena(t_arena **arena);
-
 //quote handler
-void	expand_remove_quotes(char **env, t_token *tokens);
+void	expand_remove_quotes(char **env, int return_value, t_token *tokens);
 
 //quote utils
 int		is_valid_expandable(t_quotes_helper quotes, char *input_str);
 int		there_is_quote_state_change(t_quotes_helper quotes);
 int		is_any_word(t_token_type type);
 int		expandable_exists(int len, char **env, int i, char *str);
+int		is_exitcode_expansion(t_quotes_helper quotes, char *input_str);
+int		is_pid_expansion(t_quotes_helper quotes, char *input_str);
 void	replace_content_of_token(t_token *current, char *new_str);
 
 //expansion
 size_t	expand_pid(int fd, char **new_str);
 size_t	expand_content(char **env, char *str, int fd, char **new_str);
+size_t	expand_exitcode_value(int exitcode, int fd, char **new_str);
 
 //developlment functions
 void print_tokens(t_token *tokens);
