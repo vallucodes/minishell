@@ -24,3 +24,10 @@ int	init_minishell(t_minishell *mshell, char **envp)
 	return (0);
 }
 
+void	init_quotes(t_quotes_helper *quotes)
+{
+	quotes->in_double = 0;
+	quotes->in_single = 0;
+	quotes->in_quotes = 0;
+	quotes->previous_in_quotes = 0;
+}

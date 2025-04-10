@@ -16,7 +16,8 @@ MINISHH		= ./inc/minishell.h
 
 SRC			=	main.c \
 				0.error_handling/error.c \
-				0.init/init_minishell.c \
+				0.global_utils/utils.c \
+				0.init/init.c \
 				0.memory_arena/memory_arena.c \
 				1.environment/environment.c \
 				1.environment/free_env.c \

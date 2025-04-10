@@ -54,28 +54,9 @@ int		is_any_redirect(t_token *current);
 void	init_quotes(t_quotes_helper *quotes);
 void	replace_content_of_token(t_token *current, char *new_str);
 
-//functions
-int		input_validation(char *input);
-int		tokens_validation(t_token *tokens);
+//main functions
 int		init_minishell(t_minishell *mshell, char **envp);
-
-//tokenizer
-void	init_lexer(t_input *new_input, char *input_str);
-int		tokenizer(t_minishell *mshell, t_input *input, char *input_str);
-void	retokenize_words(t_token *tokens);
-
-//tokenizer utils
-int		is_separator(char c);
-int		is_quote(char c);
-int		is_operator(char c);
-int		is_valid_char(t_quotes_helper *quotes, t_input *input);
-void	update_quote_state(char c, t_quotes_helper *quotes);
-
-//heredoc
-void	handle_heredoc(t_arena **arena, char **env, t_token *tokens);
-char	*create_tmp_file(t_arena **arena, int *fd);
-void	save_to_file(char **env, char *input, int fd, t_expand expand);
-int		is_valid_char_expansion(char c);
+int		input_validation(char *input);
 
 //quote handler
 void	expand_remove_quotes(char **env, int return_value, t_token *tokens);

@@ -55,26 +55,6 @@ static void add_token(t_token **head, t_token *new)
 	}
 }
 
-void	init_quotes(t_quotes_helper *quotes)
-{
-	quotes->in_double = 0;
-	quotes->in_single = 0;
-	quotes->in_quotes = 0;
-	quotes->previous_in_quotes = 0;
-}
-
-void	append_char(char *str, char **new, int i)
-{
-	char	*temp;
-	char	additive[2];
-
-	additive[0] = str[i];
-	additive[1] = '\0';
-	temp = *new;
-	*new = ft_strjoin(*new, additive);
-	free (temp);
-}
-
 void	word(t_minishell *mshell, t_input *input)
 {
 	t_quotes_helper	quotes;

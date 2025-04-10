@@ -47,4 +47,19 @@ typedef struct s_quotes_helper
 	int	previous_in_quotes;
 }				t_quotes_helper;
 
+typedef struct s_minishell t_minishell;
+
+//tokenizer
+void	init_lexer(t_input *new_input, char *input_str);
+int		tokenizer(t_minishell *mshell, t_input *input, char *input_str);
+int		tokens_validation(t_token *tokens);
+void	retokenize_words(t_token *tokens);
+
+//tokenizer utils
+int		is_separator(char c);
+int		is_quote(char c);
+int		is_operator(char c);
+int		is_valid_char(t_quotes_helper *quotes, t_input *input);
+void	update_quote_state(char c, t_quotes_helper *quotes);
+
 #endif
