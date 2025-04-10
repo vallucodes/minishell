@@ -23,7 +23,12 @@
 # define BALANCE "quotes or brackets unbalanced"
 # define REDIRECT "redirections invalid"
 # define TOKEN_ERROR "syntax error near unexpected token"
+# define UNREACHABLE "This is unreachable code, something is wrong with error handling\n"
 # define PIPE_ERROR " `|'"
+# define INFILE_ERROR " `<'"
+# define OUTFILE_ERROR " `>'"
+# define APPENDFILE_ERROR " `>>'"
+# define HEREDOC_ERROR " `<<'"
 # define NEWLINE_ERROR " `newline'"
 # define MALLOC "malloc fail"
 
@@ -37,37 +42,45 @@ typedef struct s_minishell
 {
 	t_arena		*arena;
 	t_env		*envp; // env struct
+	t_ast		*ast;
 	int			exitcode; //exitcode assignment after exe
-	// t_execution	*execution;
+	char		**path;
+	int			command_count;
+	pid_t		last_pid;
+	char 		*input_str; //for free if error
 	//later add execution, exit code when we are there
-}				t_minishell;
+}				t_minishell ;
 
 //functions
-void	extract_token(t_minishell *mshell, t_input *input);
+int		tokenizer(t_minishell *mshell, t_input *input, char *input_str);
 void	init_lexer(t_input *new_input, char *input_str);
 int		input_validation(char *input);
 int		tokens_validation(t_token *tokens);
 void	retokenize_words(t_token *tokens);
 void	concatinate_adjacecnt_quotes(char *str);
 int		init_minishell(t_minishell *mshell, char **envp);
-
+void	delete_minishell(t_minishell *mshell);
 
 //tokenizer utils
 int		is_separator(char c);
 int		is_quote(char c);
 int		is_operator(char c);
 int		is_word(t_input *input, int i);
-int		inquotes(char c, t_quotes_helper *quotes);
+void	update_quote_state(char c, t_quotes_helper *quotes);
+void	append_char(char *str, char **new, int i);
 
 //global utils
 int		any_redirect(t_token *current);
-void	print_error(char *msg, char *token);
+void	print_error(char *msg, char *token, t_token_type type);
 void	init_quotes(t_quotes_helper *quotes);
+void	replace_content_of_token(t_token *current, char *new_str);
+int		expandable_exists(int len, char **env, int i, char *str);
 
 //heredoc
 void	handle_heredoc(t_arena **arena, char **env, t_token *tokens);
 char	*create_tmp_file(t_arena **arena, int *fd);
 void	save_to_file(char **env, char *input, int fd, t_expand expand);
+int		is_valid_char_expansion(char c);
 
 //ast
 t_ast	*build_ast_binary_tree(t_arena **arena, t_token *tokens);
@@ -87,6 +100,20 @@ t_arena	arena_create();
 void	*arena_alloc(t_arena *a, size_t size, size_t alignment);
 void	arena_destroy(t_arena **a);
 void	init_arena(t_arena **arena);
+
+//quote handler
+void	expand_remove_quotes(char **env, t_token *tokens);
+
+//quote utils
+int		is_valid_expandable(t_quotes_helper quotes, char *input_str);
+int		there_is_quote_state_change(t_quotes_helper quotes);
+int		is_any_word(t_token_type type);
+int		expandable_exists(int len, char **env, int i, char *str);
+void	replace_content_of_token(t_token *current, char *new_str);
+
+//expansion
+size_t	expand_pid(int fd, char **new_str);
+size_t	expand_content(char **env, char *str, int fd, char **new_str);
 
 //developlment functions
 void print_tokens(t_token *tokens);

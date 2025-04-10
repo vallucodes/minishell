@@ -3,8 +3,8 @@
 
 typedef enum e_expand
 {
-	EXPAND,
 	DONT_EXPAND,
+	EXPAND,
 }	t_expand;
 
 #endif

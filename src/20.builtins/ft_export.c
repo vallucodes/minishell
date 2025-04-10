@@ -40,9 +40,9 @@ void print_sorted_export(t_env *env)
 		if (equal)
 		{
 			key_len = equal - sorted[i];
-			ft_dprintf(2, "declare -x ");
-			write(2, sorted[i], key_len + 1); // print KEY=
-			ft_dprintf(2, "\"%s\"\n", equal + 1); // print "VALUE"
+			ft_dprintf(STDOUT_FILENO, "declare -x ");
+			write(STDOUT_FILENO, sorted[i], key_len + 1); // print KEY=
+			ft_dprintf(STDOUT_FILENO, "\"%s\"\n", equal + 1); // print "VALUE"
 		}
 		else
 		{

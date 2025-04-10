@@ -1,6 +1,10 @@
 tmp*
 file*
 
+# Swap
+*.swp
+*.sh
+
 # Prerequisites
 *.d
 *copy*

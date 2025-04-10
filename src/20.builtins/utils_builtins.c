@@ -1,9 +1,9 @@
 #include "../../inc/minishell.h"
 
-int count_cmds(char **cmds)
+int count_argv(char **argv)
 {
 	int count = 0;
-	while (cmds && cmds[count])
+	while (argv && argv[count])
 		count++;
 	return count;
 }

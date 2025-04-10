@@ -13,15 +13,16 @@ int		is_valid_identifier_range(const char *str, size_t len);
 
 int		match_env_key(const char *env_entry, const char *key);
 
-int		count_cmds(char **cmds);
+int		count_argv(char **argv);
+
 int		realloc_env_capacity(t_env *env);
 char	**dup_and_sort_env(t_env *env);
 
 
-int		ft_env(t_env **my_env, char **args);
+int		ft_env(t_env **my_env, char **argv);
 int		ft_pwd(void);
 int		ft_echo(int argc, char **argv);
-void	ft_exit(char **args, t_minishell *minishell);
+void	ft_exit(char **argv, t_minishell *minishell);
 int		ft_unset(char **args, t_env *env);
 int		ft_export(char **args, t_env *env);
 

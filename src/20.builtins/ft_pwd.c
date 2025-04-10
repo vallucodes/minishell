@@ -1,6 +1,6 @@
 #include "../../inc/minishell.h"
-
 #include <linux/limits.h>
+
 int ft_pwd(void)
 {
     char cwd[PATH_MAX];

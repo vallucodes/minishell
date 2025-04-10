@@ -1,6 +1,4 @@
 #include "../../inc/minishell.h"
-#include "../../inc/builtin.h"
-
 
 int execute_builtin(t_minishell *mshell, char **cmd_args)
 {
@@ -24,7 +22,7 @@ int execute_builtin(t_minishell *mshell, char **cmd_args)
 	}
 	if (ft_strcmp(cmd_args[0], "echo") == 0)
 	{
-		mshell->exitcode = ft_echo(count_cmds(cmd_args), cmd_args);
+		mshell->exitcode = ft_echo(count_argv(cmd_args), cmd_args);
 		return (mshell->exitcode);
 	}
 	if (ft_strcmp(cmd_args[0], "exit") == 0)

@@ -15,35 +15,40 @@ LIBFTH		= $(LIBFT_DIR)/inc/libft.h
 MINISHH		= ./inc/minishell.h
 
 SRC			=	main.c \
-				print_development.c \
-				init_minishell.c \
-				memory_arena/memory_arena.c \
-				ast.c \
-				ast_branch_building.c \
-				ast_dev.c \
-				ast_utils.c \
-				heredoc.c \
-				heredoc_utils.c \
-				tokenizer.c \
-				tokenizer_utils.c \
-				tokens_validation.c \
-				retokenize_words.c \
-				input_validation.c \
-				error.c \
-				environment/environment.c \
-				environment/free_env.c \
-				builtins/ft_env.c \
-				builtins/ft_pwd.c \
-				builtins/ft_echo.c \
-				builtins/ft_exit.c \
-				builtins/ft_unset.c \
-				builtins/ft_export.c \
-				builtins/utils_builtins.c \
-				builtins/ft_export_sort_env.c \
-				execution/execute_builtin.c \
+				0.error_handling/error.c \
+				0.init-delete/init_minishell.c \
+				0.init-delete/delete_minishell.c \
+				0.memory_arena/memory_arena.c \
+				1.environment/environment.c \
+				1.environment/free_env.c \
+				2.input_validation/input_validation.c \
+				3.tokens/tokenizer.c \
+				3.tokens/tokenizer_utils.c \
+				3.tokens/tokens_validation.c \
+				3.tokens/retokenize_words.c \
+				4.heredoc/heredoc.c \
+				4.heredoc/heredoc_utils.c \
+				5.quotes_handle/quotes_handler.c \
+				5.quotes_handle/quotes_handler_utils.c \
+				6.expansion/expansion.c \
+				7.ast/ast.c \
+				7.ast/ast_branch_building.c \
+				7.ast/ast_dev.c \
+				7.ast/ast_utils.c \
+				20.builtins/ft_env.c \
+				20.builtins/ft_pwd.c \
+				20.builtins/ft_echo.c \
+				20.builtins/ft_exit.c \
+				20.builtins/ft_unset.c \
+				20.builtins/ft_export.c \
+				20.builtins/utils_builtins.c \
+				20.builtins/ft_export_sort_env.c \
+				99.dev/print_development.c \
 				execution/exec_utils.c \
+				execution/execute_builtin.c \
+				execution/path.c \
 				execution/execution.c
-#execution/traverse.c \
+
 
 OBJS		= $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
 
