@@ -1,6 +1,19 @@
 
 #include "minishell.h"
 
+void sigint_handler(int signal)
+{
+	printf("\nIntercepted SIGINT!\n");
+}
+
+void	init_signals(struct sigaction *sa)
+{
+	sa->sa_handler = sigint_handler;
+	sigemptyset(&sa->sa_mask);
+	sa->sa_flags = 0;
+	sigaction(SIGINT, sa, NULL);
+}
+
 int	init_minishell(t_minishell *mshell, char **envp)
 {
 	if (copy_env(&mshell->envp, envp) != 0)
@@ -9,6 +22,7 @@ int	init_minishell(t_minishell *mshell, char **envp)
 		return (FAIL);
 	}
 	mshell->exitcode = 0;
+	init_signals(&mshell->sa);
 	// if (init_ast(&mshell->ast) != 0)
 	//     return (1);
 

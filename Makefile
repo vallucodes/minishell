@@ -24,6 +24,7 @@ SRC			=	main.c \
 				2.input_validation/input_validation.c \
 				3.tokens/create_tokens.c \
 				3.tokens/init_lexer.c \
+				3.tokens/retokenize_words_utils.c \
 				3.tokens/retokenize_words.c \
 				3.tokens/tokenizer_utils.c \
 				3.tokens/tokenizer.c \

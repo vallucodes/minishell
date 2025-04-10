@@ -1,4 +1,3 @@
-
 #include "../../inc/minishell.h"
 
 static int init_env_storage(t_env *env, char **envp)

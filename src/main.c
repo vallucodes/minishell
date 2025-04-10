@@ -33,7 +33,7 @@ int main(int ac, char **av, char **envp)
 			arena_destroy(&mshell.arena);
 			continue ;
 		}
-		handle_heredoc(&mshell.arena, mshell.envp->envp, input.tokens);
+		handle_heredoc(&mshell.arena, mshell, input.tokens);
 		expand_remove_quotes(mshell.envp->envp, mshell.exitcode, input.tokens);
 		print_tokens(input.tokens);
 		ast = build_ast_binary_tree(&mshell.arena, input.tokens); //change to send the adress of ast

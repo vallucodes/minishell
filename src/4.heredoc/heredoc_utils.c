@@ -5,7 +5,7 @@ int	is_valid_char_expansion(char c)
 	return(ft_isalnum(c) || c == '_');
 }
 
-void	save_to_file(char **env, char *input, int fd, t_expand expand)
+void	save_to_file(t_minishell mshell, char *input, int fd, t_expand expand)
 {
 	size_t	i;
 
@@ -21,10 +21,11 @@ void	save_to_file(char **env, char *input, int fd, t_expand expand)
 		while (input[i])
 		{
 			if (input[i] == '$' && is_valid_char_expansion(input[i + 1]))
-				i += expand_content(env, &input[i], fd, NULL);
+				i += expand_content(mshell.envp->envp, &input[i], fd, NULL);
 			else if (input[i] == '$' && input[i + 1] == '$')
 				i += expand_pid(fd, NULL);
-			// else if ($ and ?)
+			else if (input[i] == '$' && input[i + 1] == '?')
+				i += expand_exitcode_value(mshell.exitcode, fd, NULL);
 			else
 				write(fd, &input[i++], 1);
 		}

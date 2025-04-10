@@ -8,6 +8,7 @@
 # include <readline/history.h>	//readline
 # include <fcntl.h>				//open
 # include <stdalign.h>			//alignof
+# include <signal.h>			//signals
 # include "../lib/libft/inc/libft.h"
 # include "lexing.h"
 # include "memory_arena.h"
@@ -39,9 +40,10 @@ typedef enum e_exit
 
 typedef struct s_minishell
 {
-	t_arena	*arena;
-	t_env	*envp; // env struct
-	int		exitcode; //exitcode assignment after exe
+	struct sigaction	sa;
+	t_arena				*arena;
+	t_env				*envp; // env struct
+	int					exitcode; //exitcode assignment after exe
 	//later add execution, exit code when we are there
 }				t_minishell;
 

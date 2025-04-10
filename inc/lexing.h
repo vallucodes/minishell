@@ -62,5 +62,6 @@ int		is_quote(char c);
 int		is_operator(char c);
 int		is_valid_char(t_quotes_helper *quotes, t_input *input);
 void	update_quote_state(char c, t_quotes_helper *quotes);
+t_token	*skip_until_pipe_or_end(t_token *current);
 
 #endif

@@ -1,6 +1,6 @@
 #include "../inc/minishell.h"
 
-static char	*read_line(t_arena **arena, char **env, char *eof, t_expand expand)
+static char	*read_line(t_arena **arena, t_minishell mshell, char *eof, t_expand expand)
 {
 	char	*input;
 	int		fd;
@@ -10,7 +10,7 @@ static char	*read_line(t_arena **arena, char **env, char *eof, t_expand expand)
 	input = readline("> ");
 	while (ft_strncmp(eof, input, ft_strlen(eof)) || (ft_strlen(input) != ft_strlen(eof)))
 	{
-		save_to_file(env, input, fd, expand);
+		save_to_file(mshell, input, fd, expand);
 		free(input);
 		input = NULL;
 		input = readline("> ");
@@ -60,7 +60,7 @@ int	check_quotes(t_token *current)
 	return (expansion_flag);
 }
 
-void	handle_heredoc(t_arena **arena, char **env, t_token *tokens)
+void	handle_heredoc(t_arena **arena, t_minishell mshell, t_token *tokens)
 {
 	t_token		*current;
 	char		*file;
@@ -73,7 +73,7 @@ void	handle_heredoc(t_arena **arena, char **env, t_token *tokens)
 		if (current->type == HERE_DOCUMENT)
 		{
 			expansion_flag = check_quotes(current->next);
-			file = read_line(arena, env, current->next->value, expansion_flag);
+			file = read_line(arena, mshell, current->next->value, expansion_flag);
 			replace_token(current, file);
 		}
 		current = current->next;

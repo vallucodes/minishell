@@ -109,7 +109,6 @@ size_t	expand_exitcode_value(int exitcode, int fd, char **new_str)
 	size_t	i;
 
 	str_nb = ft_itoa(exitcode);
-	printf("exitcode %s\n", str_nb);
 	i = 0;
 	while (str_nb[i])
 	{
