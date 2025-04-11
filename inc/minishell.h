@@ -10,6 +10,7 @@
 # include <stdalign.h>			//alignof
 # include <signal.h>			//signals
 # include "../lib/libft/inc/libft.h"
+# include "signals.h"
 # include "lexing.h"
 # include "memory_arena.h"
 # include "ast.h"
@@ -40,7 +41,7 @@ typedef enum e_exit
 
 typedef struct s_minishell
 {
-	struct sigaction	sa;
+	struct sigaction	*sa;
 	t_arena				*arena;
 	t_env				*envp; // env struct
 	int					exitcode; //exitcode assignment after exe
@@ -57,7 +58,7 @@ void	init_quotes(t_quotes_helper *quotes);
 void	replace_content_of_token(t_token *current, char *new_str);
 
 //main functions
-int		init_minishell(t_minishell *mshell, char **envp);
+int		init_minishell(struct sigaction	*sa, t_minishell *mshell, char **envp);
 int		input_validation(char *input);
 
 //quote handler

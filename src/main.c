@@ -6,18 +6,20 @@ int main(int ac, char **av, char **envp)
 	t_input		input;
 	t_ast		*ast;
 	t_minishell	mshell;
+	struct sigaction sa;
 
 	(void) av;
 
 	if (ac != 1)
 		return (FAIL);
 		// exit_error(AC ERROR)
-	if (init_minishell(&mshell, envp))
+	if (init_minishell(&sa, &mshell, envp))
 		return (FAIL);
 		// exit_error(init_issue)
 	while (1)
 	{
 		input_str = readline(PROMPT);
+		ignore_signal_action(mshell.sa);
 		// if (!input_str)
 			// free(envp);
 			// exit_error(readline);
@@ -42,6 +44,7 @@ int main(int ac, char **av, char **envp)
 		mshell.exitcode = 66;
 		free(input_str); // dont free this before the whole program ends!
 		arena_destroy(&mshell.arena);
+		restart_signal_action(mshell.sa);
 	}
 	//free_env(&mshell.env); // must free environment here after loop end
 	return (0);
