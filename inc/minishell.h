@@ -9,6 +9,7 @@
 # include <fcntl.h>				//open
 # include <stdalign.h>			//alignof
 # include <signal.h>			//signals
+# include <sys/ioctl.h>			//ioctl
 # include "../lib/libft/inc/libft.h"
 # include "signals.h"
 # include "lexing.h"

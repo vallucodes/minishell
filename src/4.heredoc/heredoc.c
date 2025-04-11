@@ -7,16 +7,23 @@ static char	*read_line(t_arena **arena, t_minishell mshell, char *eof, t_expand 
 	char	*file;
 
 	file = create_tmp_file(arena, &fd);
-	input = readline("> ");
-	while (ft_strncmp(eof, input, ft_strlen(eof)) || (ft_strlen(input) != ft_strlen(eof)))
+	restart_signal_action_heredoc(mshell.sa);
+	while (1)
 	{
+		int	fd_stdin = dup(STDIN_FILENO);
+		input = readline("> ");
+		if (g_signal == SIGINT)
+		{
+			dup2(fd_stdin, STDIN_FILENO);
+			close(fd_stdin);
+			return (NULL);
+		}
+		if (!(ft_strncmp(eof, input, ft_strlen(eof)) || (ft_strlen(input) != ft_strlen(eof))))
+			break ;
 		save_to_file(mshell, input, fd, expand);
 		free(input);
 		input = NULL;
-		input = readline("> ");
 	}
-	free(input);
-	input = NULL;
 	return (file);
 }
 
@@ -60,7 +67,7 @@ int	check_quotes(t_token *current)
 	return (expansion_flag);
 }
 
-void	handle_heredoc(t_arena **arena, t_minishell mshell, t_token *tokens)
+int	handle_heredoc(t_arena **arena, t_minishell mshell, t_token *tokens)
 {
 	t_token		*current;
 	char		*file;
@@ -74,8 +81,11 @@ void	handle_heredoc(t_arena **arena, t_minishell mshell, t_token *tokens)
 		{
 			expansion_flag = check_quotes(current->next);
 			file = read_line(arena, mshell, current->next->value, expansion_flag);
+			if (g_signal == SIGINT)
+				return (FAIL);
 			replace_token(current, file);
 		}
 		current = current->next;
 	}
+	return (SUCCESS);
 }

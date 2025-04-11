@@ -18,6 +18,7 @@ int main(int ac, char **av, char **envp)
 		// exit_error(init_issue)
 	while (1)
 	{
+		restart_signal_action_main(mshell.sa);
 		input_str = readline(PROMPT);
 		ignore_signal_action(mshell.sa);
 		// if (!input_str)
@@ -35,7 +36,12 @@ int main(int ac, char **av, char **envp)
 			arena_destroy(&mshell.arena);
 			continue ;
 		}
-		handle_heredoc(&mshell.arena, mshell, input.tokens);
+		if (handle_heredoc(&mshell.arena, mshell, input.tokens))
+		{
+			free(input_str);
+			arena_destroy(&mshell.arena);
+			continue ;
+		}
 		expand_remove_quotes(mshell.envp->envp, mshell.exitcode, input.tokens);
 		print_tokens(input.tokens);
 		ast = build_ast_binary_tree(&mshell.arena, input.tokens); //change to send the adress of ast
@@ -44,7 +50,6 @@ int main(int ac, char **av, char **envp)
 		mshell.exitcode = 66;
 		free(input_str); // dont free this before the whole program ends!
 		arena_destroy(&mshell.arena);
-		restart_signal_action(mshell.sa);
 	}
 	//free_env(&mshell.env); // must free environment here after loop end
 	return (0);
