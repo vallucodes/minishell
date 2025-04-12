@@ -24,7 +24,7 @@ typedef struct s_execution
 void	traverse(t_ast *ast);
 int		execute_builtin(t_minishell *mshell, char **cmd_args);
 void	execute_ast(t_minishell *mshell, t_ast *ast);
-int		safe_open_redirect(const char *filepath, int flags, int mode);
+int		safe_open_redirect(int *redir_fd, char *filepath, int flags, int mode);
 char	**get_command_argv(t_minishell *mshell, t_ast *ast);
 
 

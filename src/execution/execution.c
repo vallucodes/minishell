@@ -14,18 +14,29 @@ static int	is_builtin(const char *cmd)
 		ft_strcmp(cmd, "exit") == 0);
 }
 
-static void handle_redirections(t_ast *node, t_execution *exec)
+static int handle_redirections(t_ast *node, t_execution *exec)
 {
 	while (node)
 	{
 		if (node->type == REDIRECT_IN || node->type == HERE_DOCUMENT)
-			exec->redir_fd[FD_IN] = safe_open_redirect(node->file, O_RDONLY, 0);
+		{
+			if (safe_open_redirect(&exec->redir_fd[FD_IN], node->file, O_RDONLY, 0) == FAIL)
+				return (FAIL);
+		}
 		else if (node->type == REDIRECT_OUT)
-			exec->redir_fd[FD_OUT] = safe_open_redirect(node->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		{
+			if (safe_open_redirect(&exec->redir_fd[FD_OUT], node->file, O_WRONLY | O_CREAT | O_TRUNC, 0644))
+				return (FAIL);
+		}
 		else if (node->type == REDIRECT_APPEND)
-			exec->redir_fd[FD_OUT] = safe_open_redirect(node->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		{
+			if (safe_open_redirect(&exec->redir_fd[FD_OUT], node->file, O_WRONLY | O_CREAT | O_APPEND, 0644))
+				return (FAIL);
+		}
 		node = node->next_left;
+
 	}
+	return (SUCCESS);
 }
 
 static t_ast *get_cmd_node(t_ast *ast)
@@ -124,7 +135,6 @@ void execute_ast(t_minishell *mshell, t_ast *ast)
 	t_ast *cmd_node;
 	t_execution exec;
 	int pipefd[2];
-	//, prev_fd = STDIN_FILENO, has_next_pipe;
 	pid_t pid;
 	char **external_cmd;
 
@@ -134,10 +144,6 @@ void execute_ast(t_minishell *mshell, t_ast *ast)
 	while (ast)
 	{
 		init_execution(&exec, ast);
-		// exec.redir_fd[FD_IN] = STDIN_FILENO;
-		// exec.redir_fd[FD_OUT] = STDOUT_FILENO;
-		// exec.cmd_args = NULL;
-		// has_next_pipe = (ast->next_right != NULL);
 		cmd_node = NULL;
 
 		if (exec.has_next_pipe && pipe(pipefd) < 0)
@@ -146,7 +152,13 @@ void execute_ast(t_minishell *mshell, t_ast *ast)
 			return;
 		}
 
-		handle_redirections(ast, &exec);
+		if (handle_redirections(ast, &exec) == FAIL)
+		{
+			mshell->exitcode = 1;
+			ast = ast->next_right;
+			continue;
+		}
+
 		cmd_node = get_cmd_node(ast);
 		if (cmd_node)
 			exec.cmd_args = cmd_node->cmd;
