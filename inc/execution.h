@@ -20,14 +20,12 @@ typedef struct s_execution
 	int		pipefd[2];
 	int		has_next_pipe;
 
-
 }				t_execution;
 
 void	traverse(t_ast *ast);
 int		execute_builtin(t_minishell *mshell, char **cmd_args);
 void	execute_ast(t_minishell *mshell, t_ast *ast);
 int		safe_open_redirect(const char *filepath, int flags, int mode);
-char	**get_command_path(t_minishell *mshell, t_ast *ast);
 char	**get_command_argv(t_minishell *mshell, t_ast *ast);
 
 

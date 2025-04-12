@@ -110,6 +110,38 @@ int	wait_for_children(t_minishell *mshell)
 	return exit_code;
 }
 
+
+static void	redirect_and_restore_builtin(t_execution *exec,
+				t_minishell *mshell, char **cmd_args)
+{
+	int original_stdin = -1;
+	int original_stdout = -1;
+
+	if (exec->temp_fd[FD_IN] != STDIN_FILENO)
+	{
+		original_stdin = dup(STDIN_FILENO);
+		dup2(exec->temp_fd[FD_IN], STDIN_FILENO);
+		close(exec->temp_fd[FD_IN]);
+	}
+	if (exec->temp_fd[FD_OUT] != STDOUT_FILENO)
+	{
+		original_stdout = dup(STDOUT_FILENO);
+		dup2(exec->temp_fd[FD_OUT], STDOUT_FILENO);
+		close(exec->temp_fd[FD_OUT]);
+	}
+	execute_builtin(mshell, cmd_args);
+	if (original_stdout != -1)
+	{
+		dup2(original_stdout, STDOUT_FILENO);
+		close(original_stdout);
+	}
+	if (original_stdin != -1)
+	{
+		dup2(original_stdin, STDIN_FILENO);
+		close(original_stdin);
+	}
+}
+
 void execute_ast(t_minishell *mshell, t_ast *ast)
 {
 	t_ast *cmd_node;
@@ -131,10 +163,9 @@ void execute_ast(t_minishell *mshell, t_ast *ast)
 			perror("pipe");
 			return;
 		}
+
 		handle_redirections(ast, &exec);
 		cmd_node = get_cmd_node(ast, &exec.cmd_args);
-
-
 
 		//if only redirection is here like  < Makefile >out23
 		if ((!exec.cmd_args || !exec.cmd_args[0]) &&
@@ -153,7 +184,7 @@ void execute_ast(t_minishell *mshell, t_ast *ast)
 
 		if (is_builtin(exec.cmd_args[0]) && !has_next_pipe)
 		{
-			execute_builtin(mshell, exec.cmd_args);
+			redirect_and_restore_builtin(&exec, mshell, exec.cmd_args);
 			ast = ast->next_right;
 			continue;
 		}

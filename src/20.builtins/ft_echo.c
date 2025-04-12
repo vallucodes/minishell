@@ -19,14 +19,14 @@ int	ft_echo(int argv_count, char **argv)
 	// echo hello world → prints "hello" then space, then "world".
 	while (word_index < argv_count)
 	{
-		printf("%s", argv[word_index]);
+		ft_dprintf(STDOUT_FILENO, "%s", argv[word_index]);
 		if (word_index + 1 < argv_count)
-			printf(" ");
+			ft_dprintf(STDOUT_FILENO, " ");
 		word_index++;
 	}
 
 	if (newline)
-		printf("\n");
+		ft_dprintf(STDOUT_FILENO, "\n");
 
 	return (0);
 }
