@@ -15,7 +15,6 @@ typedef struct s_execution
 {
 	char 	**cmd_args;   // Command and its arguments
 	int		redir_fd[2];        // temp_fd[FD_IN] = input, temp_fd[FD_OUT] = output
-	int		temp_fd[2];   // Temporary fds (e.g., for saving stdin/stdout)
 	int		prev_fd;
 	int		pipefd[2];
 	int		has_next_pipe;
@@ -28,6 +27,10 @@ void	execute_ast(t_minishell *mshell, t_ast *ast);
 int		safe_open_redirect(const char *filepath, int flags, int mode);
 char	**get_command_argv(t_minishell *mshell, t_ast *ast);
 
+
+
+
+void setup_child_fds(int prev_fd, int *pipefd, int has_next_pipe, t_execution *exec);
 
 
 

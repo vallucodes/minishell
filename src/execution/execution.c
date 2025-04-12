@@ -1,7 +1,6 @@
 #include "../../inc/minishell.h"
 #include <sys/wait.h>
 
-
 static int	is_builtin(const char *cmd)
 {
 	if (!cmd)
@@ -20,28 +19,24 @@ static void handle_redirections(t_ast *node, t_execution *exec)
 	while (node)
 	{
 		if (node->type == REDIRECT_IN || node->type == HERE_DOCUMENT)
-			exec->temp_fd[FD_IN] = safe_open_redirect(node->file, O_RDONLY, 0);
+			exec->redir_fd[FD_IN] = safe_open_redirect(node->file, O_RDONLY, 0);
 		else if (node->type == REDIRECT_OUT)
-			exec->temp_fd[FD_OUT] = safe_open_redirect(node->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			exec->redir_fd[FD_OUT] = safe_open_redirect(node->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		else if (node->type == REDIRECT_APPEND)
-			exec->temp_fd[FD_OUT] = safe_open_redirect(node->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			exec->redir_fd[FD_OUT] = safe_open_redirect(node->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		node = node->next_left;
 	}
 }
 
-static t_ast *get_cmd_node(t_ast *node, char ***cmd_args)
+static t_ast *get_cmd_node(t_ast *ast)
 {
-	t_ast *cmd_node = NULL;
-	while (node)
+	while (ast)
 	{
-		if (node->type == COMMAND)
-		{
-			*cmd_args = node->cmd;
-			cmd_node = node;
-		}
-		node = node->next_left;
+		if (ast->type == COMMAND)
+			return (ast);
+		ast = ast->next_left;
 	}
-	return (cmd_node);
+	return (NULL);
 }
 
 static int fork_redirection_only(t_minishell *mshell, t_execution *exec)
@@ -55,47 +50,21 @@ static int fork_redirection_only(t_minishell *mshell, t_execution *exec)
 
 	if (pid == 0)
 	{
-		if (exec->temp_fd[FD_IN] != STDIN_FILENO)
-			dup2(exec->temp_fd[FD_IN], STDIN_FILENO);
-		if (exec->temp_fd[FD_OUT] != STDOUT_FILENO)
-			dup2(exec->temp_fd[FD_OUT], STDOUT_FILENO);
-		close(exec->temp_fd[FD_IN]);
-		close(exec->temp_fd[FD_OUT]);
+		if (exec->redir_fd[FD_IN] != STDIN_FILENO)
+			dup2(exec->redir_fd[FD_IN], STDIN_FILENO);
+		if (exec->redir_fd[FD_OUT] != STDOUT_FILENO)
+			dup2(exec->redir_fd[FD_OUT], STDOUT_FILENO);
+		close(exec->redir_fd[FD_IN]);
+		close(exec->redir_fd[FD_OUT]);
 		exit(0);
 	}
 	mshell->command_count++;
 	mshell->last_pid = pid;
-	if (exec->temp_fd[FD_IN] != STDIN_FILENO)
-		close(exec->temp_fd[FD_IN]);
-	if (exec->temp_fd[FD_OUT] != STDOUT_FILENO)
-		close(exec->temp_fd[FD_OUT]);
+	if (exec->redir_fd[FD_IN] != STDIN_FILENO)
+		close(exec->redir_fd[FD_IN]);
+	if (exec->redir_fd[FD_OUT] != STDOUT_FILENO)
+		close(exec->redir_fd[FD_OUT]);
 	return (1);
-}
-
-//maybe can stat wutg this tmrr 11.4, add them to struct!
-static void setup_child_fds(int prev_fd, int *pipefd, int has_next_pipe, t_execution *exec)
-{
-	if (exec->temp_fd[FD_IN] != STDIN_FILENO)
-		dup2(exec->temp_fd[FD_IN], STDIN_FILENO);
-	else if (prev_fd != STDIN_FILENO)
-		dup2(prev_fd, STDIN_FILENO);
-
-	if (exec->temp_fd[FD_OUT] != STDOUT_FILENO)
-		dup2(exec->temp_fd[FD_OUT], STDOUT_FILENO);
-	else if (has_next_pipe)
-		dup2(pipefd[1], STDOUT_FILENO);
-
-	if (exec->temp_fd[FD_IN] != STDIN_FILENO)
-		close(exec->temp_fd[FD_IN]);
-	if (exec->temp_fd[FD_OUT] != STDOUT_FILENO)
-		close(exec->temp_fd[FD_OUT]);
-	if (prev_fd != STDIN_FILENO)
-		close(prev_fd);
-	if (has_next_pipe)
-	{
-		close(pipefd[0]);
-		close(pipefd[1]);
-	}
 }
 
 int	wait_for_children(t_minishell *mshell)
@@ -117,17 +86,17 @@ static void	redirect_and_restore_builtin(t_execution *exec,
 	int original_stdin = -1;
 	int original_stdout = -1;
 
-	if (exec->temp_fd[FD_IN] != STDIN_FILENO)
+	if (exec->redir_fd[FD_IN] != STDIN_FILENO)
 	{
 		original_stdin = dup(STDIN_FILENO);
-		dup2(exec->temp_fd[FD_IN], STDIN_FILENO);
-		close(exec->temp_fd[FD_IN]);
+		dup2(exec->redir_fd[FD_IN], STDIN_FILENO);
+		close(exec->redir_fd[FD_IN]);
 	}
-	if (exec->temp_fd[FD_OUT] != STDOUT_FILENO)
+	if (exec->redir_fd[FD_OUT] != STDOUT_FILENO)
 	{
 		original_stdout = dup(STDOUT_FILENO);
-		dup2(exec->temp_fd[FD_OUT], STDOUT_FILENO);
-		close(exec->temp_fd[FD_OUT]);
+		dup2(exec->redir_fd[FD_OUT], STDOUT_FILENO);
+		close(exec->redir_fd[FD_OUT]);
 	}
 	execute_builtin(mshell, cmd_args);
 	if (original_stdout != -1)
@@ -142,34 +111,49 @@ static void	redirect_and_restore_builtin(t_execution *exec,
 	}
 }
 
+static void init_execution (t_execution *exec, t_ast *ast)
+{
+	exec->cmd_args = NULL;
+	exec->redir_fd[FD_IN] = STDIN_FILENO;
+	exec->redir_fd[FD_OUT] = STDOUT_FILENO;
+	exec->has_next_pipe = (ast->next_right != NULL);
+}
+
 void execute_ast(t_minishell *mshell, t_ast *ast)
 {
 	t_ast *cmd_node;
 	t_execution exec;
-	int pipefd[2], prev_fd = STDIN_FILENO, has_next_pipe;
+	int pipefd[2];
+	//, prev_fd = STDIN_FILENO, has_next_pipe;
 	pid_t pid;
 	char **external_cmd;
 
+	exec.prev_fd = STDIN_FILENO;
+	ft_bzero(&exec, 0);
+
 	while (ast)
 	{
-		exec.temp_fd[FD_IN] = STDIN_FILENO;
-		exec.temp_fd[FD_OUT] = STDOUT_FILENO;
-		exec.cmd_args = NULL;
+		init_execution(&exec, ast);
+		// exec.redir_fd[FD_IN] = STDIN_FILENO;
+		// exec.redir_fd[FD_OUT] = STDOUT_FILENO;
+		// exec.cmd_args = NULL;
+		// has_next_pipe = (ast->next_right != NULL);
 		cmd_node = NULL;
-		has_next_pipe = (ast->next_right != NULL);
 
-		if (has_next_pipe && pipe(pipefd) < 0)
+		if (exec.has_next_pipe && pipe(pipefd) < 0)
 		{
 			perror("pipe");
 			return;
 		}
 
 		handle_redirections(ast, &exec);
-		cmd_node = get_cmd_node(ast, &exec.cmd_args);
+		cmd_node = get_cmd_node(ast);
+		if (cmd_node)
+			exec.cmd_args = cmd_node->cmd;
 
 		//if only redirection is here like  < Makefile >out23
 		if ((!exec.cmd_args || !exec.cmd_args[0]) &&
-			(exec.temp_fd[FD_IN] != STDIN_FILENO || exec.temp_fd[FD_OUT] != STDOUT_FILENO))
+			(exec.redir_fd[FD_IN] != STDIN_FILENO || exec.redir_fd[FD_OUT] != STDOUT_FILENO))
 		{
 			if (fork_redirection_only(mshell, &exec) < 0)
 				return;
@@ -182,7 +166,7 @@ void execute_ast(t_minishell *mshell, t_ast *ast)
 			continue;
 		}
 
-		if (is_builtin(exec.cmd_args[0]) && !has_next_pipe)
+		if (is_builtin(exec.cmd_args[0]) && !exec.has_next_pipe)
 		{
 			redirect_and_restore_builtin(&exec, mshell, exec.cmd_args);
 			ast = ast->next_right;
@@ -198,7 +182,7 @@ void execute_ast(t_minishell *mshell, t_ast *ast)
 
 		if (pid == 0)
 		{
-			setup_child_fds(prev_fd, pipefd, has_next_pipe, &exec);
+			setup_child_fds(exec.prev_fd, pipefd, exec.has_next_pipe, &exec);
 			if (is_builtin(exec.cmd_args[0]))
 			{
 				execute_builtin(mshell, exec.cmd_args);
@@ -221,16 +205,16 @@ void execute_ast(t_minishell *mshell, t_ast *ast)
 		{
 			mshell->command_count++;
 			mshell->last_pid = pid;
-			if (prev_fd != STDIN_FILENO)
-				close(prev_fd);
-			if (exec.temp_fd[FD_IN] != STDIN_FILENO)
-				close(exec.temp_fd[FD_IN]);
-			if (exec.temp_fd[FD_OUT] != STDOUT_FILENO)
-				close(exec.temp_fd[FD_OUT]);
-			if (has_next_pipe)
+			if (exec.prev_fd != STDIN_FILENO)
+				close(exec.prev_fd);
+			if (exec.redir_fd[FD_IN] != STDIN_FILENO)
+				close(exec.redir_fd[FD_IN]);
+			if (exec.redir_fd[FD_OUT] != STDOUT_FILENO)
+				close(exec.redir_fd[FD_OUT]);
+			if (exec.has_next_pipe)
 			{
 				close(pipefd[1]);
-				prev_fd = pipefd[0];
+				exec.prev_fd = pipefd[0];
 			}
 		}
 		ast = ast->next_right;

@@ -47,6 +47,7 @@ SRC			=	main.c \
 				execution/exec_utils.c \
 				execution/execute_builtin.c \
 				execution/path.c \
+				execution/setup_child_fds.c \
 				execution/execution.c
 
 
