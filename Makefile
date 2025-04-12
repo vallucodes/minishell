@@ -44,7 +44,7 @@ SRC			=	main.c \
 				20.builtins/utils_builtins.c \
 				20.builtins/ft_export_sort_env.c \
 				99.dev/print_development.c \
-				execution/exec_utils.c \
+				execution/safe_open.c \
 				execution/execute_builtin.c \
 				execution/path.c \
 				execution/setup_child_fds.c \

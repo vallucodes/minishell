@@ -11,7 +11,7 @@ int ft_env(t_env **my_env, char **argv)
     arg_count = count_argv(&argv[1]); //skip env, start from arg
     if (arg_count > 0)
     {
-        ft_dprintf(STDERR_FILENO, "minishell: env: too many arguments\n");
+        ft_dprintf(STDERR_FILENO, "Giraffeshell: env: too many arguments\n");
         return (1);
     }
     i = 0;

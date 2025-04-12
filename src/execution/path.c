@@ -69,7 +69,7 @@ char	**get_command_argv(t_minishell *mshell, t_ast *ast)
 	{
 		if (!join_cmd_path(cmd_argv, mshell->path, cmd_argv[0]))
 		{
-			ft_dprintf(2, "minishell: %s: command not found\n", cmd_argv[0]);
+			ft_dprintf(2, "Giraffeshell: %s: command not found\n", cmd_argv[0]);
 			ft_free_2d(cmd_argv);
 			exit(127);
 		}

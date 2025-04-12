@@ -31,7 +31,7 @@ int	init_minishell(t_minishell *mshell, char **envp)
 		mshell->path = ft_split(path_str, ':');
 
 	if (!mshell->path)
-		ft_dprintf(2, "minishell: PATH not found in environment\n");
+		ft_dprintf(2, "Giraffeshell: PATH not found in environment\n");
 	// if (init_ast(&mshell->ast) != 0)
 	//     return (1);
 

@@ -12,7 +12,7 @@ int	ft_unset(char **args, t_env *env)
 		if (is_valid_identifier_range(args[i], ft_strlen(args[i])))
 			remove_env_var(env, args[i]);
 		else
-			ft_dprintf(2, "minishell: unset: `%s': not a valid identifier\n", args[i]);
+			ft_dprintf(2, "Giraffeshell: unset: `%s': not a valid identifier\n", args[i]);
 		i++;
 	}
 	return (0);

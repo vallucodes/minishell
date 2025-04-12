@@ -6,7 +6,7 @@ int execute_builtin(t_minishell *mshell, char **cmd_args)
 	//ft_dprintf(2, "%p\n", ast->cmd);
 	if (!mshell || !cmd_args || !cmd_args[0])
 	{
-		ft_dprintf(2, "minishell: builtin execution error\n");
+		ft_dprintf(2, "Giraffeshell: builtin execution error\n");
 		mshell->exitcode = FAIL;
 		return (mshell->exitcode);
 	}

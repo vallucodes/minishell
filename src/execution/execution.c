@@ -14,30 +14,7 @@ static int	is_builtin(const char *cmd)
 		ft_strcmp(cmd, "exit") == 0);
 }
 
-static int handle_redirections(t_ast *node, t_execution *exec)
-{
-	while (node)
-	{
-		if (node->type == REDIRECT_IN || node->type == HERE_DOCUMENT)
-		{
-			if (safe_open_redirect(&exec->redir_fd[FD_IN], node->file, O_RDONLY, 0) == FAIL)
-				return (FAIL);
-		}
-		else if (node->type == REDIRECT_OUT)
-		{
-			if (safe_open_redirect(&exec->redir_fd[FD_OUT], node->file, O_WRONLY | O_CREAT | O_TRUNC, 0644))
-				return (FAIL);
-		}
-		else if (node->type == REDIRECT_APPEND)
-		{
-			if (safe_open_redirect(&exec->redir_fd[FD_OUT], node->file, O_WRONLY | O_CREAT | O_APPEND, 0644))
-				return (FAIL);
-		}
-		node = node->next_left;
 
-	}
-	return (SUCCESS);
-}
 
 static t_ast *get_cmd_node(t_ast *ast)
 {
@@ -203,7 +180,7 @@ void execute_ast(t_minishell *mshell, t_ast *ast)
 			}
 			if (!cmd_node)
 			{
-				ft_dprintf(2, "minishell: command node not found\n");
+				ft_dprintf(2, "Giraffeshell: command node not found\n");
 				exit(127);
 			}
 			external_cmd = get_command_argv(mshell, cmd_node);

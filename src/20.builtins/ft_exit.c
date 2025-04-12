@@ -11,12 +11,12 @@ void	ft_exit(char **argv, t_minishell *minishell)
 		exit(minishell->exitcode);
 	if (!ft_atol(argv[1], &code))
 	{
-		ft_dprintf(2, "minishell: exit: %s: numeric argument required\n", argv[1]);
+		ft_dprintf(2, "Giraffeshell: exit: %s: numeric argument required\n", argv[1]);
 		exit(2);
 	}
 	if (argv_count > 2)
 	{
-		ft_dprintf(2, "minishell: exit: too many arguments\n");
+		ft_dprintf(2, "Giraffeshell: exit: too many arguments\n");
 		minishell->exitcode = 1;
 		return ;
 	}

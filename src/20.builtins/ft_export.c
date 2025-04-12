@@ -67,7 +67,7 @@ static int	handle_export_arg(t_env *env, char *arg)
 		key_len = ft_strlen(arg);
 	if (!is_valid_identifier_range(arg, key_len))
 	{
-		ft_dprintf(2, "minishell: export: `%s`: not a valid identifier\n", arg);
+		ft_dprintf(2, "Giraffeshell: export: `%s`: not a valid identifier\n", arg);
 		return (0); // invalid
 	}
 	if (!export_update_or_add(env, arg, key_len, key_has_value))
@@ -80,7 +80,7 @@ static int	export_update_or_add(t_env *env, char *arg, size_t key_len, int key_h
 	char *key = ft_substr(arg, 0, key_len);
 	if (!key)
 	{
-		ft_dprintf(2, "minishell: export: malloc failed\n");
+		ft_dprintf(2, "Giraffeshell: export: malloc failed\n");
 		return (0);
 	}
 	if (!export_update(env, arg, key, key_has_value))
@@ -119,7 +119,7 @@ static int	export_add(t_env *env, const char *arg, const char *key, size_t key_l
 {
 	if (!realloc_env_capacity(env))
 	{
-		ft_dprintf(2, "minishell: export: malloc failed\n");
+		ft_dprintf(2, "Giraffeshell: export: malloc failed\n");
 		return (0);
 	}
 	if (key_has_value)
@@ -134,7 +134,7 @@ static int	export_add(t_env *env, const char *arg, const char *key, size_t key_l
 		char *new_var = malloc(key_len + 2);
 		if (!new_var)
 		{
-			ft_dprintf(2, "minishell: export: malloc failed\n");
+			ft_dprintf(2, "Giraffeshell: export: malloc failed\n");
 			return (0);
 		}
 		ft_memcpy(new_var, key, key_len);
