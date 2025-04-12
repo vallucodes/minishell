@@ -2,9 +2,7 @@
 
 static int safe_open_redir_in(t_execution *exec, char *filepath)
 {
-	//close can happen
-
-	if (exec->redir_fd[FD_IN] != STDIN_FILENO && exec->redir_fd[FD_IN] != STDOUT_FILENO )
+	if (exec->redir_fd[FD_IN] != STDIN_FILENO)
 		close(exec->redir_fd[0]);
 
 	exec->redir_fd[FD_IN] = open(filepath, O_RDONLY, 0);
@@ -17,12 +15,9 @@ static int safe_open_redir_in(t_execution *exec, char *filepath)
 	return SUCCESS;
 }
 
-
 static int safe_open_redir_out(t_execution *exec, char *filepath)
 {
-	//close can happen
-
-	if (exec->redir_fd[FD_OUT] != STDIN_FILENO && exec->redir_fd[FD_OUT] != STDOUT_FILENO )
+	if (exec->redir_fd[FD_OUT] != STDOUT_FILENO )
 		close(exec->redir_fd[FD_OUT]);
 
 	exec->redir_fd[FD_OUT] = open(filepath, O_WRONLY | O_CREAT | O_TRUNC, 0644);
@@ -37,7 +32,7 @@ static int safe_open_redir_out(t_execution *exec, char *filepath)
 
 static int safe_open_redir_append(t_execution *exec, char *filepath)
 {
-	if (exec->redir_fd[FD_OUT] != STDIN_FILENO && exec->redir_fd[FD_OUT] != STDOUT_FILENO)
+	if (exec->redir_fd[FD_OUT] != STDOUT_FILENO)
 		close(exec->redir_fd[FD_OUT]);
 
 	exec->redir_fd[FD_OUT] = open(filepath, O_WRONLY | O_CREAT | O_APPEND, 0644);
@@ -70,7 +65,6 @@ int handle_redirections(t_ast *node, t_execution *exec)
 				return (FAIL);
 		}
 		node = node->next_left;
-
 	}
 	return (SUCCESS);
 }

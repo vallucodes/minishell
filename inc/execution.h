@@ -8,8 +8,6 @@ typedef struct s_minishell t_minishell;
 
 # define FD_IN  0
 # define FD_OUT 1
-# define REDIR_IN  0
-# define REDIR_OUT 1
 
 typedef struct s_execution
 {

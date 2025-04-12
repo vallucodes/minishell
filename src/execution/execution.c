@@ -114,6 +114,7 @@ void execute_ast(t_minishell *mshell, t_ast *ast)
 	int pipefd[2];
 	pid_t pid;
 	char **external_cmd;
+	int	has_pipe = 0;
 
 	exec.prev_fd = STDIN_FILENO;
 	ft_bzero(&exec, 0);
@@ -123,10 +124,14 @@ void execute_ast(t_minishell *mshell, t_ast *ast)
 		init_execution(&exec, ast);
 		cmd_node = NULL;
 
-		if (exec.has_next_pipe && pipe(pipefd) < 0)
+		if (exec.has_next_pipe)
 		{
-			perror("pipe");
-			return;
+			has_pipe = 1;
+			if (pipe(pipefd) < 0)
+			{
+				perror("pipe");
+				return;
+			}
 		}
 
 		if (handle_redirections(ast, &exec) == FAIL)
@@ -155,7 +160,7 @@ void execute_ast(t_minishell *mshell, t_ast *ast)
 			continue;
 		}
 
-		if (is_builtin(exec.cmd_args[0]) && !exec.has_next_pipe)
+		if (is_builtin(exec.cmd_args[0]) && !has_pipe)
 		{
 			redirect_and_restore_builtin(&exec, mshell, exec.cmd_args);
 			ast = ast->next_right;
