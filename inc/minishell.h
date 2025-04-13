@@ -8,6 +8,7 @@
 # include <readline/history.h>	//readline
 # include <fcntl.h>				//open
 # include <stdalign.h>			//alignof
+# include <errno.h>
 # include "../lib/libft/inc/libft.h"
 # include "lexing.h"
 # include "ast.h"

@@ -25,6 +25,11 @@ int execute_builtin(t_minishell *mshell, char **cmd_args)
 		mshell->exitcode = ft_echo(count_argv(cmd_args), cmd_args);
 		return (mshell->exitcode);
 	}
+	if (ft_strcmp(cmd_args[0], "cd") == 0)
+	{
+		mshell->exitcode = ft_cd(&mshell->envp, count_argv(cmd_args), cmd_args);
+		return (mshell->exitcode);
+	}
 	if (ft_strcmp(cmd_args[0], "exit") == 0)
 	{
 		ft_exit(cmd_args, mshell);

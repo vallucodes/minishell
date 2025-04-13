@@ -37,6 +37,7 @@ SRC			=	main.c \
 				7.ast/ast_utils.c \
 				20.builtins/ft_env.c \
 				20.builtins/ft_pwd.c \
+				20.builtins/ft_cd.c \
 				20.builtins/ft_echo.c \
 				20.builtins/ft_exit.c \
 				20.builtins/ft_unset.c \

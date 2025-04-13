@@ -2,19 +2,6 @@
 #include "minishell.h"
 
 
-char *get_env_value(char **envp, const char *key)
-{
-	size_t key_len = ft_strlen(key);
-	int i = 0;
-
-	while (envp && envp[i])
-	{
-		if (ft_strncmp(envp[i], key, key_len) == 0 && envp[i][key_len] == '=')
-			return (envp[i] + key_len + 1); // skip "KEY="
-		i++;
-	}
-	return (NULL);
-}
 
 int	init_minishell(t_minishell *mshell, char **envp)
 {

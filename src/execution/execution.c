@@ -117,7 +117,6 @@ void execute_ast(t_minishell *mshell, t_ast *ast)
 	int	has_pipe = 0;
 
 	exec.prev_fd = STDIN_FILENO;
-	ft_bzero(&exec, 0);
 
 	while (ast)
 	{
