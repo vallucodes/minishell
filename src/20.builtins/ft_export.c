@@ -1,8 +1,8 @@
 #include "../../inc/minishell.h"
 
 static void		print_sorted_export(t_env *env);
-static int	handle_export_arg(t_env *env, char *arg);
-static int	export_update_or_add(t_env *env, char *arg, size_t key_len, int key_has_value);
+static int		handle_export_arg(t_env *env, char *arg);
+static int		export_update_or_add(t_env *env, char *arg, size_t key_len, int key_has_value);
 
 int	ft_export(char **args, t_env *env)
 {
@@ -16,7 +16,7 @@ int	ft_export(char **args, t_env *env)
 		return (print_sorted_export(env), 0);
 	while (args[i])
 	{
-		if (!handle_export_arg(env, args[i]))
+		if (handle_export_arg(env, args[i]) == FAIL)
 			exit_code = 1;
 		i++;
 	}
@@ -66,11 +66,11 @@ static int	handle_export_arg(t_env *env, char *arg)
 	if (!is_valid_identifier_range(arg, key_len))
 	{
 		ft_dprintf(2, "Giraffeshell: export: `%s`: not a valid identifier\n", arg);
-		return (0); // invalid
+		return (FAIL);
 	}
-	if (!export_update_or_add(env, arg, key_len, key_has_value))
-		return (0); // malloc fail
-	return (1);
+	if (export_update_or_add(env, arg, key_len, key_has_value) == FAIL)
+		return (FAIL);
+	return (SUCCESS);
 }
 
 static int	export_update_or_add(t_env *env, char *arg, size_t key_len, int key_has_value)
@@ -79,17 +79,18 @@ static int	export_update_or_add(t_env *env, char *arg, size_t key_len, int key_h
 	if (!key)
 	{
 		ft_dprintf(2, "Giraffeshell: export: malloc failed\n");
-		return (0);
+		return (FAIL);
 	}
-	if (!update_var_env(env, arg, key, key_has_value))
+	if (update_var_env(env, arg, key, key_has_value) == FAIL)
 	{
-		if (!add_var_to_env(env, arg, key, key_len, key_has_value))
+		if (add_var_to_env(env, arg, key, key_len, key_has_value) == FAIL)
 		{
 			ft_dprintf(2, "Giraffeshell: export: malloc failed\n");
 			free(key);
-			return (0);
+			return (FAIL);
 		}
 	}
 	free(key);
-	return (1);
+	return (SUCCESS);
 }
+

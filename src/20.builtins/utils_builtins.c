@@ -37,34 +37,39 @@ int	update_var_env(t_env *env, const char *arg, const char *key, int key_has_val
 			{
 				free(env->envp[i]);
 				env->envp[i] = ft_strdup(arg);
+				if (!env->envp[i])
+					return (FAIL);
 			}
-			return (1); // key found
+			return (SUCCESS); // key found and updated
 		}
 		i++;
 	}
-	return (0); // not found
+	return (FAIL); // not found
 }
+
 
 int	add_var_to_env(t_env *env, const char *arg, const char *key, size_t key_len, int key_has_value)
 {
 	if (!realloc_env_capacity(env))
-		return (0);
+		return (FAIL);
+
 	if (key_has_value)
 	{
 		env->envp[env->len] = ft_strdup(arg);
 		if (!env->envp[env->len])
-			return (0);
+			return (FAIL);
 		env->len++;
 	}
 	else
 	{
 		char *new_var = malloc(key_len + 2);
 		if (!new_var)
-			return (0);
+			return (FAIL);
 		ft_memcpy(new_var, key, key_len);
 		new_var[key_len] = '\0';
 		env->envp[env->len++] = new_var;
 	}
 	env->envp[env->len] = NULL;
-	return (1);
+	return (SUCCESS);
 }
+

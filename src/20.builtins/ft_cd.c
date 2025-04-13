@@ -63,8 +63,8 @@ static int	update_pwd(t_env *env)
 		ft_dprintf(2, "Giraffeshell: cd: malloc failed\n");
 		return (FAIL);
 	}
-	if (!update_var_env(env, full_path_var, "PWD", 1)
-		&& !add_var_to_env(env, full_path_var, "PWD", 3, 1))
+	if (update_var_env(env, full_path_var, "PWD", 1) == FAIL
+		&& add_var_to_env(env, full_path_var, "PWD", 3, 1) == FAIL)
 	{
 		ft_dprintf(2, "Giraffeshell: cd: malloc failed\n");
 		free(full_path_var);
@@ -84,8 +84,8 @@ static int	update_oldpwd(t_env *env, const char *old_pwd)
 		ft_dprintf(2, "Giraffeshell: cd: malloc failed\n");
 		return (FAIL);
 	}
-		if (!update_var_env(env, full_path_var, "OLDPWD", 1)
-		&& !add_var_to_env(env, full_path_var, "OLDPWD", 6, 1))
+	if (update_var_env(env, full_path_var, "OLDPWD", 1) == FAIL
+		&& add_var_to_env(env, full_path_var, "OLDPWD", 3, 1) == FAIL)
 	{
 		ft_dprintf(2, "Giraffeshell: cd: malloc failed\n");
 		free(full_path_var);
