@@ -7,15 +7,15 @@ typedef struct s_env
 	unsigned int	allocated_capacity;   // how many total entries allocated
 	unsigned int	len;                   // how many are actually used
 
-	char			**export_only;  // variables exported without value
-	unsigned int	export_len;
-	unsigned int	export_capacity;
-
 }	t_env;
 
 int		copy_env(t_env **env, char **envp);
 void	free_env(t_env *env);
 void	free_partial_env(char **envp, int up_to);
+int		match_env_key(const char *env_entry, const char *key);
+char	*get_env_value(char **envp, const char *key);
+int		realloc_env_capacity(t_env *env);
+char	**dup_and_sort_env(t_env *env);
 
 
 #endif

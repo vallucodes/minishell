@@ -26,6 +26,7 @@ static void	loop_through_word(char **env, int exitcode, t_token *current)
 			append_char(input_str, &new_str, i++);
 	}
 	replace_content_of_token(current, new_str);
+	
 }
 
 void	expand_remove_quotes(char **env, int exitcode, t_token *tokens)

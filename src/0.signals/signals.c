@@ -1,6 +1,6 @@
 #include "../../inc/minishell.h"
 
-int	g_signal;
+// int	g_signal;
 
 void	init_signals(struct sigaction *sa)
 {
@@ -34,10 +34,10 @@ void	signal_action_heredoc(struct sigaction *sa)
 	sigaction(SIGQUIT, sa, NULL);
 }
 
-void	signal_action_child(struct sigaction *sa)
-{
-	sa->sa_handler = ;
-	sigaction(SIGINT, sa, NULL);
-	sa->sa_handler = ;
-	sigaction(SIGQUIT, sa, NULL);
-}
+// void	signal_action_child(struct sigaction *sa)
+// {
+// 	sa->sa_handler = ;
+// 	sigaction(SIGINT, sa, NULL);
+// 	sa->sa_handler = ;
+// 	sigaction(SIGQUIT, sa, NULL);
+// }

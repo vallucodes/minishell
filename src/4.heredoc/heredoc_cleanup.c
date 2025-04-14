@@ -1,6 +1,6 @@
 #include "../inc/minishell.h"
 
-static void	delete_tmp_files(t_arena **arena)
+void	delete_tmp_files(t_arena **arena)
 {
 	size_t	i;
 	char	*tmp_file;

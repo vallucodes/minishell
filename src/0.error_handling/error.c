@@ -25,3 +25,6 @@ void	print_error(char *msg, char *token, t_token_type type)
 			printf(UNREACHABLE);
 	}
 }
+
+
+

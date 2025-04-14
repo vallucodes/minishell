@@ -6,7 +6,7 @@ t_arena	arena_create(void)
 	t_arenablock	*first;
 
 	first =  malloc(sizeof(t_arenablock) + INITIAL_SIZE);
-	printf("Arena allocation  %i\n", INITIAL_SIZE);
+	// printf("Arena allocation  %i\n", INITIAL_SIZE);
 	// if (!first)
 	// 	exit_error(MALLOC);
 	first->next = NULL;
@@ -77,24 +77,6 @@ void	*arena_alloc(t_arena *a, size_t size, size_t alignment)
 	return (result);
 }
 
-void	arena_destroy(t_arena **a)
-{
-	t_arenablock	*block;
-	t_arenablock	*next;
-
-	if (!a || !*a)
-		return ;
-	block = (*a)->first;
-	while (block)
-	{
-		next = block->next;
-		free(block);
-		block = next;
-	}
-	free(*a);
-	printf("Arena destroyed\n");
-	*a = NULL;
-}
 
 void	init_arena(t_arena **arena)
 {

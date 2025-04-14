@@ -62,5 +62,5 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
-
-
+minishell
+minishell_tester/
