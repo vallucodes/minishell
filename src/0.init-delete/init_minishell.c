@@ -19,6 +19,7 @@ int	init_minishell(struct sigaction	*sa, t_minishell *mshell, char **envp)
 
 	if (!mshell->path)
 		ft_dprintf(2, "Giraffeshell: PATH not found in environment\n");
+	mshell->sa = sa;
 	init_signals(mshell->sa);
 	// if (init_ast(&mshell->ast) != 0)
 	//     return (1);
@@ -35,4 +36,12 @@ int	init_minishell(struct sigaction	*sa, t_minishell *mshell, char **envp)
 	// mshell->exit_code = 0;
 
 	return (0);
+}
+
+void	init_quotes(t_quotes_helper *quotes)
+{
+	quotes->in_double = 0;
+	quotes->in_single = 0;
+	quotes->in_quotes = 0;
+	quotes->previous_in_quotes = 0;
 }

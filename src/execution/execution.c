@@ -181,6 +181,11 @@ static void handle_parent(t_minishell *mshell, t_execution *exec, int *pipefd, p
 		close(pipefd[1]);
 		exec->prev_fd = pipefd[0];
 	}
+	else
+	{
+		close(pipefd[1]);
+		close(pipefd[0]);
+	}
 }
 
 

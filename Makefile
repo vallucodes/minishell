@@ -1,4 +1,4 @@
-NAME		= minishell.out
+NAME		= minishell
 CC			= cc
 CFLAGS		= -g3 -Wextra #-Wall -Werror
 LDFLAGS		= -lreadline

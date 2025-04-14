@@ -6,7 +6,7 @@ t_arena	arena_create(void)
 	t_arenablock	*first;
 
 	first =  malloc(sizeof(t_arenablock) + INITIAL_SIZE);
-	printf("Arena allocation  %i\n", INITIAL_SIZE);
+	// printf("Arena allocation  %i\n", INITIAL_SIZE);
 	// if (!first)
 	// 	exit_error(MALLOC);
 	first->next = NULL;
