@@ -102,3 +102,21 @@ size_t	expand_content(char **env, char *str, int fd, char **new_str)
 	}
 	return (len);
 }
+
+size_t	expand_exitcode_value(int exitcode, int fd, char **new_str)
+{
+	char	*str_nb;
+	size_t	i;
+
+	str_nb = ft_itoa(exitcode);
+	i = 0;
+	while (str_nb[i])
+	{
+		if (fd)
+			write(fd, &str_nb[i], 1);
+		else if (new_str)
+			append_char(str_nb, new_str, i);
+		i++;
+	}
+	return (2);
+}

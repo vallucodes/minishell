@@ -1,22 +1,30 @@
 #include "../inc/minishell.h"
 
-static char	*read_line(t_arena **arena, char **env, char *eof, t_expand expand)
+static char	*read_line(t_arena **arena, t_minishell mshell, char *eof, t_expand expand)
 {
 	char	*input;
 	int		fd;
 	char	*file;
 
 	file = create_tmp_file(arena, &fd);
-	input = readline("> ");
-	while (ft_strncmp(eof, input, ft_strlen(eof)) || (ft_strlen(input) != ft_strlen(eof)))
+	restart_signal_action_heredoc(mshell.sa);
+	while (1)
 	{
-		save_to_file(env, input, fd, expand);
+		int	fd_stdin = dup(STDIN_FILENO);
+		input = readline("> ");
+		if (g_signal == SIGINT)
+			return (cleanup_in_heredoc(arena, &input, fd_stdin), NULL);
+		if (!input)
+		{
+			print_warning(eof);
+			break ;
+		}
+		if (is_eof(eof, input))
+			break ;
+		save_to_file(mshell, input, fd, expand);
 		free(input);
 		input = NULL;
-		input = readline("> ");
 	}
-	free(input);
-	input = NULL;
 	return (file);
 }
 
@@ -60,7 +68,7 @@ int	check_quotes(t_token *current)
 	return (expansion_flag);
 }
 
-void	handle_heredoc(t_arena **arena, char **env, t_token *tokens)
+int	handle_heredoc(t_arena **arena, t_minishell mshell, t_token *tokens)
 {
 	t_token		*current;
 	char		*file;
@@ -73,9 +81,12 @@ void	handle_heredoc(t_arena **arena, char **env, t_token *tokens)
 		if (current->type == HERE_DOCUMENT)
 		{
 			expansion_flag = check_quotes(current->next);
-			file = read_line(arena, env, current->next->value, expansion_flag);
+			file = read_line(arena, mshell, current->next->value, expansion_flag);
+			if (file == NULL)
+				return (FAIL);
 			replace_token(current, file);
 		}
 		current = current->next;
 	}
+	return (SUCCESS);
 }

@@ -24,9 +24,3 @@ int	expandable_exists(int len, char **env, int i, char *str)
 	return ((ft_strncmp(&env[i][0], &str[1], len - 1) == 0) &&
 		(env[i][len - 1] == '='));
 }
-
-void	replace_content_of_token(t_token *current, char *new_str)
-{
-	current->value = new_str;
-	current->len = ft_strlen(new_str);
-}

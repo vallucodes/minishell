@@ -3,7 +3,7 @@
 
 
 
-int	init_minishell(t_minishell *mshell, char **envp)
+int	init_minishell(struct sigaction	*sa, t_minishell *mshell, char **envp)
 {
 	if (copy_env(&mshell->envp, envp) != 0)
 	{
@@ -19,6 +19,7 @@ int	init_minishell(t_minishell *mshell, char **envp)
 
 	if (!mshell->path)
 		ft_dprintf(2, "Giraffeshell: PATH not found in environment\n");
+	init_signals(mshell->sa);
 	// if (init_ast(&mshell->ast) != 0)
 	//     return (1);
 

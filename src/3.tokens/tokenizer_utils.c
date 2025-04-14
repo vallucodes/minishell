@@ -15,18 +15,10 @@ int	is_operator(char c)
 	return (c == '<' || c == '>' || c == '|' || c == '<');
 }
 
-int	is_word(t_input *input, int i)
+int	is_valid_char(t_quotes_helper *quotes, t_input *input)
 {
-	if (input->full_str[input->index + i] &&
-		!ft_isspace(input->full_str[input->index + i]) &&
-		input->full_str[input->index + i] != '|' &&
-		input->full_str[input->index + i] != '<' &&
-		input->full_str[input->index + i] != '>' &&
-		input->full_str[input->index + i] != '\'' &&
-		input->full_str[input->index + i] != '"')
-		return (1);
-	else
-		return (0);
+	return (input->full_str[input->index] &&
+		((!is_separator(input->full_str[input->index]) || quotes->in_quotes)));
 }
 
 void	update_quote_state(char c, t_quotes_helper *quotes)

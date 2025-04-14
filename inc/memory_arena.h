@@ -17,4 +17,9 @@ typedef struct t_arena
 	size_t			default_block_size;
 }	t_arena;
 
+t_arena	arena_create();
+void	*arena_alloc(t_arena *a, size_t size, size_t alignment);
+void	arena_destroy(t_arena **a);
+void	init_arena(t_arena **arena);
+
 #endif
