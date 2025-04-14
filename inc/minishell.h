@@ -8,6 +8,7 @@
 # include <readline/history.h>	//readline
 # include <fcntl.h>				//open
 # include <stdalign.h>			//alignof
+# include <errno.h>
 # include <signal.h>			//signals
 # include <sys/ioctl.h>			//ioctl
 # include "../lib/libft/inc/libft.h"
@@ -18,6 +19,7 @@
 # include "heredoc.h"
 # include "environment.h"
 # include "builtin.h"
+# include "execution.h"
 
 # define PROMPT "\001\e[93m\002🦒 >>>\001\e[0m\e[95m\002 Giraffeshell>$ \001\e[0m\002"
 
@@ -43,12 +45,34 @@ typedef enum e_exit
 typedef struct s_minishell
 {
 	struct sigaction	*sa;
-	t_arena				*arena;
-	t_env				*envp; // env struct
-	int					exitcode; //exitcode assignment after exe
+	t_arena		*arena;
+	t_env		*envp; // env struct
+	t_ast		*ast;
+	int			exitcode; //exitcode assignment after exe
+	char		**path;
+	int			command_count;
+	pid_t		last_pid;
+	char 		*input_str; //for free if error
 	//later add execution, exit code when we are there
-}				t_minishell;
+}				t_minishell ;
 
+//functions
+int		tokenizer(t_minishell *mshell, t_input *input, char *input_str);
+void	init_lexer(t_input *new_input, char *input_str);
+int		input_validation(char *input);
+int		tokens_validation(t_token *tokens);
+void	retokenize_words(t_token *tokens);
+void	concatinate_adjacecnt_quotes(char *str);
+int		init_minishell(struct sigaction	*sa, t_minishell *mshell, char **envp);
+void	delete_minishell(t_minishell *mshell);
+
+//tokenizer utils
+int		is_separator(char c);
+int		is_quote(char c);
+int		is_operator(char c);
+int		is_word(t_input *input, int i);
+void	update_quote_state(char c, t_quotes_helper *quotes);
+void	append_char(char *str, char **new, int i);
 //error handling
 void	print_error(char *msg, char *token, t_token_type type);
 
@@ -59,7 +83,6 @@ void	init_quotes(t_quotes_helper *quotes);
 void	replace_content_of_token(t_token *current, char *new_str);
 
 //main functions
-int		init_minishell(struct sigaction	*sa, t_minishell *mshell, char **envp);
 int		input_validation(char *input);
 
 //quote handler
