@@ -13,12 +13,13 @@ static char	*read_line(t_arena **arena, t_minishell mshell, char *eof, t_expand 
 		int	fd_stdin = dup(STDIN_FILENO);
 		input = readline("> ");
 		if (g_signal == SIGINT)
+			return (cleanup_in_heredoc(arena, &input, fd_stdin), NULL);
+		if (!input)
 		{
-			dup2(fd_stdin, STDIN_FILENO);
-			close(fd_stdin);
-			return (NULL);
+			print_warning(eof);
+			break ;
 		}
-		if (!(ft_strncmp(eof, input, ft_strlen(eof)) || (ft_strlen(input) != ft_strlen(eof))))
+		if (is_eof(eof, input))
 			break ;
 		save_to_file(mshell, input, fd, expand);
 		free(input);
@@ -81,7 +82,7 @@ int	handle_heredoc(t_arena **arena, t_minishell mshell, t_token *tokens)
 		{
 			expansion_flag = check_quotes(current->next);
 			file = read_line(arena, mshell, current->next->value, expansion_flag);
-			if (g_signal == SIGINT)
+			if (file == NULL)
 				return (FAIL);
 			replace_token(current, file);
 		}

@@ -21,9 +21,13 @@ int main(int ac, char **av, char **envp)
 		restart_signal_action_main(mshell.sa);
 		input_str = readline(PROMPT);
 		ignore_signal_action(mshell.sa);
-		// if (!input_str)
+		if (!input_str)
+		{
 			// free(envp);
+			ft_dprintf(1, "exit\n");
+			exit(1);
 			// exit_error(readline);
+		}
 		if (input_str[0] == '\0' && (free(input_str), 1))
 			continue ;
 		add_history(input_str);
@@ -39,9 +43,9 @@ int main(int ac, char **av, char **envp)
 		if (handle_heredoc(&mshell.arena, mshell, input.tokens))
 		{
 			free(input_str);
-			arena_destroy(&mshell.arena);
 			continue ;
 		}
+		restart_signal_action_main(mshell.sa);
 		expand_remove_quotes(mshell.envp->envp, mshell.exitcode, input.tokens);
 		print_tokens(input.tokens);
 		ast = build_ast_binary_tree(&mshell.arena, input.tokens); //change to send the adress of ast
