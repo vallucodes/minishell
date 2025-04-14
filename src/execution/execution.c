@@ -103,9 +103,9 @@ void	execute_builtin_child(t_minishell *mshell, t_execution *exec)
 	}
 }
 
-static int execute_builtin_parent(t_minishell *mshell, t_execution *exec, int has_pipe)
+static int execute_builtin_parent(t_minishell *mshell, t_execution *exec)
 {
-	if (is_builtin(exec->cmd_args[0]) && !has_pipe)
+	if (is_builtin(exec->cmd_args[0]) && !exec->has_pipe)
 	{
 		redirect_and_restore_builtin(exec, mshell, exec->cmd_args);
 		return (SUCCESS);
@@ -113,12 +113,11 @@ static int execute_builtin_parent(t_minishell *mshell, t_execution *exec, int ha
 	return (FAIL);
 }
 
-
-static int setup_pipe(t_execution *exec, int *pipefd, int *has_pipe)
+static int setup_pipe(t_execution *exec, int *pipefd)
 {
 	if (exec->has_next_pipe)
 	{
-		*has_pipe = 1;
+		exec->has_pipe = 1;
 		if (pipe(pipefd) < 0)
 		{
 			perror("Giraffeshell: pipe");
@@ -144,31 +143,21 @@ static int safe_fork(int *pipefd, pid_t *pid)
 	return (SUCCESS);
 }
 
-
-
 static void handle_child_process(t_minishell *mshell, t_execution *exec,
 								int *pipefd, t_ast *cmd_node)
 {
 	char **external_cmd;
 
 	setup_child_fds(exec->prev_fd, pipefd, exec->has_next_pipe, exec);
-
-	// Run builtin if needed
 	execute_builtin_child(mshell, exec);
-
-	// If there's no actual command node (syntax like < infile >outfile)
 	if (!cmd_node)
 	{
 		ft_dprintf(2, "Giraffeshell: command NODE not found\n");
 		delete_minishell(mshell);
 		exit(127);
 	}
-
-	// Try executing external command
 	external_cmd = get_command_argv(mshell, cmd_node);
 	execve(external_cmd[0], exec->cmd_args, mshell->envp->envp);
-
-	// If execve failed
 	perror(external_cmd[0]);
 	ft_free_2d(external_cmd);
 	delete_minishell(mshell);
@@ -201,9 +190,8 @@ void execute_ast(t_minishell *mshell, t_ast *ast)
 	t_execution exec;
 	int pipefd[2];
 	pid_t pid;
-	char **external_cmd;
-	int	has_pipe = 0;
 
+	exec.has_pipe = 0;
 	exec.prev_fd = STDIN_FILENO;
 
 	while (ast)
@@ -211,7 +199,7 @@ void execute_ast(t_minishell *mshell, t_ast *ast)
 		init_execution(&exec, ast);
 		cmd_node = NULL;
 
-		if (setup_pipe(&exec, pipefd, &has_pipe) == FAIL)
+		if (setup_pipe(&exec, pipefd) == FAIL)
 			return;
 
 		if (handle_redirections(ast, &exec) == FAIL)
@@ -223,9 +211,6 @@ void execute_ast(t_minishell *mshell, t_ast *ast)
 		cmd_node = get_cmd_node(ast);
 		if (cmd_node)
 			exec.cmd_args = cmd_node->cmd;
-
-
-		//if only redirection is here like  < Makefile >out23
 
 		if ((!exec.cmd_args || !exec.cmd_args[0]) &&
 			(exec.redir_fd[FD_IN] != STDIN_FILENO || exec.redir_fd[FD_OUT] != STDOUT_FILENO))
@@ -240,7 +225,7 @@ void execute_ast(t_minishell *mshell, t_ast *ast)
 			ast = ast->next_right;
 			continue;
 		}
-		if (execute_builtin_parent(mshell, &exec, has_pipe) == SUCCESS)
+		if (execute_builtin_parent(mshell, &exec) == SUCCESS)
 		{
 			ast = ast->next_right;
 			continue;
@@ -255,9 +240,6 @@ void execute_ast(t_minishell *mshell, t_ast *ast)
 	}
 	mshell->exitcode = wait_for_children(mshell);
 }
-
-
-
 
 //valgrind --track-fds=all --trace-children=yes ./minishell.out
 //valgrind --leak-check=full --track-fds=all --trace-children=yes ./minishell.out
