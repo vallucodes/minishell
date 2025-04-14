@@ -7,7 +7,7 @@ static char	*read_line(t_arena **arena, t_minishell mshell, char *eof, t_expand 
 	char	*file;
 
 	file = create_tmp_file(arena, &fd);
-	restart_signal_action_heredoc(mshell.sa);
+	signal_action_heredoc(mshell.sa);
 	while (1)
 	{
 		int	fd_stdin = dup(STDIN_FILENO);

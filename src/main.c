@@ -18,9 +18,9 @@ int main(int ac, char **av, char **envp)
 		// exit_error(init_issue)
 	while (1)
 	{
-		restart_signal_action_main(mshell.sa);
+		signal_action_main(mshell.sa);
 		input_str = readline(PROMPT);
-		ignore_signal_action(mshell.sa);
+		signal_action_ignore(mshell.sa);
 		if (!input_str)
 		{
 			// free(envp);
@@ -45,7 +45,7 @@ int main(int ac, char **av, char **envp)
 			free(input_str);
 			continue ;
 		}
-		restart_signal_action_main(mshell.sa);
+		signal_action_main(mshell.sa);
 		expand_remove_quotes(mshell.envp->envp, mshell.exitcode, input.tokens);
 		print_tokens(input.tokens);
 		ast = build_ast_binary_tree(&mshell.arena, input.tokens); //change to send the adress of ast
