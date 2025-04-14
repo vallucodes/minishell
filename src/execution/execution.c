@@ -14,8 +14,6 @@ static int	is_builtin(const char *cmd)
 		ft_strcmp(cmd, "exit") == 0);
 }
 
-
-
 static t_ast *get_cmd_node(t_ast *ast)
 {
 	while (ast)
@@ -53,18 +51,6 @@ static int fork_redirection_only(t_minishell *mshell, t_execution *exec)
 	if (exec->redir_fd[FD_OUT] != STDOUT_FILENO)
 		close(exec->redir_fd[FD_OUT]);
 	return (1);
-}
-
-int	wait_for_children(t_minishell *mshell)
-{
-	int i = 0, wstatus, exit_code = 0;
-	while (i < mshell->command_count)
-	{
-		if (mshell->last_pid == wait(&wstatus))
-			exit_code = WEXITSTATUS(wstatus);
-		i++;
-	}
-	return exit_code;
 }
 
 
@@ -107,6 +93,108 @@ static void init_execution (t_execution *exec, t_ast *ast)
 	exec->has_next_pipe = (ast->next_right != NULL);
 }
 
+void	execute_builtin_child(t_minishell *mshell, t_execution *exec)
+{
+	if (is_builtin(exec->cmd_args[0]))
+	{
+		execute_builtin(mshell, exec->cmd_args);
+		delete_minishell(mshell);
+		exit(mshell->exitcode);
+	}
+}
+
+static int execute_builtin_parent(t_minishell *mshell, t_execution *exec, int has_pipe)
+{
+	if (is_builtin(exec->cmd_args[0]) && !has_pipe)
+	{
+		redirect_and_restore_builtin(exec, mshell, exec->cmd_args);
+		return (SUCCESS);
+	}
+	return (FAIL);
+}
+
+
+static int setup_pipe(t_execution *exec, int *pipefd, int *has_pipe)
+{
+	if (exec->has_next_pipe)
+	{
+		*has_pipe = 1;
+		if (pipe(pipefd) < 0)
+		{
+			perror("Giraffeshell: pipe");
+			return FAIL;
+		}
+	}
+	return (SUCCESS);
+}
+
+static int safe_fork(int *pipefd, pid_t *pid)
+{
+	*pid = fork();
+	if (*pid < 0)
+	{
+		perror("Giraffeshell: fork");
+		if (pipefd)
+		{
+			close(pipefd[0]);
+			close(pipefd[1]);
+		}
+		return (FAIL);
+	}
+	return (SUCCESS);
+}
+
+
+
+static void handle_child_process(t_minishell *mshell, t_execution *exec,
+								int *pipefd, t_ast *cmd_node)
+{
+	char **external_cmd;
+
+	setup_child_fds(exec->prev_fd, pipefd, exec->has_next_pipe, exec);
+
+	// Run builtin if needed
+	execute_builtin_child(mshell, exec);
+
+	// If there's no actual command node (syntax like < infile >outfile)
+	if (!cmd_node)
+	{
+		ft_dprintf(2, "Giraffeshell: command NODE not found\n");
+		delete_minishell(mshell);
+		exit(127);
+	}
+
+	// Try executing external command
+	external_cmd = get_command_argv(mshell, cmd_node);
+	execve(external_cmd[0], exec->cmd_args, mshell->envp->envp);
+
+	// If execve failed
+	perror(external_cmd[0]);
+	ft_free_2d(external_cmd);
+	delete_minishell(mshell);
+	exit(127);
+}
+
+static void handle_parent(t_minishell *mshell, t_execution *exec, int *pipefd, pid_t pid)
+{
+	mshell->command_count++;
+	mshell->last_pid = pid;
+
+	if (exec->prev_fd != STDIN_FILENO)
+		close(exec->prev_fd);
+	if (exec->redir_fd[FD_IN] != STDIN_FILENO)
+		close(exec->redir_fd[FD_IN]);
+	if (exec->redir_fd[FD_OUT] != STDOUT_FILENO)
+		close(exec->redir_fd[FD_OUT]);
+
+	if (exec->has_next_pipe)
+	{
+		close(pipefd[1]);
+		exec->prev_fd = pipefd[0];
+	}
+}
+
+
 void execute_ast(t_minishell *mshell, t_ast *ast)
 {
 	t_ast *cmd_node;
@@ -123,15 +211,8 @@ void execute_ast(t_minishell *mshell, t_ast *ast)
 		init_execution(&exec, ast);
 		cmd_node = NULL;
 
-		if (exec.has_next_pipe)
-		{
-			has_pipe = 1;
-			if (pipe(pipefd) < 0)
-			{
-				perror("pipe");
-				return;
-			}
-		}
+		if (setup_pipe(&exec, pipefd, &has_pipe) == FAIL)
+			return;
 
 		if (handle_redirections(ast, &exec) == FAIL)
 		{
@@ -139,12 +220,13 @@ void execute_ast(t_minishell *mshell, t_ast *ast)
 			ast = ast->next_right;
 			continue;
 		}
-
 		cmd_node = get_cmd_node(ast);
 		if (cmd_node)
 			exec.cmd_args = cmd_node->cmd;
 
+
 		//if only redirection is here like  < Makefile >out23
+
 		if ((!exec.cmd_args || !exec.cmd_args[0]) &&
 			(exec.redir_fd[FD_IN] != STDIN_FILENO || exec.redir_fd[FD_OUT] != STDOUT_FILENO))
 		{
@@ -158,59 +240,24 @@ void execute_ast(t_minishell *mshell, t_ast *ast)
 			ast = ast->next_right;
 			continue;
 		}
-
-		if (is_builtin(exec.cmd_args[0]) && !has_pipe)
+		if (execute_builtin_parent(mshell, &exec, has_pipe) == SUCCESS)
 		{
-			redirect_and_restore_builtin(&exec, mshell, exec.cmd_args);
 			ast = ast->next_right;
 			continue;
 		}
-
-		pid = fork();
-		if (pid < 0)
-		{
-			perror("fork");
-			return;
-		}
-
+		if (safe_fork(pipefd, &pid) == FAIL)
+			return ;
 		if (pid == 0)
-		{
-			setup_child_fds(exec.prev_fd, pipefd, exec.has_next_pipe, &exec);
-			if (is_builtin(exec.cmd_args[0]))
-			{
-				execute_builtin(mshell, exec.cmd_args);
-				delete_minishell(mshell);
-				exit(mshell->exitcode);
-			}
-			if (!cmd_node)
-			{
-				ft_dprintf(2, "Giraffeshell: command node not found\n");
-				exit(127);
-			}
-			external_cmd = get_command_argv(mshell, cmd_node);
-			execve(external_cmd[0], exec.cmd_args, mshell->envp->envp);
-			perror(external_cmd[0]);
-			ft_free_2d(external_cmd);
-			arena_destroy(&mshell->arena);
-			exit(127);
-		}
+			handle_child_process(mshell, &exec, pipefd, cmd_node);
 		else
-		{
-			mshell->command_count++;
-			mshell->last_pid = pid;
-			if (exec.prev_fd != STDIN_FILENO)
-				close(exec.prev_fd);
-			if (exec.redir_fd[FD_IN] != STDIN_FILENO)
-				close(exec.redir_fd[FD_IN]);
-			if (exec.redir_fd[FD_OUT] != STDOUT_FILENO)
-				close(exec.redir_fd[FD_OUT]);
-			if (exec.has_next_pipe)
-			{
-				close(pipefd[1]);
-				exec.prev_fd = pipefd[0];
-			}
-		}
+			handle_parent(mshell, &exec, pipefd, pid);
 		ast = ast->next_right;
 	}
 	mshell->exitcode = wait_for_children(mshell);
 }
+
+
+
+
+//valgrind --track-fds=all --trace-children=yes ./minishell.out
+//valgrind --leak-check=full --track-fds=all --trace-children=yes ./minishell.out

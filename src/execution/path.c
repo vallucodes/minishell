@@ -1,5 +1,4 @@
 #include "../../inc/minishell.h"
-# include "../lib/libft/inc/libft.h"
 
 static char	*build_cmd_path(char *dir, char *cmd)
 {

@@ -23,9 +23,6 @@ int	ft_unset(char **args, t_env *env)
 	return (exit_code);
 }
 
-
-//remove env var when match is found
-//find the match position, free the match then left shift everything after that
 static void	remove_env_var(t_env *env, const char *key)
 {
 	unsigned int	cur_index;
