@@ -1,7 +1,6 @@
-
 #include "minishell.h"
 
-int	init_minishell(t_minishell *mshell, char **envp)
+int	init_minishell(struct sigaction	*sa, t_minishell *mshell, char **envp)
 {
 	if (copy_env(&mshell->envp, envp) != 0)
 	{
@@ -9,6 +8,8 @@ int	init_minishell(t_minishell *mshell, char **envp)
 		return (FAIL);
 	}
 	mshell->exitcode = 0;
+	mshell->sa = sa;
+	init_signals(mshell->sa);
 	// if (init_ast(&mshell->ast) != 0)
 	//     return (1);
 
@@ -24,3 +25,10 @@ int	init_minishell(t_minishell *mshell, char **envp)
 	return (0);
 }
 
+void	init_quotes(t_quotes_helper *quotes)
+{
+	quotes->in_double = 0;
+	quotes->in_single = 0;
+	quotes->in_quotes = 0;
+	quotes->previous_in_quotes = 0;
+}

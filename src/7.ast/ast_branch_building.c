@@ -43,7 +43,7 @@ static void	build_branch_add_redirects(t_arena **arena, t_ast **ast, t_token *to
 	{
 		while (tmp && tmp->type != PIPE)
 		{
-			if (is_any_redirect(tmp->type))
+			if (is_any_redirect(tmp))
 			{
 				add_node(ast, init_node(arena, NULL, tmp->next->value, tmp->type), FIRST);
 				tmp = tmp->next;
@@ -54,7 +54,7 @@ static void	build_branch_add_redirects(t_arena **arena, t_ast **ast, t_token *to
 	}
 	while (tmp && tmp->type != PIPE)
 	{
-		if (is_any_redirect(tmp->type))
+		if (is_any_redirect(tmp))
 			add_node(ast, init_node(arena, NULL, tmp->next->value, tmp->type), NON_FIRST);
 		tmp = tmp->next;
 	}
