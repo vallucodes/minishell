@@ -51,7 +51,6 @@ int main(int ac, char **av, char **envp)
 		ast = build_ast_binary_tree(&mshell.arena, input.tokens); //change to send the adress of ast
 		print_whole_tree(ast);
 		execute_builtins(&mshell, ast);
-		mshell.exitcode = 66;
 		free(input_str); // dont free this before the whole program ends!
 		arena_destroy(&mshell.arena);
 	}
