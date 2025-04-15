@@ -10,7 +10,7 @@
 # include <stdalign.h>			//alignof
 # include <errno.h>
 # include <signal.h>			//signals
-# include <sys/ioctl.h>			//ioctl
+// # include <sys/ioctl.h>			//ioctl
 # include "../lib/libft/inc/libft.h"
 # include "signals.h"
 # include "lexing.h"
@@ -56,46 +56,30 @@ typedef struct s_minishell
 	//later add execution, exit code when we are there
 }				t_minishell ;
 
-//functions
-int		tokenizer(t_minishell *mshell, t_input *input, char *input_str);
-void	init_lexer(t_input *new_input, char *input_str);
+//main functions
 int		input_validation(char *input);
-int		tokens_validation(t_token *tokens);
-void	retokenize_words(t_token *tokens);
-void	concatinate_adjacecnt_quotes(char *str);
 int		init_minishell(struct sigaction	*sa, t_minishell *mshell, char **envp);
+void	init_quotes(t_quotes_helper *quotes);
 void	delete_minishell(t_minishell *mshell);
 
-//tokenizer utils
-int		is_separator(char c);
-int		is_quote(char c);
-int		is_operator(char c);
-int		is_word(t_input *input, int i);
-void	update_quote_state(char c, t_quotes_helper *quotes);
-void	append_char(char *str, char **new, int i);
 //error handling
 void	print_error(char *msg, char *token, t_token_type type);
 
 //global utils
-void	append_char(char *str, char **new, int i);
+void	append_char(char *src, char **dst, int i);
 int		is_any_redirect(t_token *current);
-void	init_quotes(t_quotes_helper *quotes);
 void	replace_content_of_token(t_token *current, char *new_str);
-
-//main functions
-int		input_validation(char *input);
+int		there_is_quote_state_change(t_quotes_helper quotes);
 
 //quote handler
 void	expand_remove_quotes(char **env, int return_value, t_token *tokens);
 
 //quote utils
 int		is_valid_expandable(t_quotes_helper quotes, char *input_str);
-int		there_is_quote_state_change(t_quotes_helper quotes);
 int		is_any_word(t_token_type type);
 int		expandable_exists(int len, char **env, int i, char *str);
 int		is_exitcode_expansion(t_quotes_helper quotes, char *input_str);
 int		is_pid_expansion(t_quotes_helper quotes, char *input_str);
-void	replace_content_of_token(t_token *current, char *new_str);
 
 //expansion
 size_t	expand_pid(int fd, char **new_str);

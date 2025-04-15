@@ -85,13 +85,18 @@ size_t	expand_content(char **env, char *str, int fd, char **new_str)
 	while (str[len] && is_valid_char_expansion(str[len]))
 		len++;
 	i = -1;
-	while(env[++i])
+	while (env[++i])
 	{
 		if (expandable_exists(len, env, i, str))
 		{
 			j = skip_to_start_of_expandable(env[i]);
 			while (env[i][j])
 			{
+				// if (ft_isspace(env[i][j]))
+				// {
+				// 	replace_content_of_token(current, new_str);
+				// 	insert_new_token(&mshell->arena, current);
+				// }
 				if (fd)
 					write(fd, &env[i][j], 1);
 				else if (new_str)

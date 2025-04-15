@@ -1,14 +1,14 @@
 #include "minishell.h"
 
-void	append_char(char *str, char **new, int i)
+void	append_char(char *src, char **dst, int i)
 {
 	char	*temp;
 	char	additive[2];
 
-	additive[0] = str[i];
+	additive[0] = src[i];
 	additive[1] = '\0';
-	temp = *new;
-	*new = ft_strjoin(*new, additive);
+	temp = *dst;
+	*dst = ft_strjoin(*dst, additive);
 	free (temp);
 }
 

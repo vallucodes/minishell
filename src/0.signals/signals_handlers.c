@@ -8,6 +8,10 @@ void	sigint_handler_heredoc(int signal)
 	{
 		g_signal = signal;
 		close(STDIN_FILENO);
+		// write(STDOUT_FILENO, "\n", 1);
+		// rl_on_new_line();
+		// rl_replace_line("", 0);
+		// rl_redisplay();
 	}
 }
 
