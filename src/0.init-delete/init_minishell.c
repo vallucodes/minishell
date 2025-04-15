@@ -1,7 +1,4 @@
-
 #include "minishell.h"
-
-
 
 int	init_minishell(struct sigaction	*sa, t_minishell *mshell, char **envp)
 {
@@ -13,6 +10,7 @@ int	init_minishell(struct sigaction	*sa, t_minishell *mshell, char **envp)
 	mshell->exitcode = 0;
 	mshell->last_pid = -1;
 	mshell->path = NULL;
+	mshell->arena = NULL;
 	char *path_str = get_env_value(mshell->envp->envp, "PATH");
 	if (path_str)
 		mshell->path = ft_split(path_str, ':');
@@ -21,20 +19,10 @@ int	init_minishell(struct sigaction	*sa, t_minishell *mshell, char **envp)
 		ft_dprintf(2, "Giraffeshell: PATH not found in environment\n");
 	mshell->sa = sa;
 	init_signals(mshell->sa);
-	// if (init_ast(&mshell->ast) != 0)
-	//     return (1);
-
-
 
 	//later add full struct
 	// if (init_execution(&mshell->exec) != 0)
 	//     return (1);
-
-	// if (init_signal_handling() != 0)
-	//     return (1);
-
-	// mshell->exit_code = 0;
-
 	return (0);
 }
 

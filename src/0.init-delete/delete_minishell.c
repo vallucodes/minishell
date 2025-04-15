@@ -57,6 +57,13 @@ void	delete_minishell(t_minishell *mshell)
 	free(mshell->envp);
 	mshell->envp = NULL;
 	free(mshell->input_str);
+	if (mshell->arena)
+		arena_destroy(&mshell->arena);
+}
 
-	arena_destroy(&mshell->arena);
+void	exit_and_cleanup(t_minishell *mshell)
+{
+	delete_minishell(mshell);
+	ft_dprintf(1, "exit\n");
+	exit(0);
 }

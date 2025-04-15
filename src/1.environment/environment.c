@@ -11,7 +11,7 @@ static int init_env_storage(t_env *env, char **envp)
 	env->envp = malloc(sizeof(char *) * (var_amount + 1));
 	if (!env->envp)
 	{
-		ft_dprintf(2, "malloc error\n");
+		perror("malloc");
 		return (FAIL);
 	}
 	env->allocated_capacity = var_amount + 1;
@@ -21,9 +21,10 @@ static int init_env_storage(t_env *env, char **envp)
 
 char *get_env_value(char **envp, const char *key)
 {
-	size_t key_len = ft_strlen(key);
-	int i = 0;
+	size_t	key_len = ft_strlen(key);
+	size_t	i;
 
+	i = 0;
 	while (envp && envp[i])
 	{
 		if (ft_strncmp(envp[i], key, key_len) == 0 && envp[i][key_len] == '=')
@@ -62,7 +63,10 @@ int realloc_env_capacity(t_env *env)
 		new_capacity = 8; //just in case new capa is 0 then 0 cant *2
 	new_envp = malloc(sizeof(char *) * (new_capacity + 1));
 	if (!new_envp)
-		return (0);
+	{
+		perror("malloc");
+		return (FAIL);
+	}
 	i = 0;
 	while (i < env->len)
 	{
@@ -72,36 +76,34 @@ int realloc_env_capacity(t_env *env)
 	free(env->envp);
 	env->envp = new_envp;
 	env->allocated_capacity = new_capacity;
-	return (1);
+	return (1);// need to change to return SUCCESS
 }
 
 int copy_env(t_env **env, char **envp)
 {
-	int i;
+	size_t	i;
 
 	*env = malloc(sizeof(t_env));
 	if (!*env)
 	{
-		ft_dprintf(2, "malloc error\n");
-		return (FAIL);
+		perror("malloc");
+		exit(FAIL);
 	}
-
 	if (init_env_storage(*env, envp))
 	{
 		free(*env);
-		return (FAIL);
+		exit(FAIL);
 	}
-
 	i = 0;
 	while (envp[i])
 	{
 		(*env)->envp[i] = ft_strdup(envp[i]);
 		if (!(*env)->envp[i])
 		{
-			ft_dprintf(2, "malloc error\n");
+			perror("malloc");
 			free_partial_env((*env)->envp, i);
 			free(*env);
-			return (FAIL);
+			exit(FAIL);
 		}
 		i++;
 	}

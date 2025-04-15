@@ -1,14 +1,15 @@
 #include "../inc/minishell.h"
 
-// void	exit error()
-// {
-
-// } to-do
+void	exit_error(char *msg)
+{
+	ft_dprintf(2, msg);
+	exit(1);
+}
 
 void	print_error(char *msg, char *token, t_token_type type)
 {
 	if (token)
-		printf("%s%s\n", msg, token);
+		ft_dprintf(2, "%s%s\n", msg, token);
 	if (type)
 	{
 		if (type == REDIRECT_IN)
@@ -24,6 +25,8 @@ void	print_error(char *msg, char *token, t_token_type type)
 		else
 			ft_dprintf(2, UNREACHABLE);
 	}
+	else if (token == NULL && type == 0)
+		ft_dprintf(2, "%s", msg);
 }
 
 

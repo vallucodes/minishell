@@ -24,8 +24,9 @@
 # define PROMPT "\001\e[93m\002🦒 >>>\001\e[0m\e[95m\002 Giraffeshell>$ \001\e[0m\002"
 
 //error prompts
-# define BALANCE "quotes or brackets unbalanced"
-# define REDIRECT "redirections invalid"
+# define AC "Error: invalid number of arguments!\n"
+# define BALANCE "Error: quotes or brackets unbalanced\n"
+# define REDIRECT "Error: redirections invalid\n"
 # define TOKEN_ERROR "syntax error near unexpected token"
 # define UNREACHABLE "This is unreachable code, something is wrong with error handling\n"
 # define PIPE_ERROR " `|'"
@@ -61,6 +62,8 @@ int		input_validation(char *input);
 int		init_minishell(struct sigaction	*sa, t_minishell *mshell, char **envp);
 void	init_quotes(t_quotes_helper *quotes);
 void	delete_minishell(t_minishell *mshell);
+void	exit_and_cleanup(t_minishell *mshell);
+void	exit_error(char *msg);
 
 //error handling
 void	print_error(char *msg, char *token, t_token_type type);

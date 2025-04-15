@@ -36,7 +36,7 @@ int input_validation(char *input)
 	if (!input || ft_is_all_whitespace(input))
 		return(FAIL);
 	quote_validation(input, NONE, &balanced);
-	if(!balanced)
+	if (!balanced)
 	{
 		print_error(BALANCE, NULL, 0);
 		return (FAIL);

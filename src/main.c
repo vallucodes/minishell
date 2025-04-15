@@ -10,23 +10,15 @@ int main(int ac, char **av, char **envp)
 	(void) av;
 
 	if (ac != 1)
-		return (FAIL);
-		// exit_error(AC ERROR)
-	if (init_minishell(&sa, &mshell, envp))
-		return (FAIL);
-		// exit_error(init_issue)
+		exit_error(AC);
+	init_minishell(&sa, &mshell, envp);
 	while (1)
 	{
 		signal_action_main(mshell.sa);
 		mshell.input_str = readline(PROMPT);
 		signal_action_ignore(mshell.sa);
 		if (!mshell.input_str)
-		{
-			// free(envp);
-			ft_dprintf(1, "exit\n");
-			exit(1);
-			// exit_error(readline);
-		}
+			exit_and_cleanup(&mshell);
 		if (mshell.input_str[0] == '\0' && (free(mshell.input_str), 1))
 			continue ;
 		add_history(mshell.input_str);
