@@ -25,33 +25,34 @@ static t_ast *get_cmd_node(t_ast *ast)
 	return (NULL);
 }
 
-static int fork_redirection_only(t_minishell *mshell, t_execution *exec)
-{
-	pid_t pid = fork();
-	if (pid < 0)
-	{
-		perror("fork");
-		return (1);
-	}
+// static int fork_redirection_only(t_minishell *mshell, t_execution *exec)
+// {
+// 	pid_t pid;
 
-	if (pid == 0)
-	{
-		if (exec->redir_fd[FD_IN] != STDIN_FILENO)
-			dup2(exec->redir_fd[FD_IN], STDIN_FILENO);
-		if (exec->redir_fd[FD_OUT] != STDOUT_FILENO)
-			dup2(exec->redir_fd[FD_OUT], STDOUT_FILENO);
-		close(exec->redir_fd[FD_IN]);
-		close(exec->redir_fd[FD_OUT]);
-		exit(0);
-	}
-	mshell->command_count++;
-	mshell->last_pid = pid;
-	if (exec->redir_fd[FD_IN] != STDIN_FILENO)
-		close(exec->redir_fd[FD_IN]);
-	if (exec->redir_fd[FD_OUT] != STDOUT_FILENO)
-		close(exec->redir_fd[FD_OUT]);
-	return (1);
-}
+// 	pid = fork();
+// 	if (pid < 0)
+// 	{
+// 		perror("fork");
+// 		return (1);
+// 	}
+// 	if (pid == 0)
+// 	{
+// 		if (exec->redir_fd[FD_IN] != STDIN_FILENO)
+// 			dup2(exec->redir_fd[FD_IN], STDIN_FILENO);
+// 		if (exec->redir_fd[FD_OUT] != STDOUT_FILENO)
+// 			dup2(exec->redir_fd[FD_OUT], STDOUT_FILENO);
+// 		close(exec->redir_fd[FD_IN]);
+// 		close(exec->redir_fd[FD_OUT]);
+// 		exit(0);
+// 	}
+// 	mshell->command_count++;
+// 	mshell->last_pid = pid;
+// 	if (exec->redir_fd[FD_IN] != STDIN_FILENO)
+// 		close(exec->redir_fd[FD_IN]);
+// 	if (exec->redir_fd[FD_OUT] != STDOUT_FILENO)
+// 		close(exec->redir_fd[FD_OUT]);
+// 	return (1);
+// }
 
 
 static void	redirect_and_restore_builtin(t_execution *exec,
@@ -72,7 +73,7 @@ static void	redirect_and_restore_builtin(t_execution *exec,
 		dup2(exec->redir_fd[FD_OUT], STDOUT_FILENO);
 		close(exec->redir_fd[FD_OUT]);
 	}
-	execute_builtin(mshell, cmd_args);
+	mshell->exitcode = execute_builtin(mshell, cmd_args);
 	if (original_stdout != -1)
 	{
 		dup2(original_stdout, STDOUT_FILENO);
@@ -181,11 +182,6 @@ static void handle_parent(t_minishell *mshell, t_execution *exec, int *pipefd, p
 		close(pipefd[1]);
 		exec->prev_fd = pipefd[0];
 	}
-	// else
-	// {
-	// 	close(pipefd[1]);
-	// 	close(pipefd[0]);
-	// }
 }
 
 
@@ -227,15 +223,7 @@ void execute_ast(t_minishell *mshell, t_ast *ast)
 		if (cmd_node)
 			exec.cmd_args = cmd_node->cmd;
 
-		if ((!exec.cmd_args || !exec.cmd_args[0]) &&
-			(exec.redir_fd[FD_IN] != STDIN_FILENO || exec.redir_fd[FD_OUT] != STDOUT_FILENO))
-		{
-			if (fork_redirection_only(mshell, &exec) < 0)
-				return;
-			ast = ast->next_right;
-			continue;
-		}
-		else if (!exec.cmd_args || !exec.cmd_args[0])
+		if (!exec.cmd_args || !exec.cmd_args[0])
 		{
 			ast = ast->next_right;
 			continue;
