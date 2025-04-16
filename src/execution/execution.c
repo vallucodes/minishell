@@ -200,7 +200,7 @@ void	execute_builtin_child(t_minishell *mshell, t_execution *exec)
 {
 	if (is_builtin(exec->cmd_args[0]))
 	{
-		execute_builtin(mshell, exec->cmd_args);
+		mshell->exitcode = execute_builtin(mshell, exec->cmd_args);
 		delete_minishell(mshell);
 		exit(mshell->exitcode);
 	}
@@ -342,9 +342,9 @@ void execute_ast(t_minishell *mshell, t_ast *ast)
 {
 	t_ast *cmd_node;
 	t_execution exec;
-	int pipefd[2];
-	pipefd[0] = -1;
-	pipefd[1] = -1;
+	//int pipefd[2];
+	exec.pipefd[0] = -1;
+	exec.pipefd[1] = -1;
 	pid_t pid;
 
 	exec.has_pipe = 0;
@@ -353,25 +353,29 @@ void execute_ast(t_minishell *mshell, t_ast *ast)
 	while (ast)
 	{
 		init_execution(&exec, ast);
+
+
+
 		cmd_node = NULL;
 
-		if (setup_pipe(&exec, pipefd) == FAIL)
+		if (setup_pipe(&exec, exec.pipefd) == FAIL)
 			return;
 
 		if (handle_redirections(ast, &exec) == FAIL)
 		{
 			mshell->exitcode = 1;
 
-			if (pipefd[1] != -1)
+			if (exec.pipefd[1] != -1)
 			{
-				close(pipefd[1]);
-				pipefd[1] = -1;
+				close(exec.pipefd[1]);
+				exec.pipefd[1] = -1;
 			}
-			if (pipefd[0] != -1)
-				exec.prev_fd = pipefd[0];
+			if (exec.pipefd[0] != -1)
+				exec.prev_fd = exec.pipefd[0];
 			ast = ast->next_right;
 			continue;
 		}
+
 		cmd_node = get_cmd_node(ast);
 
 		if (cmd_node)
@@ -387,12 +391,12 @@ void execute_ast(t_minishell *mshell, t_ast *ast)
 			ast = ast->next_right;
 			continue;
 		}
-		if (safe_fork(pipefd, &pid) == FAIL)
+		if (safe_fork(exec.pipefd, &pid) == FAIL)
 			return ;
 		if (pid == 0)
-			handle_child_process(mshell, &exec, pipefd, cmd_node);
+			handle_child_process(mshell, &exec, exec.pipefd, cmd_node);
 		else
-			handle_parent(mshell, &exec, pipefd, pid);
+			handle_parent(mshell, &exec, exec.pipefd, pid);
 		ast = ast->next_right;
 	}
 	//printf("not FINAL EXIT CODE IS %d\n", mshell->exitcode );
