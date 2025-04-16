@@ -2,22 +2,23 @@
 
 int	init_minishell(struct sigaction	*sa, t_minishell *mshell, char **envp)
 {
+	char	*path_str;
+
 	if (copy_env(&mshell->envp, envp) != 0)
 	{
-		ft_dprintf(2, "Environment copy fail");
+		ft_dprintf(2, UNREACHABLE);
 		return (FAIL);
 	}
 	mshell->exitcode = 0;
 	mshell->last_pid = -1;
+	mshell->sa = sa;
 	mshell->path = NULL;
 	mshell->arena = NULL;
-	char *path_str = get_env_value(mshell->envp->envp, "PATH");
+	path_str = get_env_value(mshell->envp->envp, "PATH");
 	if (path_str)
 		mshell->path = ft_split(path_str, ':');
-
-	if (!mshell->path)
+	if (!mshell->path) //this can be also malloc fail
 		ft_dprintf(2, "Giraffeshell: PATH not found in environment\n");
-	mshell->sa = sa;
 	init_signals(mshell->sa);
 
 	//later add full struct

@@ -21,7 +21,7 @@ static char	*read_line(t_minishell *mshell, char *eof, t_expand expand)
 		}
 		if (is_eof(eof, input))
 			break ;
-		save_to_file(mshell, input, fd, expand);
+		save_line_to_tmp_file(mshell, input, fd, expand);
 		free(input);
 		input = NULL;
 	}
@@ -50,7 +50,6 @@ static int	check_quotes(t_minishell *mshell, t_token *current)
 	expansion_flag = EXPAND;
 	input_str = current->value;
 	init_quotes(&quotes);
-	// new_str = ft_strdup("");
 	new_str = ft_arena_strdup(mshell->arena, "");
 	while (input_str[i])
 	{
@@ -84,7 +83,11 @@ int	handle_heredoc(t_minishell *mshell, t_token *tokens)
 			expansion_flag = check_quotes(mshell, current->next);
 			file = read_line(mshell, current->next->value, expansion_flag);
 			if (file == NULL)
+			{
+				free(mshell->input_str);
+				arena_destroy(&mshell->arena);
 				return (FAIL);
+			}
 			replace_token(current, file);
 		}
 		current = current->next;

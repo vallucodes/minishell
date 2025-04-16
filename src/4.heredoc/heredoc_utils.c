@@ -11,7 +11,7 @@ int	is_valid_char_expansion(char c)
 	return(ft_isalnum(c) || c == '_');
 }
 
-void	save_to_file(t_minishell *mshell, char *input, int fd, t_expand expand)
+void	save_line_to_tmp_file(t_minishell *mshell, char *input, int fd, t_expand expand)
 {
 	size_t	i;
 

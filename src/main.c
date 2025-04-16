@@ -25,12 +25,8 @@ int main(int ac, char **av, char **envp)
 		if (input_validation(mshell.input_str) && (free(mshell.input_str), 1))
 			continue ;
 		init_arena(&mshell);
-		if (tokenizer(&mshell, &input, mshell.input_str) == FAIL)
-		{
-			free(mshell.input_str);
-			arena_destroy(&mshell.arena);
+		if (tokenizer(&mshell, &input) == FAIL)
 			continue ;
-		}
 		if (handle_heredoc(&mshell, input.tokens))
 		{
 			free(mshell.input_str);
@@ -47,9 +43,8 @@ int main(int ac, char **av, char **envp)
         // Add this debug line:
         //ft_dprintf(2, "Debug: Main loop continued. Child exit code was: %d\n", mshell.exitcode);
 
-		// execute_ast(&mshell, ast);
 		delete_tmp_files(&mshell.arena);
-		//free(mshell.input_str); have delete minishell
+		free(mshell.input_str);
 		arena_destroy(&mshell.arena);
 	}
 	delete_minishell(&mshell);

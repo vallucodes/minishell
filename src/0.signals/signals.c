@@ -1,7 +1,5 @@
 #include "../../inc/minishell.h"
 
-// int	g_signal;
-
 void	init_signals(struct sigaction *sa)
 {
 	g_signal = 0;

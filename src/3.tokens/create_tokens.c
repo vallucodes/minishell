@@ -53,7 +53,6 @@ static void	word(t_minishell *mshell, t_input *input)
 
 	input_str = input->full_str;
 	init_quotes(&quotes);
-	// new_str = ft_strdup("");
 	new_str = ft_arena_strdup(mshell->arena, "");
 	while (is_valid_char(&quotes, input))
 	{

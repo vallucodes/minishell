@@ -6,7 +6,7 @@
 /*   By: vlopatin <vlopatin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 19:07:57 by vlopatin          #+#    #+#             */
-/*   Updated: 2025/03/31 13:24:24 by vlopatin         ###   ########.fr       */
+/*   Updated: 2025/04/16 16:11:13 by vlopatin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,13 @@ int	ft_int(int fd, va_list args)
 {
 	int		value;
 	int		str_len;
+	char	buf[12];
 	char	*itoa_str;
 
 	value = va_arg(args, int);
-	itoa_str = ft_itoa(value);
+	itoa_str = ft_itoa_buf(value, buf, sizeof(buf));
 	ft_putstr(fd, itoa_str);
 	str_len = ft_strlen(itoa_str);
-	free(itoa_str);
 	return (str_len);
 }
 
@@ -53,13 +53,13 @@ int	ft_unsigned_int(int fd, va_list args)
 {
 	unsigned int	value;
 	int				str_len;
-	char			*uitoa_str;
+	char			buf[12];
+	char			*utoa_str;
 
 	value = va_arg (args, unsigned int);
-	uitoa_str = ft_utoa(value);
-	ft_putstr(fd, uitoa_str);
-	str_len = ft_strlen(uitoa_str);
-	free(uitoa_str);
+	utoa_str = ft_utoa_buf(value, buf, sizeof(buf));
+	ft_putstr(fd, utoa_str);
+	str_len = ft_strlen(utoa_str);
 	return (str_len);
 }
 

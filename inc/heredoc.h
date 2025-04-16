@@ -11,7 +11,7 @@ typedef enum e_expand
 //heredoc
 int		handle_heredoc(t_minishell *mshell, t_token *tokens);
 char	*create_tmp_file(t_minishell *mshell, int *fd);
-void	save_to_file(t_minishell *mshell, char *input, int fd, t_expand expand);
+void	save_line_to_tmp_file(t_minishell *mshell, char *input, int fd, t_expand expand);
 int		is_valid_char_expansion(char c);
 void	next_tmp_file(char *file, int nb);
 
