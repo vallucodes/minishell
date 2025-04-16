@@ -6,7 +6,7 @@ void	ft_exit(char **argv, t_minishell *mshell)
 	int		argv_count;
 
 	argv_count = count_argv(argv);
-	write(STDERR_FILENO, "exit\n", 5);
+	ft_dprintf(2, "exit\n");
 	if (argv_count == 1)
 	{
 		delete_minishell(mshell);

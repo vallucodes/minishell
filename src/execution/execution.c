@@ -1,5 +1,7 @@
 #include "../../inc/minishell.h"
 #include <sys/wait.h>
+#include <sys/stat.h>
+
 
 static int	is_builtin(const char *cmd)
 {
@@ -55,36 +57,136 @@ static t_ast *get_cmd_node(t_ast *ast)
 // }
 
 
-static void	redirect_and_restore_builtin(t_execution *exec,
+// static void	redirect_and_restore_builtin(t_execution *exec,
+// 				t_minishell *mshell, char **cmd_args)
+// {
+// 	int original_stdin = -1;
+// 	int original_stdout = -1;
+
+// 	if (exec->redir_fd[FD_IN] != STDIN_FILENO)
+// 	{
+// 		original_stdin = dup(STDIN_FILENO);
+// 		dup2(exec->redir_fd[FD_IN], STDIN_FILENO);
+// 		close(exec->redir_fd[FD_IN]);
+// 	}
+// 	if (exec->redir_fd[FD_OUT] != STDOUT_FILENO)
+// 	{
+// 		original_stdout = dup(STDOUT_FILENO);
+// 		dup2(exec->redir_fd[FD_OUT], STDOUT_FILENO);
+// 		close(exec->redir_fd[FD_OUT]);
+// 	}
+// 	mshell->exitcode = execute_builtin(mshell, cmd_args);
+// 	if (original_stdout != -1)
+// 	{
+// 		dup2(original_stdout, STDOUT_FILENO);
+// 		close(original_stdout);
+// 	}
+// 	if (original_stdin != -1)
+// 	{
+// 		dup2(original_stdin, STDIN_FILENO);
+// 		close(original_stdin);
+// 	}
+// }
+
+
+int	redirect_and_restore_builtin(t_execution *exec,
 				t_minishell *mshell, char **cmd_args)
 {
 	int original_stdin = -1;
 	int original_stdout = -1;
 
+	// Save and redirect stdin
 	if (exec->redir_fd[FD_IN] != STDIN_FILENO)
 	{
 		original_stdin = dup(STDIN_FILENO);
-		dup2(exec->redir_fd[FD_IN], STDIN_FILENO);
-		close(exec->redir_fd[FD_IN]);
+		if (original_stdin == -1)
+		{
+			perror("dup STDIN");
+			return (FAIL);
+		}
+		if (dup2(exec->redir_fd[FD_IN], STDIN_FILENO) == -1)
+		{
+			perror("dup2 FD_IN");
+			close(original_stdin);
+			return (FAIL);
+		}
+		if (close(exec->redir_fd[FD_IN]) == -1)
+		{
+			perror("close FD_IN");
+			close(original_stdin);
+			return (FAIL);
+		}
 	}
+
+	// Save and redirect stdout
 	if (exec->redir_fd[FD_OUT] != STDOUT_FILENO)
 	{
 		original_stdout = dup(STDOUT_FILENO);
-		dup2(exec->redir_fd[FD_OUT], STDOUT_FILENO);
-		close(exec->redir_fd[FD_OUT]);
+		if (original_stdout == -1)
+		{
+			perror("dup STDOUT");
+			if (original_stdin != -1)
+				dup2(original_stdin, STDIN_FILENO), close(original_stdin);
+			return (FAIL);
+		}
+		if (dup2(exec->redir_fd[FD_OUT], STDOUT_FILENO) == -1)
+		{
+			perror("dup2 FD_OUT");
+			if (original_stdout != -1)
+				close(original_stdout);
+			if (original_stdin != -1)
+				dup2(original_stdin, STDIN_FILENO), close(original_stdin);
+			return (FAIL);
+		}
+		if (close(exec->redir_fd[FD_OUT]) == -1)
+		{
+			perror("close FD_OUT");
+			if (original_stdout != -1)
+				close(original_stdout);
+			if (original_stdin != -1)
+				dup2(original_stdin, STDIN_FILENO), close(original_stdin);
+			return (FAIL);
+		}
 	}
+
+	// Run builtin and store its exit code
 	mshell->exitcode = execute_builtin(mshell, cmd_args);
+
+	// Restore stdout
 	if (original_stdout != -1)
 	{
-		dup2(original_stdout, STDOUT_FILENO);
-		close(original_stdout);
+		if (dup2(original_stdout, STDOUT_FILENO) == -1)
+		{
+			perror("restore STDOUT");
+			close(original_stdout);
+			return (FAIL);
+		}
+		if (close(original_stdout) == -1)
+		{
+			perror("close original_stdout");
+			return (FAIL);
+		}
 	}
+
+	// Restore stdin
 	if (original_stdin != -1)
 	{
-		dup2(original_stdin, STDIN_FILENO);
-		close(original_stdin);
+		if (dup2(original_stdin, STDIN_FILENO) == -1)
+		{
+			perror("restore STDIN");
+			close(original_stdin);
+			return (FAIL);
+		}
+		if (close(original_stdin) == -1)
+		{
+			perror("close original_stdin");
+			return (FAIL);
+		}
 	}
+
+	return (SUCCESS);
 }
+
 
 static void init_execution (t_execution *exec, t_ast *ast)
 {
@@ -108,11 +210,16 @@ static int execute_builtin_parent(t_minishell *mshell, t_execution *exec)
 {
 	if (is_builtin(exec->cmd_args[0]) && !exec->has_pipe)
 	{
-		redirect_and_restore_builtin(exec, mshell, exec->cmd_args);
-		return (SUCCESS);
+		if (redirect_and_restore_builtin(exec, mshell, exec->cmd_args) == FAIL)
+		{
+			mshell->exitcode = 1;
+			return FAIL;
+		}
+		return SUCCESS;
 	}
-	return (FAIL);
+	return FAIL;
 }
+
 
 static int setup_pipe(t_execution *exec, int *pipefd)
 {
@@ -144,10 +251,23 @@ static int safe_fork(int *pipefd, pid_t *pid)
 	return (SUCCESS);
 }
 
+
+int is_directory(const char *path)
+{
+	struct stat statbuf;
+
+	if (stat(path, &statbuf) != 0)
+		return 0; // Error accessing path, treat as not a directory
+
+	return S_ISDIR(statbuf.st_mode);
+}
+
+
 static void handle_child_process(t_minishell *mshell, t_execution *exec,
 								int *pipefd, t_ast *cmd_node)
 {
-	char **external_cmd;
+	//char **external_cmd;
+	char *full_cmd_path;
 
 	setup_child_fds(exec->prev_fd, pipefd, exec->has_next_pipe, exec);
 	execute_builtin_child(mshell, exec);
@@ -157,13 +277,45 @@ static void handle_child_process(t_minishell *mshell, t_execution *exec,
 		delete_minishell(mshell);
 		exit(127);
 	}
-	external_cmd = get_command_argv(mshell, cmd_node);
-	execve(external_cmd[0], exec->cmd_args, mshell->envp->envp);
-	perror(external_cmd[0]);
-	ft_free_2d(external_cmd);
+	full_cmd_path = get_command_path(mshell, cmd_node);
+
+	//for (int i=0; exec->cmd_args[i]; i++)
+	//	printf("exec->cmd_args %s\n", exec->cmd_args[i]);
+
+	//printf("external_cmd[0]: %s\n", external_cmd[0]);
+
+	//printf("exec->cmd_args[0]: %s\n", exec->cmd_args[0]);
+
+	execve(full_cmd_path, exec->cmd_args, mshell->envp->envp);
+	printf("execve error\n");
+
+	struct stat st;
+	if (stat(full_cmd_path, &st) == 0 && S_ISDIR(st.st_mode))
+	{
+		ft_dprintf(2, "%s: Is a directory\n", full_cmd_path);
+		mshell->exitcode = 126;
+	}
+	else if (errno == ENOENT)
+	{
+		ft_dprintf(2, "%s: No such file or directory\n", full_cmd_path);
+		mshell->exitcode = 127;
+	}
+	else if (errno == EACCES)
+	{
+		ft_dprintf(2, "%s: Permission denied\n", full_cmd_path);
+		mshell->exitcode = 126;
+	}
+	else
+	{
+		ft_dprintf(2, "%s: Execution error\n", full_cmd_path);
+		mshell->exitcode = 126;
+	}
+
+	free(full_cmd_path);
 	delete_minishell(mshell);
-	exit(127);
-}
+	exit(mshell->exitcode);
+
+	}
 
 static void handle_parent(t_minishell *mshell, t_execution *exec, int *pipefd, pid_t pid)
 {
@@ -220,6 +372,7 @@ void execute_ast(t_minishell *mshell, t_ast *ast)
 			continue;
 		}
 		cmd_node = get_cmd_node(ast);
+
 		if (cmd_node)
 			exec.cmd_args = cmd_node->cmd;
 
@@ -241,7 +394,12 @@ void execute_ast(t_minishell *mshell, t_ast *ast)
 			handle_parent(mshell, &exec, pipefd, pid);
 		ast = ast->next_right;
 	}
-	mshell->exitcode = wait_for_children(mshell);
+	//printf("not FINAL EXIT CODE IS %d\n", mshell->exitcode );
+	if (mshell->command_count > 0)
+		mshell->exitcode = wait_for_children(mshell);
+	//printf("FINAL EXIT CODE IS %d\n", mshell->exitcode );
+
+
 }
 
 //valgrind --track-fds=all --trace-children=yes ./minishell.out

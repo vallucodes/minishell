@@ -8,7 +8,7 @@ int execute_builtin(t_minishell *mshell, char **cmd_args)
 		mshell->exitcode = FAIL;
 		return (mshell->exitcode);
 	}
-	if (ft_strcmp(cmd_args[0], "env") == 0)
+	if (ft_strncmp(cmd_args[0], "env", 4) == 0)
 		return (ft_env(&mshell->envp, cmd_args));
 	if (ft_strcmp(cmd_args[0], "pwd") == 0)
 		return (ft_pwd());
