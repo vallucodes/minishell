@@ -41,9 +41,13 @@ int main(int ac, char **av, char **envp)
 		// print_tokens(input.tokens);
 		ast = build_ast_binary_tree(&mshell.arena, input.tokens); //change to send the adress of ast
 		mshell.command_count = 0;
-		// print_whole_tree(ast);
-
+		//print_whole_tree(ast);
 		execute_ast(&mshell, ast);
+
+        // Add this debug line:
+        //ft_dprintf(2, "Debug: Main loop continued. Child exit code was: %d\n", mshell.exitcode);
+
+		// execute_ast(&mshell, ast);
 		delete_tmp_files(&mshell.arena);
 		//free(mshell.input_str); have delete minishell
 		arena_destroy(&mshell.arena);

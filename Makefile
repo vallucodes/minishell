@@ -63,6 +63,8 @@ SRC			=	main.c \
 				execution/execution.c \
 				execution/wait.c
 
+#execution/utils.c \
+
 OBJS		= $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
 
 all: $(NAME)
