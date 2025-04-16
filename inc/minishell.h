@@ -86,9 +86,9 @@ int		is_exitcode_expansion(t_quotes_helper quotes, char *input_str);
 int		is_pid_expansion(t_quotes_helper quotes, char *input_str);
 
 //expansion
-size_t	expand_pid(int fd, char **new_str);
-size_t	expand_content(char **env, char *str, int fd, char **new_str);
-size_t	expand_exitcode_value(int exitcode, int fd, char **new_str);
+size_t	expand_pid(t_minishell *mshell, int fd, char **new_str);
+size_t	expand_content(t_minishell *mshell, char *str, int fd, char **new_str);
+size_t	expand_exitcode_value(t_minishell *mshell, int fd, char **new_str);
 
 //developlment functions
 void print_tokens(t_token *tokens);

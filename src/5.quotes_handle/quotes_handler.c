@@ -15,11 +15,11 @@ static void	loop_through_word(t_minishell *mshell, t_token *current)
 	{
 		update_quote_state(input_str[i], &quotes);
 		if (is_valid_expandable(quotes, &input_str[i]))
-			i += expand_content(mshell->envp->envp, &input_str[i], 0, &new_str);
+			i += expand_content(mshell, &input_str[i], 0, &new_str);
 		else if (is_pid_expansion(quotes, &input_str[i]))
-			i += expand_pid(0, &new_str);
+			i += expand_pid(mshell, 0, &new_str);
 		else if (is_exitcode_expansion(quotes, &input_str[i]))
-			i += expand_exitcode_value(mshell->exitcode, 0, &new_str);
+			i += expand_exitcode_value(mshell, 0, &new_str);
 		else if (there_is_quote_state_change(quotes))
 			i++;
 		else

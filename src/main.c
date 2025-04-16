@@ -31,7 +31,7 @@ int main(int ac, char **av, char **envp)
 			arena_destroy(&mshell.arena);
 			continue ;
 		}
-		if (handle_heredoc(&mshell.arena, mshell, input.tokens))
+		if (handle_heredoc(&mshell, input.tokens))
 		{
 			free(mshell.input_str);
 			continue ;

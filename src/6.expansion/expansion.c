@@ -33,7 +33,7 @@ char	*extract_pid(char *buffer)
 	return (pid_str);
 }
 
-void	write_or_add_to_str(int fd, char **new_str, char *str_pid)
+static void	write_or_add_to_str(t_minishell *mshell, int fd, char **new_str, char *str_pid)
 {
 	size_t	i;
 
@@ -48,7 +48,7 @@ void	write_or_add_to_str(int fd, char **new_str, char *str_pid)
 	}
 }
 
-size_t	expand_pid(int fd, char **new_str)
+size_t	expand_pid(t_minishell *mshell, int fd, char **new_str)
 {
 	char	*str_pid;
 	char	buf[256];
@@ -58,29 +58,31 @@ size_t	expand_pid(int fd, char **new_str)
 	fd_get_pid = open("/proc/self/stat", O_RDONLY);
 	if (fd_get_pid == -1)
 	{
-		write_or_add_to_str(fd, new_str, "$\0");
+		write_or_add_to_str(mshell, fd, new_str, "$\0");
 		return (1);
 	}
 	bytes_read = read(fd_get_pid, buf, sizeof(buf) - 1);
 	if (bytes_read <= 0)
 	{
-		write_or_add_to_str(fd, new_str, "$\0");
+		write_or_add_to_str(mshell, fd, new_str, "$\0");
 		return (1);
 	}
 	close(fd_get_pid);
 	buf[bytes_read] = '\0';
 	str_pid = extract_pid(buf);
-	write_or_add_to_str(fd, new_str, str_pid);
+	write_or_add_to_str(mshell, fd, new_str, str_pid);
 	free(str_pid);
 	return (2);
 }
 
-size_t	expand_content(char **env, char *str, int fd, char **new_str)
+size_t	expand_content(t_minishell *mshell, char *str, int fd, char **new_str)
 {
 	size_t	i;
 	size_t	j;
 	size_t	len;
+	char	**env;
 
+	env = mshell->envp->envp;
 	len = 1;
 	while (str[len] && is_valid_char_expansion(str[len]))
 		len++;
@@ -92,11 +94,6 @@ size_t	expand_content(char **env, char *str, int fd, char **new_str)
 			j = skip_to_start_of_expandable(env[i]);
 			while (env[i][j])
 			{
-				// if (ft_isspace(env[i][j]))
-				// {
-				// 	replace_content_of_token(current, new_str);
-				// 	insert_new_token(&mshell->arena, current);
-				// }
 				if (fd)
 					write(fd, &env[i][j], 1);
 				else if (new_str)
@@ -108,11 +105,13 @@ size_t	expand_content(char **env, char *str, int fd, char **new_str)
 	return (len);
 }
 
-size_t	expand_exitcode_value(int exitcode, int fd, char **new_str)
+size_t	expand_exitcode_value(t_minishell *mshell, int fd, char **new_str)
 {
 	char	*str_nb;
 	size_t	i;
+	int		exitcode;
 
+	exitcode = mshell->exitcode;
 	str_nb = ft_itoa(exitcode);
 	i = 0;
 	while (str_nb[i])

@@ -1,19 +1,19 @@
 #include "../inc/minishell.h"
 
-static char	*read_line(t_arena **arena, t_minishell mshell, char *eof, t_expand expand)
+static char	*read_line(t_minishell *mshell, char *eof, t_expand expand)
 {
 	char	*input;
 	int		fd;
 	char	*file;
 
-	file = create_tmp_file(arena, &fd);
-	signal_action_heredoc(mshell.sa);
+	file = create_tmp_file(mshell, &fd);
+	signal_action_heredoc(mshell->sa);
 	while (1)
 	{
 		int	fd_stdin = dup(STDIN_FILENO);
 		input = readline("> ");
 		if (g_signal == SIGINT)
-			return (cleanup_in_heredoc(arena, &input, fd_stdin), NULL);
+			return (cleanup_in_heredoc(&mshell->arena, &input, fd_stdin), NULL);
 		if (!input)
 		{
 			print_warning(eof);
@@ -68,7 +68,7 @@ int	check_quotes(t_token *current)
 	return (expansion_flag);
 }
 
-int	handle_heredoc(t_arena **arena, t_minishell mshell, t_token *tokens)
+int	handle_heredoc(t_minishell *mshell, t_token *tokens)
 {
 	t_token		*current;
 	char		*file;
@@ -81,7 +81,7 @@ int	handle_heredoc(t_arena **arena, t_minishell mshell, t_token *tokens)
 		if (current->type == HERE_DOCUMENT)
 		{
 			expansion_flag = check_quotes(current->next);
-			file = read_line(arena, mshell, current->next->value, expansion_flag);
+			file = read_line(mshell, current->next->value, expansion_flag);
 			if (file == NULL)
 				return (FAIL);
 			replace_token(current, file);

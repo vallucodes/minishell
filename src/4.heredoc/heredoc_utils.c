@@ -11,7 +11,7 @@ int	is_valid_char_expansion(char c)
 	return(ft_isalnum(c) || c == '_');
 }
 
-void	save_to_file(t_minishell mshell, char *input, int fd, t_expand expand)
+void	save_to_file(t_minishell *mshell, char *input, int fd, t_expand expand)
 {
 	size_t	i;
 
@@ -27,11 +27,11 @@ void	save_to_file(t_minishell mshell, char *input, int fd, t_expand expand)
 		while (input[i])
 		{
 			if (input[i] == '$' && is_valid_char_expansion(input[i + 1]))
-				i += expand_content(mshell.envp->envp, &input[i], fd, NULL);
+				i += expand_content(mshell, &input[i], fd, NULL);
 			else if (input[i] == '$' && input[i + 1] == '$')
-				i += expand_pid(fd, NULL);
+				i += expand_pid(mshell, fd, NULL);
 			else if (input[i] == '$' && input[i + 1] == '?')
-				i += expand_exitcode_value(mshell.exitcode, fd, NULL);
+				i += expand_exitcode_value(mshell, fd, NULL);
 			else
 				write(fd, &input[i++], 1);
 		}
@@ -50,7 +50,7 @@ void	next_tmp_file(char *file, int nb)
 	file[2] = 'p';
 	char_nb = ft_itoa(nb);
 	// if (!char_nb)
-		// exit_error(MALLOC);
+		// exit_cleanup_error(mshell, "malloc");
 	i = 3;
 	j = 0;
 	while (char_nb[j])
@@ -63,14 +63,14 @@ void	next_tmp_file(char *file, int nb)
 	free(char_nb);
 }
 
-char	*create_tmp_file(t_arena **arena, int *fd)
+char	*create_tmp_file(t_minishell *mshell, int *fd)
 {
 	char	*tmp_file;
 	int		index;
 
-	tmp_file = arena_alloc(*arena, 10, alignof(char));
-	// if (!file)
-		// exit_error(MALLOC);
+	tmp_file = arena_alloc(mshell->arena, 10, alignof(char));
+	// if (!tmp_file)
+		// exit_cleanup_error(mshell, "malloc");
 	index = 1;
 	while (1)
 	{
@@ -84,9 +84,6 @@ char	*create_tmp_file(t_arena **arena, int *fd)
 	}
 	*fd = open(tmp_file, O_WRONLY | O_CREAT | O_EXCL, 0644);
 	// if (fd < 0)
-	{
-		// free(file);
-		// exit_error(TMP_FILE_CREATION_FAILED);
-	}
+		// exit_cleanup_error(mshell, "file");
 	return (tmp_file);
 }
