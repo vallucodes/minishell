@@ -57,7 +57,7 @@ static void	word(t_minishell *mshell, t_input *input)
 	while (is_valid_char(&quotes, input))
 	{
 		update_quote_state(input->full_str[input->index], &quotes);
-		append_char(input_str, &new_str, input->index);
+		append_char(mshell, input_str, &new_str, input->index);
 		input->index++;
 	}
 	add_token(&input->tokens, init_token_word(mshell, new_str, WORD));

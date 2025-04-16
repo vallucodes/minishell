@@ -70,7 +70,7 @@ void	exit_cleanup_error(t_minishell *mshell, char *msg);
 void	print_error(char *msg, char *token, t_token_type type);
 
 //global utils
-void	append_char(char *src, char **dst, int i);
+void	append_char(t_minishell *mshell, char *src, char **dst, int i);
 int		is_any_redirect(t_token *current);
 void	replace_content_of_token(t_token *current, char *new_str);
 int		there_is_quote_state_change(t_quotes_helper quotes);

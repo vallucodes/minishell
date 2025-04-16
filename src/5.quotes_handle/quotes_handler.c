@@ -23,7 +23,7 @@ static void	loop_through_word(t_minishell *mshell, t_token *current)
 		else if (there_is_quote_state_change(quotes))
 			i++;
 		else
-			append_char(input_str, &new_str, i++);
+			append_char(mshell, input_str, &new_str, i++);
 	}
 	replace_content_of_token(current, new_str);
 }

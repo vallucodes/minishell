@@ -38,7 +38,7 @@ static void	replace_token(t_token *current, char *file)
 	current->next->len = ft_strlen(file);
 }
 
-int	check_quotes(t_token *current)
+static int	check_quotes(t_minishell *mshell, t_token *current)
 {
 	t_quotes_helper	quotes;
 	char			*new_str;
@@ -61,7 +61,7 @@ int	check_quotes(t_token *current)
 			i++;
 			continue ;
 		}
-		append_char(input_str, &new_str, i);
+		append_char(mshell, input_str, &new_str, i);
 		i++;
 	}
 	replace_content_of_token(current, new_str);
@@ -80,7 +80,7 @@ int	handle_heredoc(t_minishell *mshell, t_token *tokens)
 	{
 		if (current->type == HERE_DOCUMENT)
 		{
-			expansion_flag = check_quotes(current->next);
+			expansion_flag = check_quotes(mshell, current->next);
 			file = read_line(mshell, current->next->value, expansion_flag);
 			if (file == NULL)
 				return (FAIL);

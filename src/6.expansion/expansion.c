@@ -11,26 +11,27 @@ static int	skip_to_start_of_expandable(char *env_row)
 	return (i);
 }
 
-char	*extract_pid(char *buffer)
+static char	*extract_pid(t_minishell *mshell, char *buffer)
 {
 	size_t	i;
 	size_t	len;
-	char	*pid_str;
+	char	*str_pid;
 
 	len = 0;
 	while (buffer[len] && !ft_isspace(buffer[len]))
 		len++;
-	pid_str = malloc(len + 1);
+	// str_pid = malloc(len + 1);
+	str_pid = arena_alloc(mshell->arena, len + 1, alignof(char));
 	// if (!pid_str)
-	// 	exit_error(MALLOC);
+		// exit_cleanup_error(mshell, "malloc");
 	i = 0;
 	while (i < len)
 	{
-		pid_str[i] = buffer[i];
+		str_pid[i] = buffer[i];
 		i++;
 	}
-	pid_str[i] = '\0';
-	return (pid_str);
+	str_pid[i] = '\0';
+	return (str_pid);
 }
 
 static void	write_or_add_to_str(t_minishell *mshell, int fd, char **new_str, char *str_pid)
@@ -43,7 +44,7 @@ static void	write_or_add_to_str(t_minishell *mshell, int fd, char **new_str, cha
 		if (fd)
 			write(fd, &str_pid[i], 1);
 		else if (new_str)
-			append_char(str_pid, new_str, i);
+			append_char(mshell, str_pid, new_str, i);
 		i++;
 	}
 }
@@ -69,9 +70,8 @@ size_t	expand_pid(t_minishell *mshell, int fd, char **new_str)
 	}
 	close(fd_get_pid);
 	buf[bytes_read] = '\0';
-	str_pid = extract_pid(buf);
+	str_pid = extract_pid(mshell, buf);
 	write_or_add_to_str(mshell, fd, new_str, str_pid);
-	free(str_pid);
 	return (2);
 }
 
@@ -97,7 +97,7 @@ size_t	expand_content(t_minishell *mshell, char *str, int fd, char **new_str)
 				if (fd)
 					write(fd, &env[i][j], 1);
 				else if (new_str)
-					append_char(env[i], new_str, j);
+					append_char(mshell, env[i], new_str, j);
 				j++;
 			}
 		}
@@ -119,7 +119,7 @@ size_t	expand_exitcode_value(t_minishell *mshell, int fd, char **new_str)
 		if (fd)
 			write(fd, &str_nb[i], 1);
 		else if (new_str)
-			append_char(str_nb, new_str, i);
+			append_char(mshell, str_nb, new_str, i);
 		i++;
 	}
 	return (2);
