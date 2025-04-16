@@ -53,4 +53,4 @@ int main(int ac, char **av, char **envp)
 	return (0);
 }
 
-// ls -la<file1>fi"le"1.1| "c"a't' -e >fi""'le2' <<'fi'le3 | grep fi"l"en'am'e >>file4 | du -s > $HOME'/path'
+// ls -la<file1>fi"le"1.1| "c"a't' -e >fi""'le2' <<'fi'le3 | cmd1 fi"l"en'am'e >>file4 | du -s > $HOME'/path'

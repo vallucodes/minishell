@@ -1,18 +1,5 @@
 #include "minishell.h"
 
-
-
-// typedef struct s_minishell
-// {
-// 	t_arena		*arena;
-// 	t_env		*envp; // env struct
-// 	int			exitcode; //exitcode assignment after exe
-// 	char		*path;
-// 	int			command_count;
-// 	pid_t		*pids;
-// 	//later add execution, exit code when we are there
-// }				t_minishell ;
-
 void	arena_destroy(t_arena **a)
 {
 	t_arenablock	*block;

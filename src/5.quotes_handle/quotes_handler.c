@@ -9,7 +9,8 @@ static void	loop_through_word(t_minishell *mshell, t_token *current)
 
 	i = 0;
 	input_str = current->value;
-	new_str = ft_strdup("");
+	// new_str = ft_strdup("");
+	new_str = ft_arena_strdup(mshell->arena, "");
 	init_quotes(&quotes);
 	while (input_str[i])
 	{

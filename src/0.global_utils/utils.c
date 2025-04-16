@@ -2,14 +2,14 @@
 
 void	append_char(t_minishell *mshell, char *src, char **dst, int i)
 {
-	char	*temp;
+	// char	*temp;
 	char	additive[2];
 
 	additive[0] = src[i];
 	additive[1] = '\0';
-	temp = *dst;
-	*dst = ft_strjoin(*dst, additive);
-	free (temp);
+	// temp = *dst;
+	*dst = ft_arena_strjoin(mshell->arena, *dst, additive);
+	// free (temp);
 }
 
 int	is_any_redirect(t_token *current)

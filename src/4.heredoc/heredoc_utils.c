@@ -68,13 +68,13 @@ char	*create_tmp_file(t_minishell *mshell, int *fd)
 	char	*tmp_file;
 	int		index;
 
-	tmp_file = arena_alloc(mshell->arena, 10, alignof(char));
+	tmp_file = arena_alloc(mshell->arena, NAME_MAX + 1, alignof(char));
 	// if (!tmp_file)
 		// exit_cleanup_error(mshell, "malloc");
 	index = 1;
 	while (1)
 	{
-		ft_bzero(tmp_file, 256);
+		ft_bzero(tmp_file, NAME_MAX + 1);
 		next_tmp_file(tmp_file, index);
 		if (access (tmp_file, F_OK) != 0)
 			break ;

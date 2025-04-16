@@ -11,6 +11,7 @@
 # include <errno.h>
 # include <signal.h>			//signals
 // # include <sys/ioctl.h>			//ioctl
+# include <limits.h>
 # include "../lib/libft/inc/libft.h"
 # include "signals.h"
 # include "lexing.h"

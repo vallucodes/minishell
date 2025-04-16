@@ -50,7 +50,8 @@ static int	check_quotes(t_minishell *mshell, t_token *current)
 	expansion_flag = EXPAND;
 	input_str = current->value;
 	init_quotes(&quotes);
-	new_str = ft_strdup("");
+	// new_str = ft_strdup("");
+	new_str = ft_arena_strdup(mshell->arena, "");
 	while (input_str[i])
 	{
 		update_quote_state(input_str[i], &quotes);
