@@ -122,5 +122,6 @@ size_t	expand_exitcode_value(t_minishell *mshell, int fd, char **new_str)
 			append_char(mshell, str_nb, new_str, i);
 		i++;
 	}
+	free(str_nb);
 	return (2);
 }
