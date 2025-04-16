@@ -79,7 +79,7 @@ static t_ast *get_cmd_node(t_ast *ast_branch)
 			return (current); // Found the command node
 		current = current->next_left;
 	}
-	ft_dprintf(2, "Debug: get_cmd_node did NOT find a COMMAND node.\n"); // Debug print
+	//ft_dprintf(2, "Debug: get_cmd_node did NOT find a COMMAND node.\n"); // Debug print
 	return (NULL); // No command node found in this branch
 }
 

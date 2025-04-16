@@ -258,3 +258,4 @@ void execute_ast(t_minishell *mshell, t_ast *ast)
 
 //valgrind --track-fds=all --trace-children=yes ./minishell.out
 //valgrind --leak-check=full --track-fds=all --trace-children=yes ./minishell.out
+

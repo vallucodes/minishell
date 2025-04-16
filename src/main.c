@@ -46,14 +46,14 @@ int main(int ac, char **av, char **envp)
 		}
 		restart_signal_action_main(mshell.sa);
 		expand_remove_quotes(mshell.envp->envp, mshell.exitcode, input.tokens);
-		print_tokens(input.tokens);
+		//print_tokens(input.tokens);
 		ast = build_ast_binary_tree(&mshell.arena, input.tokens); //change to send the adress of ast
 		mshell.command_count = 0;
-		print_whole_tree(ast);
+		//print_whole_tree(ast);
 		execute_ast(&mshell, ast);
- 		
+
         // Add this debug line:
-        ft_dprintf(2, "Debug: Main loop continued. Child exit code was: %d\n", mshell.exitcode);
+        //ft_dprintf(2, "Debug: Main loop continued. Child exit code was: %d\n", mshell.exitcode);
 
 		// execute_ast(&mshell, ast);
 		delete_tmp_files(&mshell.arena);
