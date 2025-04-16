@@ -1,6 +1,6 @@
 #include "../inc/minishell.h"
 
-static void	loop_through_word(char **env, int exitcode, t_token *current)
+static void	loop_through_word(t_minishell *mshell, t_token *current)
 {
 	t_quotes_helper	quotes;
 	char			*new_str;
@@ -15,11 +15,11 @@ static void	loop_through_word(char **env, int exitcode, t_token *current)
 	{
 		update_quote_state(input_str[i], &quotes);
 		if (is_valid_expandable(quotes, &input_str[i]))
-			i += expand_content(env, &input_str[i], 0, &new_str);
+			i += expand_content(mshell->envp->envp, &input_str[i], 0, &new_str);
 		else if (is_pid_expansion(quotes, &input_str[i]))
 			i += expand_pid(0, &new_str);
 		else if (is_exitcode_expansion(quotes, &input_str[i]))
-			i += expand_exitcode_value(exitcode, 0, &new_str);
+			i += expand_exitcode_value(mshell->exitcode, 0, &new_str);
 		else if (there_is_quote_state_change(quotes))
 			i++;
 		else
@@ -28,7 +28,7 @@ static void	loop_through_word(char **env, int exitcode, t_token *current)
 	replace_content_of_token(current, new_str);
 }
 
-void	expand_remove_quotes(char **env, int exitcode, t_token *tokens)
+void	expand_remove_quotes(t_minishell *mshell, t_token *tokens)
 {
 	t_token *current;
 
@@ -36,7 +36,7 @@ void	expand_remove_quotes(char **env, int exitcode, t_token *tokens)
 	while (current)
 	{
 		if (is_any_word(current->type))
-			loop_through_word(env, exitcode, current);
+			loop_through_word(mshell, current);
 		current = current->next;
 	}
 }

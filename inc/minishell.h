@@ -76,7 +76,7 @@ void	replace_content_of_token(t_token *current, char *new_str);
 int		there_is_quote_state_change(t_quotes_helper quotes);
 
 //quote handler
-void	expand_remove_quotes(char **env, int return_value, t_token *tokens);
+void	expand_remove_quotes(t_minishell *mshell, t_token *tokens);
 
 //quote utils
 int		is_valid_expandable(t_quotes_helper quotes, char *input_str);

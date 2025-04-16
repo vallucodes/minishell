@@ -37,7 +37,7 @@ int main(int ac, char **av, char **envp)
 			continue ;
 		}
 		signal_action_main(mshell.sa);
-		expand_remove_quotes(mshell.envp->envp, mshell.exitcode, input.tokens);
+		expand_remove_quotes(&mshell, input.tokens);
 		// print_tokens(input.tokens);
 		ast = build_ast_binary_tree(&mshell.arena, input.tokens); //change to send the adress of ast
 		mshell.command_count = 0;
