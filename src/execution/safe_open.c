@@ -68,3 +68,36 @@ int handle_redirections(t_ast *node, t_execution *exec)
 	}
 	return (SUCCESS);
 }
+
+static t_ast *get_cmd_node(t_ast *ast_branch)
+{
+	t_ast *current = ast_branch; // Start from the main node (PIPE or first command)
+	// Traverse the left branch (command/redirections)
+	while (current)
+	{
+		if (current->type == COMMAND)
+			return (current); // Found the command node
+		current = current->next_left;
+	}
+	//ft_dprintf(2, "Debug: get_cmd_node did NOT find a COMMAND node.\n"); // Debug print
+	return (NULL); // No command node found in this branch
+}
+
+int travel_left(t_minishell *mshell, t_execution *exec, t_ast *ast)
+{
+	t_ast *cmd_node;
+
+	if (handle_redirections(ast, exec) == FAIL)
+	{
+		mshell->exitcode = 1;
+		delete_minishell(mshell);
+		exit(mshell->exitcode);
+	}
+
+	cmd_node = get_cmd_node(ast);
+	if (cmd_node)
+		exec->cmd_args = cmd_node->cmd;
+	return (SUCCESS);
+}
+
+

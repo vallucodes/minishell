@@ -181,11 +181,11 @@ static void handle_parent(t_minishell *mshell, t_execution *exec, int *pipefd, p
 		close(pipefd[1]);
 		exec->prev_fd = pipefd[0];
 	}
-	else
-	{
-		close(pipefd[1]);
-		close(pipefd[0]);
-	}
+	// else
+	// {
+	// 	close(pipefd[1]);
+	// 	close(pipefd[0]);
+	// }
 }
 
 
@@ -194,6 +194,8 @@ void execute_ast(t_minishell *mshell, t_ast *ast)
 	t_ast *cmd_node;
 	t_execution exec;
 	int pipefd[2];
+	pipefd[0] = -1;
+	pipefd[1] = -1;
 	pid_t pid;
 
 	exec.has_pipe = 0;
@@ -210,6 +212,14 @@ void execute_ast(t_minishell *mshell, t_ast *ast)
 		if (handle_redirections(ast, &exec) == FAIL)
 		{
 			mshell->exitcode = 1;
+
+			if (pipefd[1] != -1)
+			{
+				close(pipefd[1]);
+				pipefd[1] = -1;
+			}
+			if (pipefd[0] != -1)
+				exec.prev_fd = pipefd[0];
 			ast = ast->next_right;
 			continue;
 		}
@@ -248,3 +258,4 @@ void execute_ast(t_minishell *mshell, t_ast *ast)
 
 //valgrind --track-fds=all --trace-children=yes ./minishell.out
 //valgrind --leak-check=full --track-fds=all --trace-children=yes ./minishell.out
+
