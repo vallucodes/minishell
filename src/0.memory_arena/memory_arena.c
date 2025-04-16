@@ -1,45 +1,37 @@
 #include "../inc/minishell.h"
 
-t_arena	arena_create(void)
+static int	arena_create_block(t_arena **arena)
 {
-	t_arena			arena;
 	t_arenablock	*first;
 
-	first =  malloc(sizeof(t_arenablock) + INITIAL_SIZE);
-	// printf("Arena allocation  %i\n", INITIAL_SIZE);
-	// if (!first)
-	// 	exit_error(MALLOC);
+	first = malloc(sizeof(t_arenablock) + INITIAL_SIZE);
+	if (!first)
+	{
+		perror("malloc");
+		return (FAIL);
+	}
 	first->next = NULL;
 	first->capacity = INITIAL_SIZE;
 	first->used = 0;
-	arena.first = first;
-	arena.current = first;
-	arena.default_block_size = INITIAL_SIZE;
-	return (arena);
+	(*arena)->first = first;
+	(*arena)->current = first;
+	return (SUCCESS);
 }
 
 static size_t	calc_actual_size(t_arena *a, size_t size, size_t alignment)
 {
-	t_arenablock *block = a->current;
-	uintptr_t ptr = (uintptr_t)block->data + block->used;
+	// t_arenablock	*block;
+	uintptr_t		ptr;
+	uintptr_t		aligned;
+	size_t			padding;
+	size_t			actual_size;
 
-	// Debugging output
-	// printf("\n--- calc_actual_size ---\n");
-	// printf("block->data address: %p\n", block->data);
-	// printf("block->used: %zu\n", block->used);
-	// printf("ptr (block->data + used): %p\n", (void *)ptr);
-	// printf("alignment: %zu\n", alignment);
-
-	uintptr_t aligned = (ptr + (alignment - 1)) & ~(alignment - 1);
-	size_t padding = aligned - ptr;
-	size_t actual_size = padding + size;
-
-	// More debugging output
-	// printf("aligned address: %p\n", (void *)aligned);
-	// printf("padding: %zu\n", padding);
-	// printf("actual_size: %zu\n", actual_size);
-
-	return actual_size;
+	// block = a->current;
+	ptr = (uintptr_t)a->current->data + a->current->used;
+	aligned = (ptr + (alignment - 1)) & ~(alignment - 1);
+	padding = aligned - ptr;
+	actual_size = padding + size;
+	return (actual_size);
 }
 
 void	*arena_alloc(t_arena *a, size_t size, size_t alignment)
@@ -61,8 +53,8 @@ void	*arena_alloc(t_arena *a, size_t size, size_t alignment)
 			new_size *= 2;
 		new_block = malloc(sizeof(t_arenablock) + new_size);
 		// printf("allocated block with size %li\n", new_size);
-		// if (!new_block)
-		// 	exit_error(MALLOC);
+		if (!new_block)
+			return(NULL);
 		// printf("Arena allocation  %li\n", new_size);
 		new_block->next = NULL;
 		new_block->capacity = new_size;
@@ -77,11 +69,19 @@ void	*arena_alloc(t_arena *a, size_t size, size_t alignment)
 	return (result);
 }
 
-
-void	init_arena(t_arena **arena)
+void	init_arena_values(t_arena **arena)
 {
-	*arena = malloc(sizeof(t_arena));
-	// if (!*arena)
-		// exit_error(MALLOC);
-	**arena = arena_create();
+	(*arena)->first = NULL;
+	(*arena)->current = NULL;
+	(*arena)->default_block_size = INITIAL_SIZE;
+}
+
+void	init_arena(t_minishell *mshell)
+{
+	mshell->arena = malloc(sizeof(t_arena));
+	if (!mshell->arena)
+		exit_cleanup_error(mshell, "malloc");
+	init_arena_values(&mshell->arena);
+	if (arena_create_block(&mshell->arena))
+		exit_cleanup_error(mshell, "malloc");
 }

@@ -10,43 +10,35 @@ int main(int ac, char **av, char **envp)
 	(void) av;
 
 	if (ac != 1)
-		return (FAIL);
-		// exit_error(AC ERROR)
-	if (init_minishell(&sa, &mshell, envp))
-		return (FAIL);
-		// exit_error(init_issue)
+		exit_error(AC);
+	init_minishell(&sa, &mshell, envp);
 	while (1)
 	{
-		restart_signal_action_main(mshell.sa);
+		signal_action_main(mshell.sa);
 		mshell.input_str = readline(PROMPT);
-		ignore_signal_action(mshell.sa);
+		signal_action_ignore(mshell.sa);
 		if (!mshell.input_str)
-		{
-			// free(envp);
-			ft_dprintf(1, "exit\n");
-			exit(1);
-			// exit_error(readline);
-		}
+			exit_and_cleanup(&mshell);
 		if (mshell.input_str[0] == '\0' && (free(mshell.input_str), 1))
 			continue ;
 		add_history(mshell.input_str);
 		if (input_validation(mshell.input_str) && (free(mshell.input_str), 1))
 			continue ;
-		init_arena(&mshell.arena);
+		init_arena(&mshell);
 		if (tokenizer(&mshell, &input, mshell.input_str) == FAIL)
 		{
 			free(mshell.input_str);
 			arena_destroy(&mshell.arena);
 			continue ;
 		}
-		if (handle_heredoc(&mshell.arena, mshell, input.tokens))
+		if (handle_heredoc(&mshell, input.tokens))
 		{
 			free(mshell.input_str);
 			continue ;
 		}
-		restart_signal_action_main(mshell.sa);
-		expand_remove_quotes(mshell.envp->envp, mshell.exitcode, input.tokens);
-		//print_tokens(input.tokens);
+		signal_action_main(mshell.sa);
+		expand_remove_quotes(&mshell, input.tokens);
+		// print_tokens(input.tokens);
 		ast = build_ast_binary_tree(&mshell.arena, input.tokens); //change to send the adress of ast
 		mshell.command_count = 0;
 		//print_whole_tree(ast);
@@ -65,4 +57,6 @@ int main(int ac, char **av, char **envp)
 	return (0);
 }
 
-// ls -la<file1>fi"le"1.1| "c"a't' -e >fi""'le2' <<'fi'le3 | grep fi"l"en'am'e >>file4 | du -s > $HOME'/path'
+// ls -la<file1>fi"le"1.1| "c"a't' -e >fi""'le2' <<'fi'le3 | cmd1 fi"l"en'am'e >>file4 | du -s > $HOME'/path'
+
+// valgrind --leak-check=full --show-leak-kinds=all ./minishell

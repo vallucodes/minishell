@@ -20,7 +20,11 @@ SRC			=	main.c \
 				0.init-delete/delete_minishell.c \
 				0.global_utils/utils.c \
 				0.memory_arena/memory_arena.c \
+				0.arena_libft/ft_arena_calloc.c \
+				0.arena_libft/ft_arena_strdup.c \
+				0.arena_libft/ft_arena_strjoin.c \
 				0.signals/signals.c \
+				0.signals/signals_handlers.c \
 				1.environment/environment.c \
 				1.environment/free_env.c \
 				2.input_validation/input_validation.c \
