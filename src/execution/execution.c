@@ -279,15 +279,16 @@ static void handle_child_process(t_minishell *mshell, t_execution *exec,
 	}
 	full_cmd_path = get_command_path(mshell, cmd_node);
 
-	//for (int i=0; exec->cmd_args[i]; i++)
-	//	printf("exec->cmd_args %s\n", exec->cmd_args[i]);
+	if (!full_cmd_path)
+	{
+		ft_dprintf(2, "%s: command not found\n", exec->cmd_args[0]);
+		mshell->exitcode = 127;
+		delete_minishell(mshell);
+		exit(mshell->exitcode);
+	}
 
-	//printf("external_cmd[0]: %s\n", external_cmd[0]);
-
-	//printf("exec->cmd_args[0]: %s\n", exec->cmd_args[0]);
 
 	execve(full_cmd_path, exec->cmd_args, mshell->envp->envp);
-	printf("execve error\n");
 
 	struct stat st;
 	if (stat(full_cmd_path, &st) == 0 && S_ISDIR(st.st_mode))
