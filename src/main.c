@@ -24,7 +24,7 @@ int main(int ac, char **av, char **envp)
 		add_history(mshell.input_str);
 		if (input_validation(mshell.input_str) && (free(mshell.input_str), 1))
 			continue ;
-		init_arena(&mshell.arena);
+		init_arena(&mshell);
 		if (tokenizer(&mshell, &input, mshell.input_str) == FAIL)
 		{
 			free(mshell.input_str);

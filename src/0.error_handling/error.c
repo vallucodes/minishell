@@ -1,5 +1,12 @@
 #include "../inc/minishell.h"
 
+void	exit_cleanup_error(t_minishell *mshell, char *msg)
+{
+	delete_minishell(mshell);
+	perror(msg);
+	exit(1);
+}
+
 void	exit_error(char *msg)
 {
 	ft_dprintf(2, msg);
@@ -28,6 +35,3 @@ void	print_error(char *msg, char *token, t_token_type type)
 	else if (token == NULL && type == 0)
 		ft_dprintf(2, "%s", msg);
 }
-
-
-

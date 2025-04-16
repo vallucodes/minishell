@@ -64,6 +64,7 @@ void	init_quotes(t_quotes_helper *quotes);
 void	delete_minishell(t_minishell *mshell);
 void	exit_and_cleanup(t_minishell *mshell);
 void	exit_error(char *msg);
+void	exit_cleanup_error(t_minishell *mshell, char *msg);
 
 //error handling
 void	print_error(char *msg, char *token, t_token_type type);
