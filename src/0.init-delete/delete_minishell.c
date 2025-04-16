@@ -1,18 +1,5 @@
 #include "minishell.h"
 
-
-
-// typedef struct s_minishell
-// {
-// 	t_arena		*arena;
-// 	t_env		*envp; // env struct
-// 	int			exitcode; //exitcode assignment after exe
-// 	char		*path;
-// 	int			command_count;
-// 	pid_t		*pids;
-// 	//later add execution, exit code when we are there
-// }				t_minishell ;
-
 void	arena_destroy(t_arena **a)
 {
 	t_arenablock	*block;
@@ -57,6 +44,13 @@ void	delete_minishell(t_minishell *mshell)
 	free(mshell->envp);
 	mshell->envp = NULL;
 	free(mshell->input_str);
+	if (mshell->arena)
+		arena_destroy(&mshell->arena);
+}
 
-	arena_destroy(&mshell->arena);
+void	exit_and_cleanup(t_minishell *mshell)
+{
+	delete_minishell(mshell);
+	ft_dprintf(1, "exit\n");
+	exit(0);
 }

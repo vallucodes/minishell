@@ -5,11 +5,11 @@ void	delete_tmp_files(t_arena **arena)
 	size_t	i;
 	char	*tmp_file;
 
-	tmp_file = arena_alloc(*arena, 10, alignof(char));
+	tmp_file = arena_alloc(*arena, NAME_MAX + 1, alignof(char));
 	// if (!tmp_file)
-		// exit_error(MALLOC);
+		// exit_cleanup_error(mshell, "malloc");
 	i = 1;
-	ft_bzero(tmp_file, 256);
+	ft_bzero(tmp_file, NAME_MAX + 1);
 	while (1)
 	{
 		next_tmp_file(tmp_file, i);

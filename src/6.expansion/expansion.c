@@ -11,29 +11,30 @@ static int	skip_to_start_of_expandable(char *env_row)
 	return (i);
 }
 
-char	*extract_pid(char *buffer)
+static char	*extract_pid(t_minishell *mshell, char *buffer)
 {
 	size_t	i;
 	size_t	len;
-	char	*pid_str;
+	char	*str_pid;
 
 	len = 0;
 	while (buffer[len] && !ft_isspace(buffer[len]))
 		len++;
-	pid_str = malloc(len + 1);
+	// str_pid = malloc(len + 1);
+	str_pid = arena_alloc(mshell->arena, len + 1, alignof(char));
 	// if (!pid_str)
-	// 	exit_error(MALLOC);
+		// exit_cleanup_error(mshell, "malloc");
 	i = 0;
 	while (i < len)
 	{
-		pid_str[i] = buffer[i];
+		str_pid[i] = buffer[i];
 		i++;
 	}
-	pid_str[i] = '\0';
-	return (pid_str);
+	str_pid[i] = '\0';
+	return (str_pid);
 }
 
-void	write_or_add_to_str(int fd, char **new_str, char *str_pid)
+static void	write_or_add_to_str(t_minishell *mshell, int fd, char **new_str, char *str_pid)
 {
 	size_t	i;
 
@@ -43,12 +44,12 @@ void	write_or_add_to_str(int fd, char **new_str, char *str_pid)
 		if (fd)
 			write(fd, &str_pid[i], 1);
 		else if (new_str)
-			append_char(str_pid, new_str, i);
+			append_char(mshell, str_pid, new_str, i);
 		i++;
 	}
 }
 
-size_t	expand_pid(int fd, char **new_str)
+size_t	expand_pid(t_minishell *mshell, int fd, char **new_str)
 {
 	char	*str_pid;
 	char	buf[256];
@@ -58,34 +59,35 @@ size_t	expand_pid(int fd, char **new_str)
 	fd_get_pid = open("/proc/self/stat", O_RDONLY);
 	if (fd_get_pid == -1)
 	{
-		write_or_add_to_str(fd, new_str, "$\0");
+		write_or_add_to_str(mshell, fd, new_str, "$\0");
 		return (1);
 	}
 	bytes_read = read(fd_get_pid, buf, sizeof(buf) - 1);
 	if (bytes_read <= 0)
 	{
-		write_or_add_to_str(fd, new_str, "$\0");
+		write_or_add_to_str(mshell, fd, new_str, "$\0");
 		return (1);
 	}
 	close(fd_get_pid);
 	buf[bytes_read] = '\0';
-	str_pid = extract_pid(buf);
-	write_or_add_to_str(fd, new_str, str_pid);
-	free(str_pid);
+	str_pid = extract_pid(mshell, buf);
+	write_or_add_to_str(mshell, fd, new_str, str_pid);
 	return (2);
 }
 
-size_t	expand_content(char **env, char *str, int fd, char **new_str)
+size_t	expand_content(t_minishell *mshell, char *str, int fd, char **new_str)
 {
 	size_t	i;
 	size_t	j;
 	size_t	len;
+	char	**env;
 
+	env = mshell->envp->envp;
 	len = 1;
 	while (str[len] && is_valid_char_expansion(str[len]))
 		len++;
 	i = -1;
-	while(env[++i])
+	while (env[++i])
 	{
 		if (expandable_exists(len, env, i, str))
 		{
@@ -95,7 +97,7 @@ size_t	expand_content(char **env, char *str, int fd, char **new_str)
 				if (fd)
 					write(fd, &env[i][j], 1);
 				else if (new_str)
-					append_char(env[i], new_str, j);
+					append_char(mshell, env[i], new_str, j);
 				j++;
 			}
 		}
@@ -103,11 +105,13 @@ size_t	expand_content(char **env, char *str, int fd, char **new_str)
 	return (len);
 }
 
-size_t	expand_exitcode_value(int exitcode, int fd, char **new_str)
+size_t	expand_exitcode_value(t_minishell *mshell, int fd, char **new_str)
 {
 	char	*str_nb;
 	size_t	i;
+	int		exitcode;
 
+	exitcode = mshell->exitcode;
 	str_nb = ft_itoa(exitcode);
 	i = 0;
 	while (str_nb[i])
@@ -115,8 +119,9 @@ size_t	expand_exitcode_value(int exitcode, int fd, char **new_str)
 		if (fd)
 			write(fd, &str_nb[i], 1);
 		else if (new_str)
-			append_char(str_nb, new_str, i);
+			append_char(mshell, str_nb, new_str, i);
 		i++;
 	}
+	free(str_nb);
 	return (2);
 }

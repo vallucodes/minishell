@@ -5,8 +5,8 @@ static t_token *init_token(t_minishell *mshell, t_input *input, int len, t_token
 	t_token *new_token;
 
 	new_token = arena_alloc(mshell->arena, sizeof(t_token), alignof(t_token));
-	// if (!new_token)
-		// exit_error(MALLOC);
+	if (!new_token)
+		exit_cleanup_error(mshell, "malloc");
 	new_token->value = &input->full_str[input->index];
 	new_token->len = len;
 	new_token->type = type;
@@ -20,8 +20,8 @@ static t_token *init_token_word(t_minishell *mshell, char *word, t_token_type ty
 	t_token *new_token;
 
 	new_token = arena_alloc(mshell->arena, sizeof(t_token), alignof(t_token));
-	// if (!new_token)
-		// exit_error(MALLOC);
+	if (!new_token)
+		exit_cleanup_error(mshell, "malloc");
 	new_token->value = &word[0];
 	new_token->len = ft_strlen(word);
 	new_token->type = type;
@@ -53,11 +53,12 @@ static void	word(t_minishell *mshell, t_input *input)
 
 	input_str = input->full_str;
 	init_quotes(&quotes);
-	new_str = ft_strdup("");
+	// new_str = ft_strdup("");
+	new_str = ft_arena_strdup(mshell->arena, "");
 	while (is_valid_char(&quotes, input))
 	{
 		update_quote_state(input->full_str[input->index], &quotes);
-		append_char(input_str, &new_str, input->index);
+		append_char(mshell, input_str, &new_str, input->index);
 		input->index++;
 	}
 	add_token(&input->tokens, init_token_word(mshell, new_str, WORD));
