@@ -6,7 +6,7 @@
 /*   By: vlopatin <vlopatin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 17:03:16 by vlopatin          #+#    #+#             */
-/*   Updated: 2025/04/16 16:32:42 by vlopatin         ###   ########.fr       */
+/*   Updated: 2025/04/16 16:45:02 by vlopatin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ char	*ft_utoa_buf(unsigned int n, char *buf, size_t bufsize)
 	return (buf);
 }
 
-unsigned int get_signess(int sign, int n)
+unsigned int	get_signess(int sign, int n)
 {
 	unsigned int	unsigned_n;
 
@@ -65,7 +65,6 @@ unsigned int get_signess(int sign, int n)
 		unsigned_n = (unsigned int)n;
 	return (unsigned_n);
 }
-
 
 char	*ft_itoa_buf(int n, char *buf, size_t bufsize)
 {

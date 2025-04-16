@@ -85,7 +85,7 @@ int	handle_heredoc(t_minishell *mshell, t_token *tokens)
 			if (file == NULL)
 			{
 				free(mshell->input_str);
-				arena_destroy(&mshell->arena);
+				arena_delete(&mshell->arena);
 				return (FAIL);
 			}
 			replace_token(current, file);

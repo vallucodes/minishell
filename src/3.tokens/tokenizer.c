@@ -7,7 +7,7 @@ int	tokenizer(t_minishell *mshell, t_input *input)
 	if (tokens_validation(input->tokens) == FAIL)
 	{
 		free(mshell->input_str);
-		arena_destroy(&mshell->arena);
+		arena_delete(&mshell->arena);
 		return (FAIL);
 	}
 	retokenize_words(input->tokens);

@@ -27,11 +27,8 @@ int main(int ac, char **av, char **envp)
 		init_arena(&mshell);
 		if (tokenizer(&mshell, &input) == FAIL)
 			continue ;
-		if (handle_heredoc(&mshell, input.tokens))
-		{
-			free(mshell.input_str);
+		if (handle_heredoc(&mshell, input.tokens) == FAIL)
 			continue ;
-		}
 		signal_action_main(mshell.sa);
 		expand_remove_quotes(&mshell, input.tokens);
 		// print_tokens(input.tokens);
@@ -45,7 +42,7 @@ int main(int ac, char **av, char **envp)
 
 		delete_tmp_files(&mshell.arena);
 		free(mshell.input_str);
-		arena_destroy(&mshell.arena);
+		arena_delete(&mshell.arena);
 	}
 	delete_minishell(&mshell);
 	//free_env(&mshell.env); // must free environment here after loop end

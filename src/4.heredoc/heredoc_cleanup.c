@@ -29,7 +29,7 @@ void	cleanup_in_heredoc(t_arena **arena, char **input, int fd_stdin)
 	free(*input);
 	dup2(fd_stdin, STDIN_FILENO);
 	close(fd_stdin);
-	arena_destroy(arena);
+	arena_delete(arena);
 }
 
 void	print_warning(char *eof)
