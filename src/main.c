@@ -14,9 +14,11 @@ int main(int ac, char **av, char **envp)
 	init_minishell(&sa, &mshell, envp, &ast);
 	while (1)
 	{
-		signal_action_main(mshell.sa);
+		if (signal_action_main(mshell.sa) == FAIL)
+			printf("fail\n");
 		mshell.input_str = readline(PROMPT);
-		signal_action_ignore(mshell.sa);
+		if (signal_action_ignore(mshell.sa) == FAIL)
+			printf("fail\n");
 		if (!mshell.input_str)
 			exit_and_cleanup(&mshell);
 		if (mshell.input_str[0] == '\0' && (free(mshell.input_str), 1))
@@ -29,7 +31,8 @@ int main(int ac, char **av, char **envp)
 			continue ;
 		if (handle_heredoc(&mshell, input.tokens) == FAIL)
 			continue ;
-		signal_action_main(mshell.sa);
+		if (signal_action_main(mshell.sa) == FAIL)
+			printf("fail\n");
 		expand_remove_quotes(&mshell, input.tokens);
 		// print_tokens(input.tokens);
 		build_ast_binary_tree(&mshell, input.tokens, &ast); //change to send the adress of ast
