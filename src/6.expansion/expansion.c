@@ -20,10 +20,9 @@ static char	*extract_pid(t_minishell *mshell, char *buffer)
 	len = 0;
 	while (buffer[len] && !ft_isspace(buffer[len]))
 		len++;
-	// str_pid = malloc(len + 1);
 	str_pid = arena_alloc(mshell->arena, len + 1, alignof(char));
-	// if (!pid_str)
-		// exit_cleanup_error(mshell, "malloc");
+	if (!str_pid)
+		exit_cleanup_error(mshell, "malloc");
 	i = 0;
 	while (i < len)
 	{
@@ -54,7 +53,7 @@ size_t	expand_pid(t_minishell *mshell, int fd, char **new_str)
 	char	*str_pid;
 	char	buf[256];
 	int		fd_get_pid;
-	size_t	bytes_read;
+	int		bytes_read;
 
 	fd_get_pid = open("/proc/self/stat", O_RDONLY);
 	if (fd_get_pid == -1)
@@ -65,13 +64,18 @@ size_t	expand_pid(t_minishell *mshell, int fd, char **new_str)
 	bytes_read = read(fd_get_pid, buf, sizeof(buf) - 1);
 	if (bytes_read <= 0)
 	{
+		close (fd_get_pid);
 		write_or_add_to_str(mshell, fd, new_str, "$\0");
 		return (1);
 	}
+	else
+	{
+		buf[bytes_read] = '\0';
+		str_pid = extract_pid(mshell, buf);
+		write_or_add_to_str(mshell, fd, new_str, str_pid);
+	}
 	close(fd_get_pid);
-	buf[bytes_read] = '\0';
-	str_pid = extract_pid(mshell, buf);
-	write_or_add_to_str(mshell, fd, new_str, str_pid);
+	fd_get_pid = -1;
 	return (2);
 }
 

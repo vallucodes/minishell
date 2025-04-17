@@ -1,18 +1,18 @@
 #include "../inc/minishell.h"
 
-void	delete_tmp_files(t_arena **arena)
+void	delete_tmp_files(t_minishell *mshell)
 {
 	size_t	i;
 	char	*tmp_file;
 
-	tmp_file = arena_alloc(*arena, NAME_MAX + 1, alignof(char));
-	// if (!tmp_file)
-		// exit_cleanup_error(mshell, "malloc");
+	tmp_file = arena_alloc(mshell->arena, NAME_MAX + 1, alignof(char));
+	if (!tmp_file)
+		exit_cleanup_error(mshell, "malloc");
 	i = 1;
 	ft_bzero(tmp_file, NAME_MAX + 1);
 	while (1)
 	{
-		next_tmp_file(tmp_file, i);
+		next_tmp_file(mshell, tmp_file, i);
 		if (access(tmp_file, F_OK) == 0)
 		{
 			unlink(tmp_file);
@@ -23,13 +23,14 @@ void	delete_tmp_files(t_arena **arena)
 	}
 }
 
-void	cleanup_in_heredoc(t_arena **arena, char **input, int fd_stdin)
+void	cleanup_in_heredoc(t_minishell *mshell, char **input, int fd_stdin)
 {
-	delete_tmp_files(arena);
+	delete_tmp_files(mshell);
 	free(*input);
 	dup2(fd_stdin, STDIN_FILENO);
 	close(fd_stdin);
-	arena_delete(arena);
+	free(mshell->input_str);
+	arena_delete(&mshell->arena);
 }
 
 void	print_warning(char *eof)

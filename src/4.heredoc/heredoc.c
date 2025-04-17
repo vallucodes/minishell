@@ -1,19 +1,30 @@
 #include "../inc/minishell.h"
 
-static char	*read_line(t_minishell *mshell, char *eof, t_expand expand)
+static int	get_stdin(t_minishell *mshell)
+{
+	int		fd_stdin;
+
+	fd_stdin = dup(STDIN_FILENO);
+	if (fd_stdin == -1)
+		exit_cleanup_error(mshell, "dup");
+	return (fd_stdin);
+}
+
+static char	*read_heredoc_input(t_minishell *mshell, char *eof, t_expand expand)
 {
 	char	*input;
 	int		fd;
 	char	*file;
+	int		fd_stdin;
 
 	file = create_tmp_file(mshell, &fd);
+	fd_stdin = get_stdin(mshell);
 	signal_action_heredoc(mshell->sa);
 	while (1)
 	{
-		int	fd_stdin = dup(STDIN_FILENO);
 		input = readline("> ");
 		if (g_signal == SIGINT)
-			return (cleanup_in_heredoc(&mshell->arena, &input, fd_stdin), NULL);
+			return (cleanup_in_heredoc(mshell, &input, fd_stdin), NULL);
 		if (!input)
 		{
 			print_warning(eof);
@@ -25,6 +36,10 @@ static char	*read_line(t_minishell *mshell, char *eof, t_expand expand)
 		free(input);
 		input = NULL;
 	}
+	close(fd);
+	fd = -1;
+	close(fd_stdin);
+	fd_stdin = -1;
 	return (file);
 }
 
@@ -46,22 +61,20 @@ static int	check_quotes(t_minishell *mshell, t_token *current)
 	size_t			i;
 	char			expansion_flag;
 
-	i = 0;
 	expansion_flag = EXPAND;
 	input_str = current->value;
 	init_quotes(&quotes);
 	new_str = ft_arena_strdup(mshell->arena, "");
+	if (!new_str)
+		exit_cleanup_error(mshell, "malloc");
+	i = 0;
 	while (input_str[i])
 	{
 		update_quote_state(input_str[i], &quotes);
 		if (quotes.in_quotes)
 			expansion_flag = DONT_EXPAND;
-		if (there_is_quote_state_change(quotes))
-		{
-			i++;
-			continue ;
-		}
-		append_char(mshell, input_str, &new_str, i);
+		if (!there_is_quote_state_change(quotes))
+			append_char(mshell, input_str, &new_str, i);
 		i++;
 	}
 	replace_content_of_token(current, new_str);
@@ -81,13 +94,9 @@ int	handle_heredoc(t_minishell *mshell, t_token *tokens)
 		if (current->type == HERE_DOCUMENT)
 		{
 			expansion_flag = check_quotes(mshell, current->next);
-			file = read_line(mshell, current->next->value, expansion_flag);
+			file = read_heredoc_input(mshell, current->next->value, expansion_flag);
 			if (file == NULL)
-			{
-				free(mshell->input_str);
-				arena_delete(&mshell->arena);
 				return (FAIL);
-			}
 			replace_token(current, file);
 		}
 		current = current->next;

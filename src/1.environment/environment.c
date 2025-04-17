@@ -5,15 +5,11 @@ static int init_env_storage(t_env *env, char **envp)
 	int	var_amount;
 
 	var_amount = 0;
-
 	while (envp[var_amount])
 		var_amount++;
 	env->envp = malloc(sizeof(char *) * (var_amount + 1));
 	if (!env->envp)
-	{
-		perror("malloc");
 		return (FAIL);
-	}
 	env->allocated_capacity = var_amount + 1;
 	env->len = 0;
 	return (SUCCESS);
@@ -85,15 +81,9 @@ int copy_env(t_env **env, char **envp)
 
 	*env = malloc(sizeof(t_env));
 	if (!*env)
-	{
-		perror("malloc");
-		exit(FAIL);
-	}
+		exit_env("malloc", NULL);
 	if (init_env_storage(*env, envp))
-	{
-		free(*env);
-		exit(FAIL);
-	}
+		exit_env("malloc", env);
 	i = 0;
 	while (envp[i])
 	{

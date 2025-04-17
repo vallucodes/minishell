@@ -30,6 +30,7 @@
 # define REDIRECT "Error: redirections invalid\n"
 # define TOKEN_ERROR "syntax error near unexpected token"
 # define UNREACHABLE "This is unreachable code, something is wrong with error handling\n"
+# define TMP_FILES "Too many heredoc redirections\n"
 # define PIPE_ERROR " `|'"
 # define INFILE_ERROR " `<'"
 # define OUTFILE_ERROR " `>'"
@@ -62,12 +63,12 @@ typedef struct s_minishell
 int		input_validation(char *input);
 int		init_minishell(struct sigaction	*sa, t_minishell *mshell, char **envp);
 void	init_quotes(t_quotes_helper *quotes);
+
+//errors, exits and cleanups
 void	delete_minishell(t_minishell *mshell);
 void	exit_and_cleanup(t_minishell *mshell);
-void	exit_error(char *msg);
+void	exit_error(t_minishell *mshell, char *msg);
 void	exit_cleanup_error(t_minishell *mshell, char *msg);
-
-//error handling
 void	print_error(char *msg, char *token, t_token_type type);
 
 //global utils

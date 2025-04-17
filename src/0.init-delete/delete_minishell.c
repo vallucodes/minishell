@@ -45,11 +45,13 @@ void	delete_minishell(t_minishell *mshell)
 	mshell->envp = NULL;
 	free(mshell->input_str);
 	arena_delete(&mshell->arena);
+	rl_clear_history();
 }
 
 void	exit_and_cleanup(t_minishell *mshell)
 {
 	delete_minishell(mshell);
+	rl_clear_history();
 	ft_dprintf(1, "exit\n");
 	exit(0);
 }

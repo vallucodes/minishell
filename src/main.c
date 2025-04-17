@@ -10,7 +10,7 @@ int main(int ac, char **av, char **envp)
 	(void) av;
 
 	if (ac != 1)
-		exit_error(AC);
+		exit_error(NULL, AC);
 	init_minishell(&sa, &mshell, envp);
 	while (1)
 	{
@@ -40,7 +40,7 @@ int main(int ac, char **av, char **envp)
         // Add this debug line:
         //ft_dprintf(2, "Debug: Main loop continued. Child exit code was: %d\n", mshell.exitcode);
 
-		delete_tmp_files(&mshell.arena);
+		delete_tmp_files(&mshell);
 		free(mshell.input_str);
 		arena_delete(&mshell.arena);
 	}
@@ -51,4 +51,4 @@ int main(int ac, char **av, char **envp)
 
 // ls -la<file1>fi"le"1.1| "c"a't' -e >fi""'le2' <<'fi'le3 | cmd1 fi"l"en'am'e >>file4 | du -s > $HOME'/path'
 
-// valgrind --leak-check=full --show-leak-kinds=all ./minishell
+// valgrind --leak-check=full --show-reachable=yes --track-fds=yes --error-limit=no --suppressions=./minimal.supp ./minishell

@@ -48,7 +48,7 @@ void	*arena_alloc(t_arena *a, size_t size, size_t alignment)
 			new_size *= 2;
 		new_block = malloc(sizeof(t_arenablock) + new_size);
 		if (!new_block)
-			return(NULL);
+			return (NULL);
 		// printf("allocated block with size %li\n", new_size);
 		new_block->next = NULL;
 		new_block->capacity = new_size;

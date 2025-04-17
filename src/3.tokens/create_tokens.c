@@ -54,6 +54,8 @@ static void	word(t_minishell *mshell, t_input *input)
 	input_str = input->full_str;
 	init_quotes(&quotes);
 	new_str = ft_arena_strdup(mshell->arena, "");
+	if (!new_str)
+		exit_cleanup_error(mshell, "malloc");
 	while (is_valid_char(&quotes, input))
 	{
 		update_quote_state(input->full_str[input->index], &quotes);
