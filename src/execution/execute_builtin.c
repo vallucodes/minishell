@@ -42,7 +42,7 @@ int execute_builtin(t_minishell *mshell, char **cmd_args)
 	}
 	if (ft_strcmp(cmd_args[0], "export") == 0)
 	{
-		ft_export(cmd_args, mshell->envp);
+		ft_export(cmd_args, mshell);
 		return (mshell->exitcode);
 	}
 	return (FAIL); //no built-in matched

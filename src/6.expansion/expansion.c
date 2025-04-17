@@ -64,7 +64,7 @@ size_t	expand_pid(t_minishell *mshell, int fd, char **new_str)
 	bytes_read = read(fd_get_pid, buf, sizeof(buf) - 1);
 	if (bytes_read <= 0)
 	{
-		close (fd_get_pid);
+		close(fd_get_pid);
 		write_or_add_to_str(mshell, fd, new_str, "$\0");
 		return (1);
 	}
@@ -117,6 +117,8 @@ size_t	expand_exitcode_value(t_minishell *mshell, int fd, char **new_str)
 
 	exitcode = mshell->exitcode;
 	str_nb = ft_itoa(exitcode);
+	if (!str_nb)
+		exit_cleanup_error(mshell, "malloc");
 	i = 0;
 	while (str_nb[i])
 	{

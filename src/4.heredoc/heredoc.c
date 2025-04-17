@@ -13,18 +13,18 @@ static int	get_stdin(t_minishell *mshell)
 static char	*read_heredoc_input(t_minishell *mshell, char *eof, t_expand expand)
 {
 	char	*input;
-	int		fd;
 	char	*file;
+	int		fd_tmp;
 	int		fd_stdin;
 
-	file = create_tmp_file(mshell, &fd);
+	file = create_tmp_file(mshell, &fd_tmp);
 	fd_stdin = get_stdin(mshell);
 	signal_action_heredoc(mshell->sa);
 	while (1)
 	{
 		input = readline("> ");
 		if (g_signal == SIGINT)
-			return (cleanup_in_heredoc(mshell, &input, fd_stdin), NULL);
+			return (cleanup_at_signal(mshell, &input, fd_stdin, fd_tmp), NULL);
 		if (!input)
 		{
 			print_warning(eof);
@@ -32,14 +32,10 @@ static char	*read_heredoc_input(t_minishell *mshell, char *eof, t_expand expand)
 		}
 		if (is_eof(eof, input))
 			break ;
-		save_line_to_tmp_file(mshell, input, fd, expand);
-		free(input);
-		input = NULL;
+		save_line_to_tmp_file(mshell, input, fd_tmp, expand);
+		free_and_set(&input);
 	}
-	close(fd);
-	fd = -1;
-	close(fd_stdin);
-	fd_stdin = -1;
+	cleanup_at_success(&input, &fd_tmp, &fd_stdin);
 	return (file);
 }
 

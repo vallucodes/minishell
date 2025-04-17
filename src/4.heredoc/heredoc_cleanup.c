@@ -23,11 +23,13 @@ void	delete_tmp_files(t_minishell *mshell)
 	}
 }
 
-void	cleanup_in_heredoc(t_minishell *mshell, char **input, int fd_stdin)
+void	cleanup_at_signal(t_minishell *mshell, char **input, int fd_stdin, int fd_tmp)
 {
+	close(fd_tmp);
 	delete_tmp_files(mshell);
 	free(*input);
-	dup2(fd_stdin, STDIN_FILENO);
+	if (dup2(fd_stdin, STDIN_FILENO) == -1)
+		exit_cleanup_error(mshell, "dup2");
 	close(fd_stdin);
 	free(mshell->input_str);
 	arena_delete(&mshell->arena);
@@ -36,4 +38,10 @@ void	cleanup_in_heredoc(t_minishell *mshell, char **input, int fd_stdin)
 void	print_warning(char *eof)
 {
 	ft_dprintf(1, "giraffeshell: warning: here-document at line 1 delimited by end-of-file (wanted `%s')\n", eof); // add proper counter, counts amount of inputs from every readline call
+}
+
+void	cleanup_at_success(char **input, int *fd_tmp, int *fd_stdin)
+{
+	close_fds(fd_tmp, fd_stdin);
+	free_and_set(input);
 }

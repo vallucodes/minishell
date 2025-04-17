@@ -57,12 +57,9 @@ int realloc_env_capacity(t_env *env)
 	new_capacity = env->allocated_capacity * 2;
 	if (new_capacity == 0)
 		new_capacity = 8; //just in case new capa is 0 then 0 cant *2
-	new_envp = malloc(sizeof(char *) * (new_capacity + 1));
+	new_envp = NULL; //malloc(sizeof(char *) * (new_capacity + 1));
 	if (!new_envp)
-	{
-		perror("malloc");
 		return (FAIL);
-	}
 	i = 0;
 	while (i < env->len)
 	{

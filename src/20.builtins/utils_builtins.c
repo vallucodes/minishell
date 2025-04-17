@@ -50,7 +50,7 @@ int	update_var_env(t_env *env, const char *arg, const char *key, int key_has_val
 
 int	add_var_to_env(t_env *env, const char *arg, const char *key, size_t key_len, int key_has_value)
 {
-	if (!realloc_env_capacity(env))
+	if (realloc_env_capacity(env) == FAIL)
 		return (FAIL);
 
 	if (key_has_value)

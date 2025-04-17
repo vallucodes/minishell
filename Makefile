@@ -37,6 +37,7 @@ SRC			=	main.c \
 				3.tokens/tokens_validation.c \
 				4.heredoc/heredoc.c \
 				4.heredoc/heredoc_utils.c \
+				4.heredoc/heredoc_tmp_files.c \
 				4.heredoc/heredoc_cleanup.c \
 				5.quotes_handle/quotes_handler.c \
 				5.quotes_handle/quotes_handler_utils.c \
