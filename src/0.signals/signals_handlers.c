@@ -24,6 +24,16 @@ void	sigint_handler_main(int signal)
 	// g_signal = signal;
 }
 
+t_minishell *get_minishell(t_minishell *m)
+{
+	static t_minishell *minishell;
+
+	if (m == NULL)
+		return (minishell);
+	minishell = m;
+	return (NULL);
+}
+
 // void	sigint_handler_child(int signal)
 // {
 // 	if (signal == SIGINT)

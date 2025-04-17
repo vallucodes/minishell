@@ -2,7 +2,6 @@
 #include <sys/wait.h>
 #include <sys/stat.h>
 
-
 static int	is_builtin(const char *cmd)
 {
 	if (!cmd)
@@ -27,162 +26,25 @@ static t_ast *get_cmd_node(t_ast *ast)
 	return (NULL);
 }
 
-// static int fork_redirection_only(t_minishell *mshell, t_execution *exec)
-// {
-// 	pid_t pid;
-
-// 	pid = fork();
-// 	if (pid < 0)
-// 	{
-// 		perror("fork");
-// 		return (1);
-// 	}
-// 	if (pid == 0)
-// 	{
-// 		if (exec->redir_fd[FD_IN] != STDIN_FILENO)
-// 			dup2(exec->redir_fd[FD_IN], STDIN_FILENO);
-// 		if (exec->redir_fd[FD_OUT] != STDOUT_FILENO)
-// 			dup2(exec->redir_fd[FD_OUT], STDOUT_FILENO);
-// 		close(exec->redir_fd[FD_IN]);
-// 		close(exec->redir_fd[FD_OUT]);
-// 		exit(0);
-// 	}
-// 	mshell->command_count++;
-// 	mshell->last_pid = pid;
-// 	if (exec->redir_fd[FD_IN] != STDIN_FILENO)
-// 		close(exec->redir_fd[FD_IN]);
-// 	if (exec->redir_fd[FD_OUT] != STDOUT_FILENO)
-// 		close(exec->redir_fd[FD_OUT]);
-// 	return (1);
-// }
-
-
-// static void	redirect_and_restore_builtin(t_execution *exec,
-// 				t_minishell *mshell, char **cmd_args)
-// {
-// 	int original_stdin = -1;
-// 	int original_stdout = -1;
-
-// 	if (exec->redir_fd[FD_IN] != STDIN_FILENO)
-// 	{
-// 		original_stdin = dup(STDIN_FILENO);
-// 		dup2(exec->redir_fd[FD_IN], STDIN_FILENO);
-// 		close(exec->redir_fd[FD_IN]);
-// 	}
-// 	if (exec->redir_fd[FD_OUT] != STDOUT_FILENO)
-// 	{
-// 		original_stdout = dup(STDOUT_FILENO);
-// 		dup2(exec->redir_fd[FD_OUT], STDOUT_FILENO);
-// 		close(exec->redir_fd[FD_OUT]);
-// 	}
-// 	mshell->exitcode = execute_builtin(mshell, cmd_args);
-// 	if (original_stdout != -1)
-// 	{
-// 		dup2(original_stdout, STDOUT_FILENO);
-// 		close(original_stdout);
-// 	}
-// 	if (original_stdin != -1)
-// 	{
-// 		dup2(original_stdin, STDIN_FILENO);
-// 		close(original_stdin);
-// 	}
-// }
-
-
 int	redirect_and_restore_builtin(t_execution *exec,
 				t_minishell *mshell, char **cmd_args)
 {
-	int original_stdin = -1;
-	int original_stdout = -1;
+	int origin_stdin = -1;
+	int origin_stdout = -1;
 
-	// Save and redirect stdin
-	if (exec->redir_fd[FD_IN] != STDIN_FILENO)
-	{
-		original_stdin = dup(STDIN_FILENO);
-		if (original_stdin == -1)
-		{
-			perror("dup STDIN");
-			return (FAIL);
-		}
-		if (dup2(exec->redir_fd[FD_IN], STDIN_FILENO) == -1)
-		{
-			perror("dup2 FD_IN");
-			close(original_stdin);
-			return (FAIL);
-		}
-		if (close(exec->redir_fd[FD_IN]) == -1)
-		{
-			perror("close FD_IN");
-			close(original_stdin);
-			return (FAIL);
-		}
-	}
+	if (save_and_redirect_stdin(exec->redir_fd[FD_IN], &origin_stdin) == FAIL)
+		return (FAIL);
 
-	// Save and redirect stdout
-	if (exec->redir_fd[FD_OUT] != STDOUT_FILENO)
+	if (save_and_redirect_stdout(exec->redir_fd[FD_OUT], &origin_stdout) == FAIL)
 	{
-		original_stdout = dup(STDOUT_FILENO);
-		if (original_stdout == -1)
-		{
-			perror("dup STDOUT");
-			if (original_stdin != -1)
-				dup2(original_stdin, STDIN_FILENO), close(original_stdin);
-			return (FAIL);
-		}
-		if (dup2(exec->redir_fd[FD_OUT], STDOUT_FILENO) == -1)
-		{
-			perror("dup2 FD_OUT");
-			if (original_stdout != -1)
-				close(original_stdout);
-			if (original_stdin != -1)
-				dup2(original_stdin, STDIN_FILENO), close(original_stdin);
-			return (FAIL);
-		}
-		if (close(exec->redir_fd[FD_OUT]) == -1)
-		{
-			perror("close FD_OUT");
-			if (original_stdout != -1)
-				close(original_stdout);
-			if (original_stdin != -1)
-				dup2(original_stdin, STDIN_FILENO), close(original_stdin);
-			return (FAIL);
-		}
+		restore_stdin(origin_stdin);
+		return (FAIL);
 	}
 
 	// Run builtin and store its exit code
 	mshell->exitcode = execute_builtin(mshell, cmd_args);
-
-	// Restore stdout
-	if (original_stdout != -1)
-	{
-		if (dup2(original_stdout, STDOUT_FILENO) == -1)
-		{
-			perror("restore STDOUT");
-			close(original_stdout);
-			return (FAIL);
-		}
-		if (close(original_stdout) == -1)
-		{
-			perror("close original_stdout");
-			return (FAIL);
-		}
-	}
-
-	// Restore stdin
-	if (original_stdin != -1)
-	{
-		if (dup2(original_stdin, STDIN_FILENO) == -1)
-		{
-			perror("restore STDIN");
-			close(original_stdin);
-			return (FAIL);
-		}
-		if (close(original_stdin) == -1)
-		{
-			perror("close original_stdin");
-			return (FAIL);
-		}
-	}
+	restore_stdout(origin_stdout);
+	restore_stdin(origin_stdin);
 
 	return (SUCCESS);
 }
@@ -257,16 +119,15 @@ int is_directory(const char *path)
 	struct stat statbuf;
 
 	if (stat(path, &statbuf) != 0)
-		return 0; // Error accessing path, treat as not a directory
+		return (0); // Error accessing path, treat as not a directory
 
-	return S_ISDIR(statbuf.st_mode);
+	return (S_ISDIR(statbuf.st_mode));
 }
 
 
 static void handle_child_process(t_minishell *mshell, t_execution *exec,
 								int *pipefd, t_ast *cmd_node)
 {
-	//char **external_cmd;
 	char *full_cmd_path;
 
 	setup_child_fds(exec->prev_fd, pipefd, exec->has_next_pipe, exec);
@@ -286,7 +147,6 @@ static void handle_child_process(t_minishell *mshell, t_execution *exec,
 		delete_minishell(mshell);
 		exit(mshell->exitcode);
 	}
-
 
 	execve(full_cmd_path, exec->cmd_args, mshell->envp->envp);
 
@@ -315,8 +175,7 @@ static void handle_child_process(t_minishell *mshell, t_execution *exec,
 	free(full_cmd_path);
 	delete_minishell(mshell);
 	exit(mshell->exitcode);
-
-	}
+}
 
 static void handle_parent(t_minishell *mshell, t_execution *exec, int *pipefd, pid_t pid)
 {
@@ -337,12 +196,11 @@ static void handle_parent(t_minishell *mshell, t_execution *exec, int *pipefd, p
 	}
 }
 
-
 void execute_ast(t_minishell *mshell, t_ast *ast)
 {
 	t_ast *cmd_node;
 	t_execution exec;
-	//int pipefd[2];
+
 	exec.pipefd[0] = -1;
 	exec.pipefd[1] = -1;
 	pid_t pid;
@@ -353,8 +211,6 @@ void execute_ast(t_minishell *mshell, t_ast *ast)
 	while (ast)
 	{
 		init_execution(&exec, ast);
-
-
 
 		cmd_node = NULL;
 
@@ -372,6 +228,7 @@ void execute_ast(t_minishell *mshell, t_ast *ast)
 			}
 			if (exec.pipefd[0] != -1)
 				exec.prev_fd = exec.pipefd[0];
+
 			ast = ast->next_right;
 			continue;
 		}

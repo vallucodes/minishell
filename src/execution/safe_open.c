@@ -3,7 +3,7 @@
 static int safe_open_redir_in(t_execution *exec, char *filepath)
 {
 	if (exec->redir_fd[FD_IN] != STDIN_FILENO)
-		close(exec->redir_fd[0]);
+		close(exec->redir_fd[FD_IN]);
 
 	exec->redir_fd[FD_IN] = open(filepath, O_RDONLY, 0);
 	if (exec->redir_fd[FD_IN] == -1)
