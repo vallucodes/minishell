@@ -69,7 +69,7 @@ int realloc_env_capacity(t_env *env)
 	free(env->envp);
 	env->envp = new_envp;
 	env->allocated_capacity = new_capacity;
-	return (1);// need to change to return SUCCESS
+	return (SUCCESS);// need to change to return SUCCESS
 }
 
 int copy_env(t_env **env, char **envp)

@@ -66,6 +66,8 @@ int	add_var_to_env(t_env *env, const char *arg, const char *key, size_t key_len,
 		if (!new_var)
 			return (FAIL);
 		ft_memcpy(new_var, key, key_len);
+		ft_dprintf(2, "Giraffeshell: export: `%s`: add update fails3\n", arg);
+
 		new_var[key_len] = '\0';
 		env->envp[env->len++] = new_var;
 	}

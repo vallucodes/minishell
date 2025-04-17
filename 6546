@@ -1,0 +1,22 @@
+total 212
+drwxr-xr-x 11 hiennguy 2020   4096 Apr 17 18:48 .
+drwxr-xr-x  4 hiennguy 2020     50 Mar 26 13:28 ..
+drwxr-xr-x  4 hiennguy 2020    143 Apr 16 17:25 42_minishell_tester
+-rw-r--r--  1 hiennguy 2020      0 Apr 17 18:48 54654
+-rw-r--r--  1 hiennguy 2020      0 Apr 17 18:48 6546
+-rw-r--r--  1 hiennguy 2020      0 Apr 17 16:38 file2
+-rw-r--r--  1 hiennguy 2020      0 Apr 17 16:08 file4
+drwxr-xr-x  8 hiennguy 2020   4096 Apr 17 18:16 .git
+-rw-r--r--  1 hiennguy 2020    560 Apr 17 17:41 .gitignore
+drwxr-xr-x  2 hiennguy 2020    167 Apr 17 17:41 inc
+drwxr-xr-x  3 hiennguy 2020     19 Mar  6 14:35 lib
+-rw-r--r--  1 hiennguy 2020   2572 Apr 17 17:59 Makefile
+-rwxr-xr-x  1 hiennguy 2020 177288 Apr 17 18:38 minishell
+drwxr-xr-x  6 hiennguy 2020   4096 Apr 17 18:04 minishell_tester
+drwxr-xr-x 18 hiennguy 2020   4096 Apr 17 18:38 obj
+-rwxr-xr-x  1 hiennguy 2020   2694 Apr 17 17:41 parse_valgrind_suppressions.sh
+-rw-r--r--  1 hiennguy 2020   2829 Apr 17 17:41 README.md
+drwxr-xr-x 20 hiennguy 2020   4096 Apr 17 18:23 src
+-rw-r--r--  1 hiennguy 2020      0 Apr 17 18:48 tmp1
+drwxr-xr-x  2 hiennguy 2020     43 Apr 14 14:56 vlad_development
+drwxr-xr-x  2 hiennguy 2020     64 Apr  7 16:22 .vscode

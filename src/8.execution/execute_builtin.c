@@ -25,7 +25,7 @@ int execute_builtin(t_minishell *mshell, char **cmd_args)
 		return (ft_unset(cmd_args, mshell->envp));
 	if (ft_strcmp(cmd_args[0], "export") == 0)
 	{
-		ft_export(cmd_args, mshell);
+		mshell->exitcode = ft_export(cmd_args, mshell);
 		return (mshell->exitcode);
 	}
 	return (FAIL); //no built-in matched

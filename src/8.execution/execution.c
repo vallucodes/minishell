@@ -214,7 +214,7 @@ void execute_ast(t_minishell *mshell, t_ast *ast)
 	if (mshell->command_count > 0)
 		mshell->exitcode = wait_for_children(mshell);
 	//printf("FINAL EXIT CODE IS %d\n", mshell->exitcode );
-
+	//printf("command count %d\n", mshell->command_count );
 
 }
 
