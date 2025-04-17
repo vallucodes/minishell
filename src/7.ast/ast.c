@@ -44,22 +44,20 @@ void	add_node(t_ast **ast, t_ast *new_node, t_order order)
 	}
 }
 
-t_ast	*build_ast_binary_tree(t_minishell *mshell, t_token *tokens)
+void	build_ast_binary_tree(t_minishell *mshell, t_token *tokens, t_ast **ast)
 {
-	t_ast	*ast;
 	size_t	amount_of_pipes;
 	size_t	i;
 
-	ast = NULL;
+	*ast = NULL;
 	i = 0;
 	amount_of_pipes = get_amount_of_pipes(tokens);
 	while (i < amount_of_pipes)
 	{
-		add_node(&ast, init_node(mshell, NULL, NULL, PIPE), FIRST);
-		build_branch(mshell, &ast, tokens, NON_LAST_BRANCH);
+		add_node(ast, init_node(mshell, NULL, NULL, PIPE), FIRST);
+		build_branch(mshell, ast, tokens, NON_LAST_BRANCH);
 		tokens = skip_to_next_pipe(tokens);
 		i++;
 	}
-	build_branch(mshell, &ast, tokens, LAST_BRANCH);
-	return (ast);
+	build_branch(mshell, ast, tokens, LAST_BRANCH);
 }

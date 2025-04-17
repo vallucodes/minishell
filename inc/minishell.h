@@ -10,8 +10,7 @@
 # include <stdalign.h>			//alignof
 # include <errno.h>
 # include <signal.h>			//signals
-// # include <sys/ioctl.h>			//ioctl
-# include <limits.h>
+# include <limits.h>			//FILE_MAX
 # include "../lib/libft/inc/libft.h"
 # include "signals.h"
 # include "lexing.h"
@@ -61,7 +60,7 @@ typedef struct s_minishell
 
 //main functions
 int		input_validation(char *input);
-int		init_minishell(struct sigaction	*sa, t_minishell *mshell, char **envp);
+int		init_minishell(struct sigaction	*sa, t_minishell *mshell, char **envp, t_ast **ast);
 void	init_quotes(t_quotes_helper *quotes);
 
 //errors, exits and cleanups
