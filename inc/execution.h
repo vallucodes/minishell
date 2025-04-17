@@ -26,8 +26,17 @@ int		execute_builtin(t_minishell *mshell, char **cmd_args);
 void	execute_ast(t_minishell *mshell, t_ast *ast);
 int		wait_for_children(t_minishell *mshell);
 
-void	setup_child_fds(int prev_fd, int *pipefd, int has_next_pipe, t_execution *exec);
 
+int 	save_and_redirect_stdin(int new_fd, int *saved_stdin);
+int 	save_and_redirect_stdout(int new_fd, int *saved_stdout);
+int 	restore_stdout(int saved_stdout);
+int 	restore_stdin(int saved_stdin);
+
+
+void		setup_child_fds(int prev_fd, int *pipefd, int has_next_pipe, t_execution *exec);
+int			execute_builtin_parent(t_minishell *mshell, t_execution *exec);
+void		execute_builtin_child(t_minishell *mshell, t_execution *exec);
+int			redirect_and_restore_builtin(t_execution *exec, t_minishell *mshell, char **cmd_args);
 
 
 

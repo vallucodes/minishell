@@ -58,14 +58,14 @@ SRC			=	main.c \
 				20.builtins/utils_builtins.c \
 				20.builtins/ft_export_sort_env.c \
 				99.dev/print_development.c \
-				execution/safe_open.c \
-				execution/execute_builtin.c \
-				execution/path.c \
-				execution/setup_child_fds.c \
-				execution/execution.c \
-				execution/wait.c
-
-#execution/utils.c \
+				8.execution/execute_builtin.c \
+				8.execution/execution.c \
+				8.execution/path.c \
+				8.execution/safe_open.c \
+				8.execution/setup_child_fds.c \
+				8.execution/utils.c \
+				8.execution/utils2.c \
+				8.execution/wait.c
 
 OBJS		= $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
 

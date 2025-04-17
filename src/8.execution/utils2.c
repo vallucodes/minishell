@@ -75,6 +75,20 @@ int save_and_redirect_stdout(int new_fd, int *saved_stdout)
 	return (SUCCESS);
 }
 
+int restore_stdin(int saved_stdin)
+{
+    if (saved_stdin == -1)
+        return (SUCCESS); // Nothing to restore
+
+    if (safe_dup2(saved_stdin, STDIN_FILENO) == FAIL)
+    {
+        safe_close(saved_stdin);
+        return (FAIL);
+    }
+    return safe_close(saved_stdin);
+}
+
+
 int restore_stdout(int saved_stdout)
 {
 	if (saved_stdout == -1)

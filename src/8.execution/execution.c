@@ -26,29 +26,6 @@ static t_ast *get_cmd_node(t_ast *ast)
 	return (NULL);
 }
 
-int	redirect_and_restore_builtin(t_execution *exec,
-				t_minishell *mshell, char **cmd_args)
-{
-	int origin_stdin = -1;
-	int origin_stdout = -1;
-
-	if (save_and_redirect_stdin(exec->redir_fd[FD_IN], &origin_stdin) == FAIL)
-		return (FAIL);
-
-	if (save_and_redirect_stdout(exec->redir_fd[FD_OUT], &origin_stdout) == FAIL)
-	{
-		restore_stdin(origin_stdin);
-		return (FAIL);
-	}
-
-	// Run builtin and store its exit code
-	mshell->exitcode = execute_builtin(mshell, cmd_args);
-	restore_stdout(origin_stdout);
-	restore_stdin(origin_stdin);
-
-	return (SUCCESS);
-}
-
 
 static void init_execution (t_execution *exec, t_ast *ast)
 {
@@ -58,29 +35,6 @@ static void init_execution (t_execution *exec, t_ast *ast)
 	exec->has_next_pipe = (ast->next_right != NULL);
 }
 
-void	execute_builtin_child(t_minishell *mshell, t_execution *exec)
-{
-	if (is_builtin(exec->cmd_args[0]))
-	{
-		mshell->exitcode = execute_builtin(mshell, exec->cmd_args);
-		delete_minishell(mshell);
-		exit(mshell->exitcode);
-	}
-}
-
-static int execute_builtin_parent(t_minishell *mshell, t_execution *exec)
-{
-	if (is_builtin(exec->cmd_args[0]) && !exec->has_pipe)
-	{
-		if (redirect_and_restore_builtin(exec, mshell, exec->cmd_args) == FAIL)
-		{
-			mshell->exitcode = 1;
-			return FAIL;
-		}
-		return SUCCESS;
-	}
-	return FAIL;
-}
 
 
 static int setup_pipe(t_execution *exec, int *pipefd)
