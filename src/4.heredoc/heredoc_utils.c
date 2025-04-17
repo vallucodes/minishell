@@ -13,12 +13,12 @@ int	is_valid_char_expansion(char c)
 
 void	close_fds(int *fd1, int *fd2)
 {
-	if (*fd1 != -1)
+	if (fd1 && *fd1 != -1)
 	{
 		close (*fd1);
 		*fd1 = -1;
 	}
-	if (*fd2 != -1)
+	if (fd1 && *fd2 != -1)
 	{
 		close (*fd2);
 		*fd2 = -1;

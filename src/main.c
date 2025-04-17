@@ -11,7 +11,7 @@ int main(int ac, char **av, char **envp)
 
 	if (ac != 1)
 		exit_error(NULL, AC);
-	init_minishell(&sa, &mshell, envp);
+	init_minishell(&sa, &mshell, envp, &ast);
 	while (1)
 	{
 		signal_action_main(mshell.sa);
@@ -32,9 +32,9 @@ int main(int ac, char **av, char **envp)
 		signal_action_main(mshell.sa);
 		expand_remove_quotes(&mshell, input.tokens);
 		// print_tokens(input.tokens);
-		ast = build_ast_binary_tree(&mshell.arena, input.tokens); //change to send the adress of ast
+		build_ast_binary_tree(&mshell, input.tokens, &ast); //change to send the adress of ast
 		mshell.command_count = 0;
-		//print_whole_tree(ast);
+		// print_whole_tree(ast);
 		execute_ast(&mshell, ast);
 
         // Add this debug line:
@@ -49,6 +49,6 @@ int main(int ac, char **av, char **envp)
 	return (0);
 }
 
-// ls -la<file1>fi"le"1.1| "c"a't' -e >fi""'le2' <<'fi'le3 | cmd1 fi"l"en'am'e >>file4 | du -s > $HOME'/path'
+// ls -la<file1>fi"le"1.1| "c"a't' -e >fi""'le2' <'fi'le3 | cmd1 fi"l"en'am'e >>file4 | du -s > $HOME'/path'
 
 // valgrind --leak-check=full --show-reachable=yes --track-fds=yes --error-limit=no --suppressions=./minimal.supp ./minishell

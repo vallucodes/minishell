@@ -61,7 +61,7 @@ typedef struct s_minishell
 
 //main functions
 int		input_validation(char *input);
-int		init_minishell(struct sigaction	*sa, t_minishell *mshell, char **envp);
+int		init_minishell(struct sigaction	*sa, t_minishell *mshell, char **envp, t_ast **ast);
 void	init_quotes(t_quotes_helper *quotes);
 
 //errors, exits and cleanups
@@ -91,6 +91,9 @@ int		is_pid_expansion(t_quotes_helper quotes, char *input_str);
 size_t	expand_pid(t_minishell *mshell, int fd, char **new_str);
 size_t	expand_content(t_minishell *mshell, char *str, int fd, char **new_str);
 size_t	expand_exitcode_value(t_minishell *mshell, int fd, char **new_str);
+void	write_or_add_to_str(t_minishell *mshell, int fd, char **new_str, char *str_pid);
+int		skip_to_start_of_expandable(char *env_row);
+size_t	get_len_explandeble(char *str);
 
 //developlment functions
 void print_tokens(t_token *tokens);

@@ -1,16 +1,5 @@
 #include "../inc/minishell.h"
 
-static int	skip_to_start_of_expandable(char *env_row)
-{
-	int	i;
-
-	i = 0;
-	while (env_row[i] && env_row[i] != '=')
-		i++;
-	i++;
-	return (i);
-}
-
 static char	*extract_pid(t_minishell *mshell, char *buffer)
 {
 	size_t	i;
@@ -33,21 +22,6 @@ static char	*extract_pid(t_minishell *mshell, char *buffer)
 	return (str_pid);
 }
 
-static void	write_or_add_to_str(t_minishell *mshell, int fd, char **new_str, char *str_pid)
-{
-	size_t	i;
-
-	i = 0;
-	while (str_pid[i])
-	{
-		if (fd)
-			write(fd, &str_pid[i], 1);
-		else if (new_str)
-			append_char(mshell, str_pid, new_str, i);
-		i++;
-	}
-}
-
 size_t	expand_pid(t_minishell *mshell, int fd, char **new_str)
 {
 	char	*str_pid;
@@ -68,14 +42,10 @@ size_t	expand_pid(t_minishell *mshell, int fd, char **new_str)
 		write_or_add_to_str(mshell, fd, new_str, "$\0");
 		return (1);
 	}
-	else
-	{
-		buf[bytes_read] = '\0';
-		str_pid = extract_pid(mshell, buf);
-		write_or_add_to_str(mshell, fd, new_str, str_pid);
-	}
+	buf[bytes_read] = '\0';
+	str_pid = extract_pid(mshell, buf);
+	write_or_add_to_str(mshell, fd, new_str, str_pid);
 	close(fd_get_pid);
-	fd_get_pid = -1;
 	return (2);
 }
 
@@ -87,9 +57,7 @@ size_t	expand_content(t_minishell *mshell, char *str, int fd, char **new_str)
 	char	**env;
 
 	env = mshell->envp->envp;
-	len = 1;
-	while (str[len] && is_valid_char_expansion(str[len]))
-		len++;
+	len = get_len_explandeble(str);
 	i = -1;
 	while (env[++i])
 	{
