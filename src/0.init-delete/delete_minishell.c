@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	arena_destroy(t_arena **a)
+void	arena_delete(t_arena **a)
 {
 	t_arenablock	*block;
 	t_arenablock	*next;
@@ -44,13 +44,14 @@ void	delete_minishell(t_minishell *mshell)
 	free(mshell->envp);
 	mshell->envp = NULL;
 	free(mshell->input_str);
-	if (mshell->arena)
-		arena_destroy(&mshell->arena);
+	arena_delete(&mshell->arena);
+	rl_clear_history();
 }
 
 void	exit_and_cleanup(t_minishell *mshell)
 {
 	delete_minishell(mshell);
+	rl_clear_history();
 	ft_dprintf(1, "exit\n");
 	exit(0);
 }

@@ -21,6 +21,6 @@ int		ft_cd(t_env **my_env, int argv_count, char **argv);
 int		ft_echo(int argc, char **argv);
 void	ft_exit(char **argv, t_minishell *minishell);
 int		ft_unset(char **args, t_env *env);
-int		ft_export(char **args, t_env *env);
+int		ft_export(char **args, t_minishell *mshell);
 
 #endif

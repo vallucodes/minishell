@@ -10,8 +10,8 @@ int main(int ac, char **av, char **envp)
 	(void) av;
 
 	if (ac != 1)
-		exit_error(AC);
-	init_minishell(&sa, &mshell, envp);
+		exit_error(NULL, AC);
+	init_minishell(&sa, &mshell, envp, &ast);
 	while (1)
 	{
 		signal_action_main(mshell.sa);
@@ -25,38 +25,30 @@ int main(int ac, char **av, char **envp)
 		if (input_validation(mshell.input_str) && (free(mshell.input_str), 1))
 			continue ;
 		init_arena(&mshell);
-		if (tokenizer(&mshell, &input, mshell.input_str) == FAIL)
-		{
-			free(mshell.input_str);
-			arena_destroy(&mshell.arena);
+		if (tokenizer(&mshell, &input) == FAIL)
 			continue ;
-		}
-		if (handle_heredoc(&mshell, input.tokens))
-		{
-			free(mshell.input_str);
+		if (handle_heredoc(&mshell, input.tokens) == FAIL)
 			continue ;
-		}
 		signal_action_main(mshell.sa);
 		expand_remove_quotes(&mshell, input.tokens);
 		// print_tokens(input.tokens);
-		ast = build_ast_binary_tree(&mshell.arena, input.tokens); //change to send the adress of ast
+		build_ast_binary_tree(&mshell, input.tokens, &ast);
 		mshell.command_count = 0;
-		//print_whole_tree(ast);
+		// print_whole_tree(ast);
 		execute_ast(&mshell, ast);
 
         // Add this debug line:
         //ft_dprintf(2, "Debug: Main loop continued. Child exit code was: %d\n", mshell.exitcode);
 
-		// execute_ast(&mshell, ast);
-		delete_tmp_files(&mshell.arena);
-		//free(mshell.input_str); have delete minishell
-		arena_destroy(&mshell.arena);
+		delete_tmp_files(&mshell);
+		free(mshell.input_str);
+		arena_delete(&mshell.arena);
 	}
 	delete_minishell(&mshell);
 	//free_env(&mshell.env); // must free environment here after loop end
 	return (0);
 }
 
-// ls -la<file1>fi"le"1.1| "c"a't' -e >fi""'le2' <<'fi'le3 | cmd1 fi"l"en'am'e >>file4 | du -s > $HOME'/path'
+// ls -la<file1>fi"le"1.1| "c"a't' -e >fi""'le2' <'fi'le3 | cmd1 fi"l"en'am'e >>file4 | du -s > $HOME'/path'
 
-// valgrind --leak-check=full --show-leak-kinds=all ./minishell
+// valgrind --leak-check=full --show-reachable=yes --track-fds=yes --error-limit=no --suppressions=./minimal.supp ./minishell

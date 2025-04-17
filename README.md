@@ -69,3 +69,9 @@ From main branch to your own branch: `git merge main`
 git checkout main  
 git pull  
 git checkout -b branch-name
+
+## suppression
+
+valgrind --leak-check=full --show-reachable=yes --error-limit=no --gen-suppressions=all --log-file=minimalraw.log ./minishell
+cat ./minimalraw.log | ./parse_valgrind_suppressions.sh > minimal.supp 
+valgrind --leak-check=full --show-reachable=yes --error-limit=no --suppressions=./minimal.supp ./minishell

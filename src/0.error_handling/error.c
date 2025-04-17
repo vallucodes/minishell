@@ -7,8 +7,10 @@ void	exit_cleanup_error(t_minishell *mshell, char *msg)
 	exit(1);
 }
 
-void	exit_error(char *msg)
+void	exit_error(t_minishell *mshell, char *msg)
 {
+	if (mshell)
+		delete_minishell(mshell);
 	ft_dprintf(2, msg);
 	exit(1);
 }
