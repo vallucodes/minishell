@@ -3,7 +3,9 @@ file*
 
 # Swap
 *.swp
-*.sh
+*.log
+*.supp
+clean.sh
 
 # Prerequisites
 *.d

@@ -1,6 +1,14 @@
 #include "../../inc/minishell.h"
 
-void free_env(t_env *env)
+void	exit_env(char *msg, t_env **env)
+{
+	perror(msg);
+	if (env)
+		free(*env);
+	exit(FAIL);
+}
+
+void	free_env(t_env *env)
 {
 	unsigned int i;
 
@@ -19,7 +27,7 @@ void free_env(t_env *env)
 	env->allocated_capacity = 0;
 }
 
-void free_partial_env(char **envp, int up_to)
+void	free_partial_env(char **envp, int up_to)
 {
 	while (up_to--)
 		free(envp[up_to]);

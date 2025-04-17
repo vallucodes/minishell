@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: vlopatin <vlopatin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 15:10:38 by vlopatin          #+#    #+#             */
-/*   Updated: 2025/04/09 20:54:29 by hiennguy         ###   ########.fr       */
+/*   Updated: 2025/04/16 15:37:52 by vlopatin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,15 +98,13 @@ int		ft_dprintf(int fd, const char *s, ...);
 
 void	ft_putstr(int fd, char *str);
 int		ft_putnbr_base(int fd, unsigned long nbr, char	*base);
-char	*ft_utoa(unsigned int n);
+char	*ft_itoa_buf(int n, char *buf, size_t bufsize);
+char	*ft_utoa_buf(unsigned int n, char *buf, size_t bufsize);
 int		ft_char(int fd, va_list args);
 int		ft_hex(int fd, va_list args, char *case_type);
 int		ft_int(int fd, va_list args);
 int		ft_pointer(int fd, va_list args);
 int		ft_string(int fd, va_list args);
 int		ft_unsigned_int(int fd, va_list args);
-
-
-//fprintf
 
 #endif

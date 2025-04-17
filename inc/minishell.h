@@ -10,8 +10,7 @@
 # include <stdalign.h>			//alignof
 # include <errno.h>
 # include <signal.h>			//signals
-// # include <sys/ioctl.h>			//ioctl
-# include <limits.h>
+# include <limits.h>			//FILE_MAX
 # include "../lib/libft/inc/libft.h"
 # include "signals.h"
 # include "lexing.h"
@@ -30,6 +29,7 @@
 # define REDIRECT "Error: redirections invalid\n"
 # define TOKEN_ERROR "syntax error near unexpected token"
 # define UNREACHABLE "This is unreachable code, something is wrong with error handling\n"
+# define TMP_FILES "Too many heredoc redirections\n"
 # define PIPE_ERROR " `|'"
 # define INFILE_ERROR " `<'"
 # define OUTFILE_ERROR " `>'"
@@ -60,14 +60,14 @@ typedef struct s_minishell
 
 //main functions
 int		input_validation(char *input);
-int		init_minishell(struct sigaction	*sa, t_minishell *mshell, char **envp);
+int		init_minishell(struct sigaction	*sa, t_minishell *mshell, char **envp, t_ast **ast);
 void	init_quotes(t_quotes_helper *quotes);
+
+//errors, exits and cleanups
 void	delete_minishell(t_minishell *mshell);
 void	exit_and_cleanup(t_minishell *mshell);
-void	exit_error(char *msg);
+void	exit_error(t_minishell *mshell, char *msg);
 void	exit_cleanup_error(t_minishell *mshell, char *msg);
-
-//error handling
 void	print_error(char *msg, char *token, t_token_type type);
 
 //global utils
@@ -90,6 +90,9 @@ int		is_pid_expansion(t_quotes_helper quotes, char *input_str);
 size_t	expand_pid(t_minishell *mshell, int fd, char **new_str);
 size_t	expand_content(t_minishell *mshell, char *str, int fd, char **new_str);
 size_t	expand_exitcode_value(t_minishell *mshell, int fd, char **new_str);
+void	write_or_add_to_str(t_minishell *mshell, int fd, char **new_str, char *str_pid);
+int		skip_to_start_of_expandable(char *env_row);
+size_t	get_len_explandeble(char *str);
 
 //developlment functions
 void print_tokens(t_token *tokens);

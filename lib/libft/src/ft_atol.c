@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atol.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: vlopatin <vlopatin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 15:03:01 by hiennguy          #+#    #+#             */
-/*   Updated: 2025/04/02 15:44:30 by hiennguy         ###   ########.fr       */
+/*   Updated: 2025/04/16 16:45:44 by vlopatin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static int	check_atol_overflow(long result, int digit, int sign)
 {
 	if (sign == 1 && result > (LONG_MAX - digit) / 10)
 		return (1);
-	if (sign == -1 && -result < (LONG_MIN + digit) / 10)
+	if (sign == -1 && (-result) < (LONG_MIN + digit) / 10)
 		return (1);
 	return (0);
 }

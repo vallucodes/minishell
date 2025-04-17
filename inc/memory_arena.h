@@ -19,7 +19,7 @@ typedef struct t_arena
 
 t_arena	arena_create();
 void	*arena_alloc(t_arena *a, size_t size, size_t alignment);
-void	arena_destroy(t_arena **a);
+void	arena_delete(t_arena **a);
 void	init_arena(t_minishell *mshell);
 
 //libft utils

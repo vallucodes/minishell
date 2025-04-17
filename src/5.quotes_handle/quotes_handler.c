@@ -1,5 +1,12 @@
 #include "../inc/minishell.h"
 
+static void	init_vars(size_t *i, char **input_str, t_token *current, t_quotes_helper *quotes)
+{
+	*i = 0;
+	init_quotes(quotes);
+	*input_str = current->value;
+}
+
 static void	loop_through_word(t_minishell *mshell, t_token *current)
 {
 	t_quotes_helper	quotes;
@@ -7,11 +14,10 @@ static void	loop_through_word(t_minishell *mshell, t_token *current)
 	char			*input_str;
 	size_t			i;
 
-	i = 0;
-	input_str = current->value;
-	// new_str = ft_strdup("");
+	init_vars(&i, &input_str, current, &quotes);
 	new_str = ft_arena_strdup(mshell->arena, "");
-	init_quotes(&quotes);
+	if (!new_str)
+		exit_cleanup_error(mshell, "malloc");
 	while (input_str[i])
 	{
 		update_quote_state(input_str[i], &quotes);
