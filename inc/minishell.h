@@ -61,7 +61,7 @@ typedef struct s_minishell
 
 //main functions
 int		input_validation(char *input);
-int		init_minishell(struct sigaction	*sa, t_minishell *mshell, char **envp, t_ast **ast);
+int		init_minishell(struct sigaction	*sa, t_minishell *mshell, char **envp);
 void	init_quotes(t_quotes_helper *quotes);
 
 //errors, exits and cleanups

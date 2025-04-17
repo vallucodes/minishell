@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	init_minishell(struct sigaction	*sa, t_minishell *mshell, char **envp, t_ast **ast)
+int	init_minishell(struct sigaction	*sa, t_minishell *mshell, char **envp)
 {
 	char	*path_str;
 
@@ -14,7 +14,7 @@ int	init_minishell(struct sigaction	*sa, t_minishell *mshell, char **envp, t_ast
 	mshell->sa = sa;
 	mshell->path = NULL;
 	mshell->arena = NULL;
-	*ast = NULL;
+	// *ast = NULL;
 	path_str = get_env_value(mshell->envp->envp, "PATH");
 	if (path_str)
 		mshell->path = ft_split(path_str, ':');

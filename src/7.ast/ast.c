@@ -1,12 +1,13 @@
 #include "../inc/minishell.h"
 
-t_ast	*init_node(t_minishell *mshell, char **cmd, char *file, t_token_type type)
+t_ast *init_node(t_arena **arena, char **cmd, char *file, t_token_type type)
 {
 	t_ast	*new_node;
 
-	new_node = arena_alloc(mshell->arena, sizeof(t_ast), alignof(t_ast));
-	if (!new_node)
-		exit_cleanup_error(mshell, "malloc");
+	// new_node = (t_ast *)malloc(sizeof(t_ast));
+	new_node = arena_alloc(*arena, sizeof(t_ast), alignof(t_ast));
+	// if (!new_node)
+	// 	exit_error(MALLOC);
 	new_node->type = type;
 	new_node->cmd = cmd;
 	new_node->file = file;
@@ -44,20 +45,23 @@ void	add_node(t_ast **ast, t_ast *new_node, t_order order)
 	}
 }
 
-void	build_ast_binary_tree(t_minishell *mshell, t_token *tokens, t_ast **ast)
+t_ast	*build_ast_binary_tree(t_arena **arena, t_token *tokens)
 {
+	t_ast	*ast;
 	size_t	amount_of_pipes;
 	size_t	i;
 
+	ast = NULL;
 	i = 0;
 	amount_of_pipes = get_amount_of_pipes(tokens);
 	while (i < amount_of_pipes)
 	{
-		add_node(ast, init_node(mshell, NULL, NULL, PIPE), FIRST);
-		build_branch(mshell, ast, tokens, NON_LAST_BRANCH);
+		add_node(&ast, init_node(arena, NULL, NULL, PIPE), FIRST);
+		build_branch(arena, &ast, tokens, NON_LAST_BRANCH);
 		tokens = skip_to_next_pipe(tokens);
 		i++;
 	}
-	build_branch(mshell, ast, tokens, LAST_BRANCH);
+	build_branch(arena, &ast, tokens, LAST_BRANCH);
+	return (ast);
 }
 //ls -la < file1 > file1.1| cat -e > file2 | grep filename > file3 | du -s > file4
