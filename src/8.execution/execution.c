@@ -149,32 +149,15 @@ static void handle_parent(t_minishell *mshell, t_execution *exec, int *pipefd, p
 		exec->prev_fd = pipefd[0];
 	}
 }
-
 void execute_ast(t_minishell *mshell, t_ast *ast)
 {
 	t_ast *cmd_node;
 	t_execution exec;
-
-	exec.pipefd[0] = -1;
-	exec.pipefd[1] = -1;
 	pid_t pid;
-
-	exec.has_pipe = 0;
-	exec.prev_fd = STDIN_FILENO;
-
-	while (ast)
-	{
-		init_execution(&exec, ast);
-
-		cmd_node = NULL;
-
-		if (setup_pipe(&exec, exec.pipefd) == FAIL)
-			return;
-
+	const char *cmd;
 		if (handle_redirections(ast, &exec) == FAIL)
 		{
 			mshell->exitcode = 1;
-
 			if (exec.pipefd[1] != -1)
 			{
 				close(exec.pipefd[1]);
@@ -182,41 +165,35 @@ void execute_ast(t_minishell *mshell, t_ast *ast)
 			}
 			if (exec.pipefd[0] != -1)
 				exec.prev_fd = exec.pipefd[0];
-
-			ast = ast->next_right;
-			continue;
 		}
-
-		cmd_node = get_cmd_node(ast);
-
-		if (cmd_node)
-			exec.cmd_args = cmd_node->cmd;
-
-		if (!exec.cmd_args || !exec.cmd_args[0])
-		{
-			ast = ast->next_right;
-			continue;
-		}
-		if (execute_builtin_parent(mshell, &exec) == SUCCESS)
-		{
-			ast = ast->next_right;
-			continue;
-		}
-		if (safe_fork(exec.pipefd, &pid) == FAIL)
-			return ;
-		if (pid == 0)
-			handle_child_process(mshell, &exec, exec.pipefd, cmd_node);
 		else
-			handle_parent(mshell, &exec, exec.pipefd, pid);
+		{
+			cmd_node = get_cmd_node(ast);
+			if (cmd_node)
+				exec.cmd_args = cmd_node->cmd;
+
+			if (exec.cmd_args && exec.cmd_args[0])
+			{
+				if (execute_builtin_parent(mshell, &exec) != SUCCESS)
+				{
+					if (safe_fork(exec.pipefd, &pid) == FAIL)
+						return;
+					if (pid == 0)
+						handle_child_process(mshell, &exec, exec.pipefd, cmd_node);
+					else
+						handle_parent(mshell, &exec, exec.pipefd, pid);
+				}
+			}
+		}
 		ast = ast->next_right;
-	}
-	//printf("not FINAL EXIT CODE IS %d\n", mshell->exitcode );
+
+	//printf("not FINAL EXIT CODE IS %d\n", mshell->exitcode);
 	if (mshell->command_count > 0)
 		mshell->exitcode = wait_for_children(mshell);
-	//printf("FINAL EXIT CODE IS %d\n", mshell->exitcode );
-	//printf("command count %d\n", mshell->command_count );
-
+	//printf("FINAL EXIT CODE IS %d\n", mshell->exitcode);
+	//printf("command count %d\n", mshell->command_count);
 }
+
 
 //valgrind --track-fds=all --trace-children=yes ./minishell.out
 //valgrind --leak-check=full --track-fds=all --trace-children=yes ./minishell.out

@@ -8,7 +8,6 @@ int count_argv(char **argv)
 	return count;
 }
 
-// is it a valid variable name for unset & export?
 int	is_valid_identifier_range(const char *str, size_t len)
 {
 	size_t i = 0;
@@ -52,7 +51,6 @@ int	add_var_to_env(t_env *env, const char *arg, const char *key, size_t key_len,
 {
 	if (realloc_env_capacity(env) == FAIL)
 		return (FAIL);
-
 	if (key_has_value)
 	{
 		env->envp[env->len] = ft_strdup(arg);
@@ -66,8 +64,6 @@ int	add_var_to_env(t_env *env, const char *arg, const char *key, size_t key_len,
 		if (!new_var)
 			return (FAIL);
 		ft_memcpy(new_var, key, key_len);
-		ft_dprintf(2, "Giraffeshell: export: `%s`: add update fails3\n", arg);
-
 		new_var[key_len] = '\0';
 		env->envp[env->len++] = new_var;
 	}

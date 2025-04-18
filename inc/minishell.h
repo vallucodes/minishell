@@ -55,6 +55,8 @@ typedef struct s_minishell
 	int			command_count;
 	pid_t		last_pid;
 	char 		*input_str; //for free if error
+	int			origin_stdin;
+	int			origin_stdout;
 	//later add execution, exit code when we are there
 }				t_minishell ;
 

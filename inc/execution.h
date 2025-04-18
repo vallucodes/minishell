@@ -38,6 +38,7 @@ int			execute_builtin_parent(t_minishell *mshell, t_execution *exec);
 void		execute_builtin_child(t_minishell *mshell, t_execution *exec);
 int			redirect_and_restore_builtin(t_execution *exec, t_minishell *mshell, char **cmd_args);
 
+void execute_ast_v1(t_minishell *mshell, t_ast *ast);
 
 
 

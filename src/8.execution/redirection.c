@@ -69,19 +69,4 @@ int handle_redirections(t_ast *node, t_execution *exec)
 	return (SUCCESS);
 }
 
-static t_ast *get_cmd_node(t_ast *ast_branch)
-{
-	t_ast *current = ast_branch;
-
-	while (current)
-	{
-		if (current->type == COMMAND)
-			return (current);
-		current = current->next_left;
-	}
-	//ft_dprintf(2, "Debug: get_cmd_node did NOT find a COMMAND node.\n"); // Debug print
-	return (NULL);
-
-}
-
 

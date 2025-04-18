@@ -46,6 +46,10 @@ void	delete_minishell(t_minishell *mshell)
 	free(mshell->input_str);
 	arena_delete(&mshell->arena);
 	rl_clear_history();
+	if (mshell->origin_stdin >= 0)
+		close(mshell->origin_stdin);
+	if (mshell->origin_stdout >= 0)
+		close(mshell->origin_stdout);
 }
 
 void	exit_and_cleanup(t_minishell *mshell)

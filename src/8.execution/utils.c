@@ -55,6 +55,7 @@ int	redirect_and_restore_builtin(t_execution *exec,
 
 	return (SUCCESS);
 }
+
 int execute_builtin_parent(t_minishell *mshell, t_execution *exec)
 {
 	if (is_builtin(exec->cmd_args[0]) && !exec->has_pipe)

@@ -61,7 +61,8 @@ SRC			=	main.c \
 				8.execution/execute_builtin.c \
 				8.execution/execution.c \
 				8.execution/path.c \
-				8.execution/safe_open.c \
+				8.execution/draft.c \
+				8.execution/redirection.c \
 				8.execution/setup_child_fds.c \
 				8.execution/utils.c \
 				8.execution/utils2.c \
