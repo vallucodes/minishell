@@ -1,94 +1,47 @@
 #include "../../inc/minishell.h"
 
-// int	init_signals(struct sigaction *sa)
-// {
-// 	g_signal = 0;
-// 	sa->sa_handler = sigint_handler_main;
-// 	if (sigemptyset(&sa->sa_mask) == -1)
-// 	{
-// 		perror("sigemptyset");
-// 		return (FAIL);
-// 	}
-// 	sa->sa_flags = 0;
-// 	if (sigaction(SIGINT, sa, NULL) == -1)
-// 	{
-// 		perror("sigaction");
-// 		return (FAIL);
-// 	}
-// 	return (SUCCESS);
-// }
-
-int	signal_action_ignore(void)
+int	sig_action_ignore(t_minishell *mshell)
 {
 	if (signal(SIGINT, SIG_IGN) == SIG_ERR)
-	{
-		perror("sigaction");
-		return (FAIL);
-	}
+		exit_cleanup_error(mshell, "sigaction");
 	if (signal(SIGQUIT, SIG_IGN) == SIG_ERR)
-	{
-		perror("sigaction");
-		return (FAIL);
-	}
+		exit_cleanup_error(mshell, "sigaction");
 	return (SUCCESS);
 }
 
-int	signal_action_main(void)
+int	sig_action_main(t_minishell *mshell)
 {
+	g_signal = 0;
 	if (signal(SIGINT, sigint_handler_main) == SIG_ERR)
-	{
-		perror("sigaction");
-		return (FAIL);
-	}
+		exit_cleanup_error(mshell, "sigaction");
 	if (signal(SIGQUIT, SIG_IGN) == SIG_ERR)
-	{
-		perror("signal");
-		return (FAIL);
-	}
+		exit_cleanup_error(mshell, "sigaction");
 	return (SUCCESS);
 }
 
-int	signal_action_heredoc(void)
+int	sig_action_heredoc(t_minishell *mshell)
 {
 	if (signal(SIGINT, sigint_handler_heredoc) == SIG_ERR)
-	{
-		perror("signal");
-		return (FAIL);
-	}
+		exit_cleanup_error(mshell, "sigaction");
 	if (signal(SIGQUIT, SIG_IGN) == SIG_ERR)
-	{
-		perror("signal");
-		return (FAIL);
-	}
+		exit_cleanup_error(mshell, "sigaction");
 	return (SUCCESS);
 }
 
-int	signal_action_parent(void)
+int	sig_action_parent(t_minishell *mshell)
 {
 	if (signal(SIGINT, sigint_handler_parent) == SIG_ERR)
-	{
-		perror("signal");
-		return (FAIL);
-	}
+		exit_cleanup_error(mshell, "sigaction");
 	if (signal(SIGQUIT, sigint_handler_parent) == SIG_ERR)
-	{
-		perror("signal");
-		return (FAIL);
-	}
+		exit_cleanup_error(mshell, "sigaction");
 	return (SUCCESS);
 }
 
-int	signal_action_default(void)
+int	sig_action_default(t_minishell *mshell)
 {
 	if (signal(SIGINT, SIG_DFL) == SIG_ERR)
-	{
-		perror("signal");
-		return (FAIL);
-	}
+		exit_cleanup_error(mshell, "sigaction");
 	if (signal(SIGQUIT, SIG_DFL) == SIG_ERR)
-	{
-		perror("signal");
-		return (FAIL);
-	}
+		exit_cleanup_error(mshell, "sigaction");
 	return (SUCCESS);
 }

@@ -5,18 +5,17 @@ int main(int ac, char **av, char **envp)
 	t_input		input;
 	t_ast		*ast;
 	t_minishell	mshell;
-	struct sigaction sa;
 
 	(void) av;
 
 	if (ac != 1)
 		exit_error(NULL, AC);
-	init_minishell(&sa, &mshell, envp, &ast);
+	init_minishell(&mshell, envp, &ast);
 	while (1)
 	{
-		signal_action_main();
+		sig_action_main(&mshell);
 		mshell.input_str = readline(PROMPT);
-		signal_action_ignore();
+		sig_action_ignore(&mshell);
 		mshell.rl_count += 1;
 		if (!mshell.input_str)
 			exit_and_cleanup(&mshell);
