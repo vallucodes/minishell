@@ -19,7 +19,7 @@ static char	*read_heredoc_input(t_minishell *mshell, char *eof, t_expand expand)
 
 	file = create_tmp_file(mshell, &fd_tmp);
 	fd_stdin = get_stdin(mshell);
-	signal_action_heredoc(mshell->sa);
+	signal_action_heredoc();
 	mshell->rl_count_heredoc = 0;
 	while (1)
 	{
@@ -37,6 +37,7 @@ static char	*read_heredoc_input(t_minishell *mshell, char *eof, t_expand expand)
 		save_line_to_tmp_file(mshell, input, fd_tmp, expand);
 		free_and_set(&input);
 	}
+	signal_action_ignore();
 	cleanup_at_success(mshell, &input, &fd_tmp, &fd_stdin);
 	return (file);
 }

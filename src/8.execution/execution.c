@@ -148,6 +148,7 @@ static void handle_child_process(t_minishell *mshell, t_execution *exec,
 {
 	char **external_cmd;
 
+	signal_action_default();
 	setup_child_fds(exec->prev_fd, pipefd, exec->has_next_pipe, exec);
 	execute_builtin_child(mshell, exec);
 	if (!cmd_node)
@@ -253,6 +254,7 @@ void execute_ast(t_minishell *mshell, t_ast *ast)
 			handle_parent(mshell, &exec, pipefd, pid);
 		ast = ast->next_right;
 	}
+	signal_action_parent();
 	mshell->exitcode = wait_for_children(mshell);
 }
 

@@ -14,9 +14,9 @@ int main(int ac, char **av, char **envp)
 	init_minishell(&sa, &mshell, envp, &ast);
 	while (1)
 	{
-		signal_action_main(mshell.sa);
+		signal_action_main();
 		mshell.input_str = readline(PROMPT);
-		signal_action_ignore(mshell.sa);
+		signal_action_ignore();
 		mshell.rl_count += 1;
 		if (!mshell.input_str)
 			exit_and_cleanup(&mshell);
@@ -30,7 +30,6 @@ int main(int ac, char **av, char **envp)
 			continue ;
 		if (handle_heredoc(&mshell, input.tokens) == FAIL)
 			continue ;
-		signal_action_main(mshell.sa);
 		expand_remove_quotes(&mshell, input.tokens);
 		// print_tokens(input.tokens);
 		build_ast_binary_tree(&mshell, input.tokens, &ast);

@@ -21,13 +21,14 @@ void	sigint_handler_main(int signal)
 		rl_replace_line("", 0);
 		rl_redisplay();
 	}
-	// g_signal = signal;
 }
 
-// void	sigint_handler_child(int signal)
-// {
-// 	if (signal == SIGINT)
-// 		write(STDOUT_FILENO, "\n", 1);
-// 	if (signal == SIGQUIT)
-// 		ft_dprintf(2, "Quit, core dump\n");
-// }
+void	sigint_handler_parent(int signal)
+{
+	if (signal == SIGINT)
+		write(STDOUT_FILENO, "\n", 1);
+	if (signal == SIGQUIT)
+		ft_dprintf(2, "Quit, core dumped\n");
+}
+
+

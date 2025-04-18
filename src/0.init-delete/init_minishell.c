@@ -22,7 +22,7 @@ int	init_minishell(struct sigaction	*sa, t_minishell *mshell, char **envp, t_ast
 		mshell->path = ft_split(path_str, ':');
 	if (!mshell->path) //this can be also malloc fail
 		ft_dprintf(2, "Giraffeshell: PATH not found in environment\n");
-	init_signals(mshell->sa);
+	// init_signals(mshell->sa);
 
 	//later add full struct
 	// if (init_execution(&mshell->exec) != 0)
