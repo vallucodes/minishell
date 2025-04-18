@@ -20,6 +20,7 @@ static char	*read_heredoc_input(t_minishell *mshell, char *eof, t_expand expand)
 	file = create_tmp_file(mshell, &fd_tmp);
 	fd_stdin = get_stdin(mshell);
 	signal_action_heredoc(mshell->sa);
+	mshell->rl_count_heredoc = 0;
 	while (1)
 	{
 		input = readline("> ");
@@ -27,15 +28,16 @@ static char	*read_heredoc_input(t_minishell *mshell, char *eof, t_expand expand)
 			return (cleanup_at_signal(mshell, &input, fd_stdin, fd_tmp), NULL);
 		if (!input)
 		{
-			print_warning(eof);
+			print_warning(mshell->rl_count, eof);
 			break ;
 		}
+		mshell->rl_count_heredoc += 1;
 		if (is_eof(eof, input))
 			break ;
 		save_line_to_tmp_file(mshell, input, fd_tmp, expand);
 		free_and_set(&input);
 	}
-	cleanup_at_success(&input, &fd_tmp, &fd_stdin);
+	cleanup_at_success(mshell, &input, &fd_tmp, &fd_stdin);
 	return (file);
 }
 

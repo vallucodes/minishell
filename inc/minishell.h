@@ -47,14 +47,16 @@ typedef enum e_exit
 typedef struct s_minishell
 {
 	struct sigaction	*sa;
-	t_arena		*arena;
-	t_env		*envp; // env struct
-	t_ast		*ast;
-	int			exitcode; //exitcode assignment after exe
-	char		**path;
-	int			command_count;
-	pid_t		last_pid;
-	char 		*input_str; //for free if error
+	t_arena				*arena;
+	t_env				*envp; // env struct
+	t_ast				*ast;
+	int					exitcode; //exitcode assignment after exe
+	char				**path;
+	int					command_count;
+	pid_t				last_pid;
+	char 				*input_str; //for free if error
+	size_t				rl_count;
+	size_t				rl_count_heredoc;
 	//later add execution, exit code when we are there
 }				t_minishell ;
 

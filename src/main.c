@@ -17,6 +17,7 @@ int main(int ac, char **av, char **envp)
 		signal_action_main(mshell.sa);
 		mshell.input_str = readline(PROMPT);
 		signal_action_ignore(mshell.sa);
+		mshell.rl_count += 1;
 		if (!mshell.input_str)
 			exit_and_cleanup(&mshell);
 		if (mshell.input_str[0] == '\0' && (free(mshell.input_str), 1))

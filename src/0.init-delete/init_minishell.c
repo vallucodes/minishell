@@ -14,6 +14,8 @@ int	init_minishell(struct sigaction	*sa, t_minishell *mshell, char **envp, t_ast
 	mshell->sa = sa;
 	mshell->path = NULL;
 	mshell->arena = NULL;
+	mshell->rl_count = 0;
+	mshell->rl_count_heredoc = 0;
 	*ast = NULL;
 	path_str = get_env_value(mshell->envp->envp, "PATH");
 	if (path_str)
