@@ -63,8 +63,7 @@ static int	handle_export_arg(t_minishell *mshell, char *arg)
 		key_len = (size_t)(equal_sign - arg);
 	else
 		key_len = ft_strlen(arg);
-	//for (int i = 0; arg[i]; i++)
-		//printf("arg[%d] = '%c'\n", i, arg[i]);
+
 	if (!is_valid_identifier_range(arg, key_len))
 	{
 		ft_dprintf(2, "Giraffeshell: export: `%s`: not a valid identifier\n", arg);
@@ -81,7 +80,7 @@ static int	handle_export_arg(t_minishell *mshell, char *arg)
 
 static int	export_update_or_add(t_minishell *mshell, char *arg, size_t key_len, int key_has_value)
 {
-	char *key = ft_substr(arg, 0, key_len); //this needs to be fixed for malloc fails
+	char *key = ft_substr(arg, 0, key_len);
 	if (!key)
 	{
 		ft_dprintf(2, "Giraffeshell: export: malloc failed\n");
@@ -94,10 +93,10 @@ static int	export_update_or_add(t_minishell *mshell, char *arg, size_t key_len, 
 			perror("malloc");
 			delete_minishell(mshell);
 			free(key);
-			exit(1);
+			//exit(1);
 			//ft_dprintf(2, "Giraffeshell: export: `%s`: add update fails\n", arg);
 			// free(key);
-			// return (FAIL);
+			return (FAIL);
 		}
 	}
 	free(key);

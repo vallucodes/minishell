@@ -53,7 +53,7 @@ int realloc_env_capacity(t_env *env)
 	size_t	i;
 
 	if (env->len + 1 < env->allocated_capacity)
-		return (1);
+		return (SUCCESS);
 	new_capacity = env->allocated_capacity * 2;
 	if (new_capacity == 0)
 		new_capacity = 8; //just in case new capa is 0 then 0 cant *2
