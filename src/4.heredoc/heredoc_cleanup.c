@@ -35,13 +35,16 @@ void	cleanup_at_signal(t_minishell *mshell, char **input, int fd_stdin, int fd_t
 	arena_delete(&mshell->arena);
 }
 
-void	print_warning(char *eof)
+void	print_warning(size_t rl_count, char *eof)
 {
-	ft_dprintf(1, "giraffeshell: warning: here-document at line 1 delimited by end-of-file (wanted `%s')\n", eof); // add proper counter, counts amount of inputs from every readline call
+	ft_dprintf(1, "giraffeshell: warning: here-document at line %u ", rl_count);
+	ft_dprintf(1, "delimited by end-of-file (wanted `%s')\n", eof);
 }
 
-void	cleanup_at_success(char **input, int *fd_tmp, int *fd_stdin)
+void	cleanup_at_success(t_minishell *mshell, char **input, int *fd_tmp, int *fd_stdin)
 {
+	mshell->rl_count += mshell->rl_count_heredoc;
+	mshell->rl_count_heredoc = 0;
 	close_fds(fd_tmp, fd_stdin);
 	free_and_set(input);
 }

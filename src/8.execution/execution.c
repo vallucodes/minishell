@@ -157,6 +157,7 @@ static void handle_child_process(t_minishell *mshell, t_execution *exec,
 		exit(127);
 	}
 	external_cmd = get_command_argv(mshell, cmd_node);
+	sig_action_default(mshell);
 	execve(external_cmd[0], exec->cmd_args, mshell->envp->envp);
 	perror(external_cmd[0]);
 	ft_free_2d(external_cmd);
@@ -253,6 +254,7 @@ void execute_ast(t_minishell *mshell, t_ast *ast)
 			handle_parent(mshell, &exec, pipefd, pid);
 		ast = ast->next_right;
 	}
+	sig_action_parent(mshell);
 	mshell->exitcode = wait_for_children(mshell);
 }
 

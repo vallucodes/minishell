@@ -15,13 +15,13 @@ int		is_valid_char_expansion(char c);
 void	next_tmp_file(t_minishell *mshell, char *file, int nb);
 
 //utils
-void	print_warning(char *eof);
+void	print_warning(size_t readline_count, char *eof);
 int		is_eof(char *eof, char *input);
 
 //cleanup and exit
 void	delete_tmp_files(t_minishell *mshell);
 void	cleanup_at_signal(t_minishell *mshell, char **input, int fd_stdin, int fd);
-void	cleanup_at_success(char **input, int *fd_tmp, int *fd_stdin);
+void	cleanup_at_success(t_minishell *mshell, char **input, int *fd_tmp, int *fd_stdin);
 void	free_and_set(char **input);
 void	close_fds(int *fd1, int *fd2);
 

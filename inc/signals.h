@@ -3,17 +3,18 @@
 
 extern int	g_signal;
 
+typedef struct s_minishell t_minishell;
+
 void	sigint_handler_main(int signal);
 void	sigint_handler_heredoc(int signal);
+void	sigint_handler_parent(int signal);
 
-void	init_signals(struct sigaction *sa);
-void	signal_action_ignore(struct sigaction *sa);
-void	signal_action_main(struct sigaction *sa);
-void	signal_action_heredoc(struct sigaction *sa);
+int		sig_action_ignore(t_minishell *mshell);
+int		sig_action_main(t_minishell *mshell);
+int		sig_action_heredoc(t_minishell *mshell);
+int		sig_action_parent(t_minishell *mshell);
+int		sig_action_default(t_minishell *mshell);
+
+void	set_exitcode_signal(t_minishell *mshell);
 
 #endif
-
-// int		init_signals(struct sigaction *sa);
-// int		signal_action_ignore(struct sigaction *sa);
-// int		signal_action_main(struct sigaction *sa);
-// int		signal_action_heredoc(struct sigaction *sa);
