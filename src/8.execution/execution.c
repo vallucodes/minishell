@@ -23,13 +23,13 @@ static int exec_external_command(t_minishell *mshell, t_ast *ast)
 		return FAIL;
 
 	full_cmd_path = get_command_path(mshell, cmd_node);
-
+	//printf("COMMAND OR ARGS COUNT: %d\n", count_argv(cmd_node->cmd));
 	execve(full_cmd_path, cmd_node->cmd, mshell->envp->envp);
 	ft_dprintf(2, "Giraffeshell: %s: %s\n", cmd_node->cmd[0], strerror(errno));
 	mshell->exitcode = 1;
 	if (errno == ENOENT)
 		mshell->exitcode = 127;
-	else if (errno == EACCES || errno == EISDIR)
+	else if (errno == EACCES || errno == EISDIR || errno == ENOTDIR)
 		mshell->exitcode = 126;
 
 	free(full_cmd_path);
@@ -61,7 +61,6 @@ int execute_in_sub_process(t_minishell *mshell, t_ast *ast)
 	exec.status = 0;
 	exec.command_count = 0;
 	current = ast;
-
 	while (current)
 	{
 		exec.has_pipe = (current->next_right != NULL);
