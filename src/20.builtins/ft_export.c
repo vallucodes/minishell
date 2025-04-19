@@ -87,7 +87,7 @@ static int	export_update_or_add(t_minishell *mshell, char *arg, size_t key_len, 
 	}
 	if (update_var_env(mshell->envp, arg, key, key_has_value) == FAIL)
 	{
-		if (add_var_to_env(mshell->envp, arg, key, key_len, key_has_value) == FAIL)
+		if (add_var_to_env(mshell->envp, arg) == FAIL)
 		{
 			perror("malloc");
 			delete_minishell(mshell);

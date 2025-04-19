@@ -26,8 +26,9 @@ int	is_valid_identifier_range(const char *str, size_t len)
 
 int	update_var_env(t_env *env, const char *arg, const char *key, int key_has_value)
 {
-	size_t i = 0;
+	size_t i;
 
+	i = 0;
 	while (i < env->len)
 	{
 		if (match_env_key(env->envp[i], key))
@@ -47,27 +48,41 @@ int	update_var_env(t_env *env, const char *arg, const char *key, int key_has_val
 }
 
 
-int	add_var_to_env(t_env *env, const char *arg, const char *key, size_t key_len, int key_has_value)
+int	add_var_to_env(t_env *env, const char *arg)
 {
 	if (realloc_env_capacity(env) == FAIL)
 		return (FAIL);
-	if (key_has_value)
-	{
-		env->envp[env->len] = ft_strdup(arg);
-		if (!env->envp[env->len])
-			return (FAIL);
-		env->len++;
-	}
-	else
-	{
-		char *new_var = malloc(key_len + 2);
-		if (!new_var)
-			return (FAIL);
-		ft_memcpy(new_var, key, key_len);
-		new_var[key_len] = '\0';
-		env->envp[env->len++] = new_var;
-	}
+
+	env->envp[env->len] = ft_strdup(arg);
+	if (!env->envp[env->len])
+		return (FAIL);
+	env->len++;
 	env->envp[env->len] = NULL;
 	return (SUCCESS);
 }
+
+// int	add_var_to_env(t_env *env, const char *arg, const char *key, size_t key_len, int key_has_value)
+// {
+// 	char *new_var;
+// 	if (realloc_env_capacity(env) == FAIL)
+// 		return (FAIL);
+// 	if (key_has_value)
+// 	{
+// 		env->envp[env->len] = ft_strdup(arg);
+// 		if (!env->envp[env->len])
+// 			return (FAIL);
+// 		env->len++;
+// 	}
+// 	else
+// 	{
+// 		new_var = malloc(key_len + 2);
+// 		if (!new_var)
+// 			return (FAIL);
+// 		ft_memcpy(new_var, key, key_len);
+// 		new_var[key_len] = '\0';
+// 		env->envp[env->len++] = new_var;
+// 	}
+// 	env->envp[env->len] = NULL;
+// 	return (SUCCESS);
+// }
 

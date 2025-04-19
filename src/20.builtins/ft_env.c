@@ -8,7 +8,7 @@ int ft_env(t_env **my_env, char **argv)
     if (!my_env || !(*my_env) || !(*my_env)->envp)
         return (FAIL);
 
-    arg_count = count_argv(&argv[1]); //skip env, start from arg
+    arg_count = count_argv(&argv[1]);
     if (arg_count > 0)
     {
         ft_dprintf(STDERR_FILENO, "Giraffeshell: env: too many arguments\n");
