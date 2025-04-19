@@ -24,7 +24,7 @@ char	*get_cmd_full_path(char **path, char *cmd)
 		full_path = build_cmd_path(path[i], cmd);
 		if (!full_path)
 			return (NULL);// TODO
-		if (access(full_path, X_OK) == 0)
+		if (access(full_path, F_OK) == 0)
 			return (full_path);
 		free(full_path);
 		i++;

@@ -10,7 +10,7 @@ int	init_minishell(struct sigaction	*sa, t_minishell *mshell, char **envp, t_ast
 		return (FAIL);
 	}
 	mshell->exitcode = 0;
-	mshell->last_pid = -1;
+
 	mshell->sa = sa;
 	mshell->path = NULL;
 	mshell->arena = NULL;

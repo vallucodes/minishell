@@ -1,6 +1,5 @@
 #include "../../inc/minishell.h"
 
-
 int	is_builtin(t_ast *ast)
 {
 	while (ast)
@@ -12,41 +11,13 @@ int	is_builtin(t_ast *ast)
 				|| ft_strcmp(ast->cmd[0], "pwd") == 0
 				|| ft_strcmp(ast->cmd[0], "export") == 0
 				|| ft_strcmp(ast->cmd[0], "unset") == 0
-				|| ft_strcmp(ast->cmd[0], "env") == 0
+				|| ft_strcmp(ast->cmd[0], "env") == 0	//printf("FINAL EXIT CODE IS %d\n", exitcode);
 				|| ft_strcmp(ast->cmd[0], "exit") == 0)
 		)
 			return (1);
 		ast = ast->next_left;
 	}
 	return (0);
-}
-
-static char **remove_redir_args(char **cmd)
-{
-	int i;
-	int j;
-
-	i = 0;
-	j = 0;
-	char **cleaned = malloc(sizeof(char *) * ((count_argv(cmd)) + 1));
-	if (!cleaned)
-		return NULL;
-	while (cmd[i])
-	{
-		if (ft_strlen(cmd[i]) == 1 && ft_isdigit(cmd[i][0]))
-		{
-			i++;
-			continue;
-		}
-		if (ft_is_numeric(cmd[i]) && ft_strlen(cmd[i]) < 4)
-		{
-			i++;
-			continue;
-		}
-		cleaned[j++] = ft_strdup(cmd[i++]);
-	}
-	cleaned[j] = NULL;
-	return cleaned;
 }
 
 static int return_builtin(t_minishell *mshell, int argc, char **argv)
@@ -77,25 +48,30 @@ static int return_builtin(t_minishell *mshell, int argc, char **argv)
 	return FAIL;
 }
 
-
 int execute_builtin(t_minishell *mshell, t_ast *ast)
 {
 	int argc;
 	t_ast *cmd_node;
-	char **clean_cmd;
 
 	cmd_node = get_cmd_node(ast);
 	if (!cmd_node || !cmd_node->cmd || !cmd_node->cmd[0])
 		return FAIL;
+	argc = count_argv(cmd_node->cmd);
+	mshell->exitcode = return_builtin(mshell, argc, cmd_node->cmd);
+	return (mshell->exitcode);
+}
 
-	clean_cmd = remove_redir_args(cmd_node->cmd);
-	if (!clean_cmd || !clean_cmd[0])
+int execute_builtin_alone(t_minishell *mshell, t_ast *ast)
+{
+	if (handle_redirection(ast) == FAIL)
 	{
-		ft_free_2d(clean_cmd);
-		return FAIL;
+		mshell->exitcode = 1;
+		safe_dup2(mshell->origin_stdin, STDIN_FILENO);
+		safe_dup2(mshell->origin_stdout, STDOUT_FILENO);
+		return (FAIL);
 	}
-	argc = count_argv(clean_cmd);
-	mshell->exitcode = return_builtin(mshell, argc, clean_cmd);
-	ft_free_2d(clean_cmd);
+	mshell->exitcode = execute_builtin(mshell, ast);
+	if (dup2(mshell->origin_stdin, STDIN_FILENO) < 0 || dup2(mshell->origin_stdout, STDOUT_FILENO) < 0)
+		return (FAIL);
 	return (mshell->exitcode);
 }

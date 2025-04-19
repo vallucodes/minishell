@@ -2,29 +2,6 @@
 #include <sys/wait.h>
 #include <sys/stat.h>
 
-// static int	execute_in_sub_process(t_minishell *mshell, t_ast *ast)
-// {
-// 	fork
-// 	run all commands in each process
-
-
-// 	exe external
-// 	execve
-// 	return waitAll();
-// }
-
-
-// static int	wait_all(t_minishell *mshell)
-// {
-// 	int	exitCode;
-
-// 	while (condition)
-// 	{
-// 		/* code */
-// 	}
-
-// }
-
 t_ast *get_cmd_node(t_ast *ast)
 {
 	while (ast)
@@ -36,34 +13,79 @@ t_ast *get_cmd_node(t_ast *ast)
 	return (NULL);
 }
 
-
-static int execute_builtin_alone(t_minishell *mshell, t_ast *ast)
+static int exec_external_command(t_minishell *mshell, t_ast *ast)
 {
-	if (handle_redirection(ast) < 0)
-		return (FAIL);
+	char *full_cmd_path;
+	t_ast *cmd_node;
 
-	mshell->exitcode = execute_builtin(mshell, ast);
-	if (dup2(mshell->origin_stdin, STDIN_FILENO) < 0 || dup2(mshell->origin_stdout, STDOUT_FILENO) < 0)
-		return (FAIL);
-	return (0);
+	cmd_node = get_cmd_node(ast);
+	if (!cmd_node || !cmd_node->cmd || !cmd_node->cmd[0])
+		return FAIL;
+
+	full_cmd_path = get_command_path(mshell, cmd_node);
+
+	execve(full_cmd_path, cmd_node->cmd, mshell->envp->envp);
+	ft_dprintf(2, "Giraffeshell: %s: %s\n", cmd_node->cmd[0], strerror(errno));
+	mshell->exitcode = 1;
+	if (errno == ENOENT)
+		mshell->exitcode = 127;
+	else if (errno == EACCES || errno == EISDIR)
+		mshell->exitcode = 126;
+
+	free(full_cmd_path);
+	delete_minishell(mshell);
+	exit(mshell->exitcode);
 }
 
+static void	handle_child_process(t_minishell *mshell, t_ast *ast, t_exec *exec)
+{
+	close_origin_fds(mshell); // closes duped std fds in child
+	setup_child_pipe_fds(mshell, exec);
+	if (handle_redirection(ast) == FAIL)
+		exit(1);
+
+	if (is_builtin(ast))
+		exit(execute_builtin(mshell, ast));
+	else
+		exec_external_command(mshell, ast);
+	exit(127);
+}
+
+int execute_in_sub_process(t_minishell *mshell, t_ast *ast)
+{
+	t_exec	exec;
+	t_ast	*current;
+	int		exitcode = 0;
+
+	exec.prev_fd = -1;
+	exec.status = 0;
+	exec.command_count = 0;
+	current = ast;
+
+	while (current)
+	{
+		exec.has_pipe = (current->next_right != NULL);
+		if (setup_pipe(&exec) == FAIL)
+			return FAIL;
+		if (setup_fork(&exec) == FAIL)
+			return FAIL;
+
+		if (exec.pid == 0)
+			handle_child_process(mshell, current, &exec);
+		else
+			setup_parent_pipe_fds(&exec);
+
+		current = current->next_right;
+	}
+	exitcode = wait_for_children(&exec);
+	return (exitcode);
+}
 
 void execute_ast_v1(t_minishell *mshell, t_ast *ast)
 {
 	if (ast->type != PIPE && is_builtin(ast))
 		mshell->exitcode = execute_builtin_alone(mshell, ast);
-	// else
-	// 	mshell->exitcode = execute_in_sub_process(mshell, ast);
-	//setup pipe if have
-
-	//execute command builtin in parent, do redeirection and restore std if needed
-
-
-	// if (not_builtin || more than 2 commands)
-	// 	fork();
-
-	// 	handle_redirection();
-	// 	execute command()
-
+	else
+		mshell->exitcode = execute_in_sub_process(mshell, ast);
 }
+

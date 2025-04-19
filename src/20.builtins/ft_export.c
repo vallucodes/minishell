@@ -11,7 +11,6 @@ int	ft_export(char **args, t_minishell *mshell)
 
 	i = 1;
 	exit_code = 0;
-	//if there is no argurment after export, then just print export list
 	if (!args[i])
 		return (print_sorted_export(mshell->envp), 0);
 	while (args[i])
@@ -93,10 +92,7 @@ static int	export_update_or_add(t_minishell *mshell, char *arg, size_t key_len, 
 			perror("malloc");
 			delete_minishell(mshell);
 			free(key);
-			//exit(1);
-			//ft_dprintf(2, "Giraffeshell: export: `%s`: add update fails\n", arg);
-			// free(key);
-			return (FAIL);
+			exit(1);
 		}
 	}
 	free(key);

@@ -96,7 +96,7 @@ static void handle_child_process(t_minishell *mshell, t_execution *exec,
 
 	if (!full_cmd_path)
 	{
-		ft_dprintf(2, "%s: command not found\n", exec->cmd_args[0]);
+		ft_dprintf(2, "Giraffeshell: %s: command not found\n", exec->cmd_args[0]);
 		mshell->exitcode = 127;
 		delete_minishell(mshell);
 		exit(mshell->exitcode);

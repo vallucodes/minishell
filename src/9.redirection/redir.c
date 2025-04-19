@@ -8,12 +8,12 @@ static int	redirect_input(t_ast *ast)
 	if (open_redir_file(ast->file, O_RDONLY, &fd_in) == FAIL)
 		return (FAIL);
 
-	if (fd_in != -1)
+	if (safe_dup2(fd_in, STDIN_FILENO) == FAIL)
 	{
-		if (safe_dup2(fd_in, STDIN_FILENO) == FAIL)
-			return (FAIL);
 		close(fd_in);
+		return (FAIL);
 	}
+	close(fd_in);
 	return (SUCCESS);
 }
 

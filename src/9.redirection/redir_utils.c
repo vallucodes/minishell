@@ -21,7 +21,7 @@ int	open_redir_file(const char *file, int flags, int *fd)
 	*fd = open(file, flags, 0644);
 	if (*fd < 0)
 	{
-		perror(file);
+		ft_dprintf(2, "Giraffeshell: %s: %s\n", file, strerror(errno));
 		return (FAIL);
 	}
 	return (SUCCESS);
