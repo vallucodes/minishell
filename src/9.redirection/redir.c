@@ -1,5 +1,33 @@
 #include "../../inc/minishell.h"
 
+static int	redirect_input(t_ast *ast);
+static int	redirect_output(t_ast *ast);
+static int	redirect_append(t_ast *ast);
+
+int	handle_redirection(t_ast *ast)
+{
+	while (ast)
+	{
+		if (ast->type == REDIRECT_IN)
+		{
+			if (redirect_input(ast) == FAIL)
+				return (FAIL);
+		}
+		else if (ast->type == REDIRECT_OUT)
+		{
+			if (redirect_output(ast) == FAIL)
+				return (FAIL);
+		}
+		else if (ast->type == REDIRECT_APPEND)
+		{
+			if (redirect_append(ast) == FAIL)
+				return (FAIL);
+		}
+		ast = ast->next_left;
+	}
+	return (SUCCESS);
+}
+
 static int	redirect_input(t_ast *ast)
 {
 	int	fd_in;
@@ -50,28 +78,3 @@ static int	redirect_append(t_ast *ast)
 	close(fd_out);
 	return (SUCCESS);
 }
-
-int	handle_redirection(t_ast *ast)
-{
-	while (ast)
-	{
-		if (ast->type == REDIRECT_IN)
-		{
-			if (redirect_input(ast) == FAIL)
-				return (FAIL);
-		}
-		else if (ast->type == REDIRECT_OUT)
-		{
-			if (redirect_output(ast) == FAIL)
-				return (FAIL);
-		}
-		else if (ast->type == REDIRECT_APPEND)
-		{
-			if (redirect_append(ast) == FAIL)
-				return (FAIL);
-		}
-		ast = ast->next_left;
-	}
-	return (SUCCESS);
-}
-
