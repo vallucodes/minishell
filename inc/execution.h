@@ -67,8 +67,10 @@ int execute_builtin_alone(t_minishell *mshell, t_ast *ast);
 
 
 //execute external
-char	*get_command_path(t_minishell *mshell, t_ast *ast);
+void	handle_child_process(t_minishell *mshell, t_ast *ast, t_exec *exec);
 
+//get path
+char	*get_command_path(t_minishell *mshell, t_ast *ast);
 
 //execute controller
 void execute_ast_v1(t_minishell *mshell, t_ast *ast);

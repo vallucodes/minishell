@@ -63,6 +63,7 @@ SRC			=	main.c \
 				9.redirection/redir.c \
 				8.execution/execute_builtin.c \
 				8.execution/execution.c \
+				8.execution/child_process.c \
 				8.execution/path.c \
 				8.execution/setup.c \
 				8.execution/wait.c

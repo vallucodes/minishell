@@ -1,54 +1,29 @@
 #include "../../inc/minishell.h"
-#include <sys/wait.h>
-#include <sys/stat.h>
 
-t_ast *get_cmd_node(t_ast *ast)
+int			execute_builtin_alone(t_minishell *mshell, t_ast *ast);
+int			execute_in_sub_process(t_minishell *mshell, t_ast *ast);
+
+void execute_ast_v1(t_minishell *mshell, t_ast *ast)
 {
-	while (ast)
-	{
-		if (ast->type == COMMAND)
-			return (ast);
-		ast = ast->next_left;
-	}
-	return (NULL);
-}
-
-static int exec_external_command(t_minishell *mshell, t_ast *ast)
-{
-	char *full_cmd_path;
-	t_ast *cmd_node;
-
-	cmd_node = get_cmd_node(ast);
-	if (!cmd_node || !cmd_node->cmd || !cmd_node->cmd[0])
-		return FAIL;
-
-	full_cmd_path = get_command_path(mshell, cmd_node);
-	//printf("COMMAND OR ARGS COUNT: %d\n", count_argv(cmd_node->cmd));
-	execve(full_cmd_path, cmd_node->cmd, mshell->envp->envp);
-	ft_dprintf(2, "Giraffeshell: %s: %s\n", cmd_node->cmd[0], strerror(errno));
-	mshell->exitcode = 1;
-	if (errno == ENOENT)
-		mshell->exitcode = 127;
-	else if (errno == EACCES || errno == EISDIR || errno == ENOTDIR)
-		mshell->exitcode = 126;
-
-	free(full_cmd_path);
-	delete_minishell(mshell);
-	exit(mshell->exitcode);
-}
-
-static void	handle_child_process(t_minishell *mshell, t_ast *ast, t_exec *exec)
-{
-	close_origin_fds(mshell); // closes duped std fds in child
-	setup_child_pipe_fds(mshell, exec);
-	if (handle_redirection(ast) == FAIL)
-		exit(1);
-
-	if (is_builtin(ast))
-		exit(execute_builtin(mshell, ast));
+	if (ast->type != PIPE && is_builtin(ast))
+		mshell->exitcode = execute_builtin_alone(mshell, ast);
 	else
-		exec_external_command(mshell, ast);
-	exit(127);
+		mshell->exitcode = execute_in_sub_process(mshell, ast);
+}
+
+int execute_builtin_alone(t_minishell *mshell, t_ast *ast)
+{
+	if (handle_redirection(ast) == FAIL)
+	{
+		mshell->exitcode = 1;
+		safe_dup2(mshell->origin_stdin, STDIN_FILENO);
+		safe_dup2(mshell->origin_stdout, STDOUT_FILENO);
+		return (FAIL);
+	}
+	mshell->exitcode = execute_builtin(mshell, ast);
+	if (dup2(mshell->origin_stdin, STDIN_FILENO) < 0 || dup2(mshell->origin_stdout, STDOUT_FILENO) < 0)
+		return (FAIL);
+	return (mshell->exitcode);
 }
 
 int execute_in_sub_process(t_minishell *mshell, t_ast *ast)
@@ -80,11 +55,13 @@ int execute_in_sub_process(t_minishell *mshell, t_ast *ast)
 	return (exitcode);
 }
 
-void execute_ast_v1(t_minishell *mshell, t_ast *ast)
-{
-	if (ast->type != PIPE && is_builtin(ast))
-		mshell->exitcode = execute_builtin_alone(mshell, ast);
-	else
-		mshell->exitcode = execute_in_sub_process(mshell, ast);
-}
+
+
+
+
+
+
+
+
+
 

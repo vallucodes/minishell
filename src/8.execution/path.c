@@ -1,19 +1,36 @@
 #include "../../inc/minishell.h"
 
-static char	*build_cmd_path(char *dir, char *cmd)
+static char	*get_cmd_full_path(t_minishell *mshell, char **path, char *cmd);
+static char	*build_cmd_path(t_minishell *mshell, char *dir, char *cmd);
+
+char	*get_command_path(t_minishell *mshell, t_ast *ast)
 {
-	char	*temp;
 	char	*full_path;
 
-	temp = ft_strjoin(dir, "/");
-	if (temp == NULL)
-		return (NULL);// TODO
-	full_path = ft_strjoin(temp, cmd);
-	free(temp);
+	if (!ast || !ast->cmd || !ast->cmd[0])
+		exit_cleanup_error(mshell, "command");
+	full_path = NULL;
+	if (!ft_strchr(ast->cmd[0], '/'))
+	{
+		full_path = get_cmd_full_path(mshell, mshell->path, ast->cmd[0]);
+
+		if (!full_path)
+		{
+			ft_dprintf(2, "Giraffeshell: %s: command not found\n", ast->cmd[0]);
+			delete_minishell(mshell);
+			exit(127);
+		}
+	}
+	else
+	{
+		full_path = ft_strdup(ast->cmd[0]);
+		if (!full_path)
+			exit_cleanup_error(mshell, "malloc");
+	}
 	return (full_path);
 }
 
-char	*get_cmd_full_path(char **path, char *cmd)
+static char	*get_cmd_full_path(t_minishell *mshell, char **path, char *cmd)
 {
 	int		i;
 	char	*full_path;
@@ -21,9 +38,9 @@ char	*get_cmd_full_path(char **path, char *cmd)
 	i = 0;
 	while (path && path[i])
 	{
-		full_path = build_cmd_path(path[i], cmd);
+		full_path = build_cmd_path(mshell, path[i], cmd);
 		if (!full_path)
-			return (NULL);// TODO
+			exit_cleanup_error(mshell, "malloc");
 		if (access(full_path, F_OK) == 0)
 			return (full_path);
 		free(full_path);
@@ -32,31 +49,25 @@ char	*get_cmd_full_path(char **path, char *cmd)
 	return (NULL);
 }
 
-char	*get_command_path(t_minishell *mshell, t_ast *ast)
+static char	*build_cmd_path(t_minishell *mshell, char *dir, char *cmd)
 {
+	char	*temp;
 	char	*full_path;
 
-	if (!ast->cmd)
-		return (NULL);// TODO
-
-	full_path = NULL;
-
-	if (!ft_strchr(ast->cmd[0], '/'))
+	temp = ft_strjoin(dir, "/");
+	if (temp == NULL)
+		exit_cleanup_error(mshell, "malloc");
+	full_path = ft_strjoin(temp, cmd);
+	if (full_path == NULL)
 	{
-		full_path = get_cmd_full_path(mshell->path, ast->cmd[0]);
-
-		if (!full_path)
-		{
-			ft_dprintf(2, "Giraffeshell: %s: command not found\n", ast->cmd[0]);
-			exit(127);
-		}
+		free(temp);
+		exit_cleanup_error(mshell, "malloc");
 	}
-	else
-	{
-		full_path = ft_strdup(ast->cmd[0]);
-		if(!full_path)
-			return (NULL);// TODO
-	}
+	free(temp);
 	return (full_path);
 }
+
+
+
+
 

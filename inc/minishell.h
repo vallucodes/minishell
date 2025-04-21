@@ -11,6 +11,8 @@
 # include <errno.h>
 # include <signal.h>			//signals
 # include <limits.h>			//FILE_MAX
+# include <sys/wait.h>
+# include <sys/stat.h>
 # include "../lib/libft/inc/libft.h"
 # include "signals.h"
 # include "lexing.h"

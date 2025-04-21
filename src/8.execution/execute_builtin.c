@@ -61,17 +61,4 @@ int execute_builtin(t_minishell *mshell, t_ast *ast)
 	return (mshell->exitcode);
 }
 
-int execute_builtin_alone(t_minishell *mshell, t_ast *ast)
-{
-	if (handle_redirection(ast) == FAIL)
-	{
-		mshell->exitcode = 1;
-		safe_dup2(mshell->origin_stdin, STDIN_FILENO);
-		safe_dup2(mshell->origin_stdout, STDOUT_FILENO);
-		return (FAIL);
-	}
-	mshell->exitcode = execute_builtin(mshell, ast);
-	if (dup2(mshell->origin_stdin, STDIN_FILENO) < 0 || dup2(mshell->origin_stdout, STDOUT_FILENO) < 0)
-		return (FAIL);
-	return (mshell->exitcode);
-}
+

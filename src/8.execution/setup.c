@@ -1,5 +1,16 @@
 #include "../../inc/minishell.h"
 
+t_ast *get_cmd_node(t_ast *ast)
+{
+	while (ast)
+	{
+		if (ast->type == COMMAND)
+			return (ast);
+		ast = ast->next_left;
+	}
+	return (NULL);
+}
+
 int setup_pipe(t_exec *exec)
 {
 	if (exec->has_pipe)
@@ -61,7 +72,7 @@ void setup_child_pipe_fds(t_minishell *mshell, t_exec *exec)
 void setup_parent_pipe_fds(t_exec *exec)
 {
 	exec->command_count++;
-	printf("command count is %d\n", exec->command_count);
+	//printf("command count is %d\n", exec->command_count);
 	if (exec->prev_fd != -1)
 		close(exec->prev_fd);
 
