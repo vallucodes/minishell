@@ -13,10 +13,10 @@ void	append_char(t_minishell *mshell, char *src, char **dst, int i)
 
 int	is_any_redirect(t_token *current)
 {
-	return(current->type == REDIRECT_IN ||
-			current->type == REDIRECT_OUT ||
-			current->type == REDIRECT_APPEND ||
-			current->type == HERE_DOCUMENT);
+	return (current->type == REDIR_IN
+			|| current->type == REDIR_OUT
+			|| current->type == REDIR_APPEND
+			|| current->type == HERE_DOC);
 }
 
 void	replace_content_of_token(t_token *current, char *new_str)

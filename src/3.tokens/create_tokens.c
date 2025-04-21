@@ -1,8 +1,9 @@
 #include "minishell.h"
 
-static t_token *init_token(t_minishell *mshell, t_input *input, int len, t_token_type type)
+static t_token	*init_token(t_minishell *mshell, \
+		t_input *input, int len, t_token_type type)
 {
-	t_token *new_token;
+	t_token	*new_token;
 
 	new_token = arena_alloc(mshell->arena, sizeof(t_token), alignof(t_token));
 	if (!new_token)
@@ -15,9 +16,10 @@ static t_token *init_token(t_minishell *mshell, t_input *input, int len, t_token
 	return (new_token);
 }
 
-static t_token *init_token_word(t_minishell *mshell, char *word, t_token_type type)
+static t_token	*init_token_word(t_minishell *mshell, \
+		char *word, t_token_type type)
 {
-	t_token *new_token;
+	t_token	*new_token;
 
 	new_token = arena_alloc(mshell->arena, sizeof(t_token), alignof(t_token));
 	if (!new_token)
@@ -29,11 +31,12 @@ static t_token *init_token_word(t_minishell *mshell, char *word, t_token_type ty
 	return (new_token);
 }
 
-static void add_token(t_token **head, t_token *new)
+static void	add_token(t_token **head, t_token *new)
 {
-	t_token *last;
+	t_token	*last;
+
 	if (new == NULL)
-		return;
+		return ;
 	if (*head == NULL)
 		*head = new;
 	else
@@ -74,15 +77,15 @@ void	create_tokens(t_minishell *mshell, t_input *input)
 		if (input->full_str[input->index] == '\0')
 			break ;
 		if (ft_strncmp(&input->full_str[input->index], "<<", 2) == 0)
-			add_token(&input->tokens, init_token(mshell, input, 2, HERE_DOCUMENT));
+			add_token(&input->tokens, init_token(mshell, input, 2, HERE_DOC));
 		else if (ft_strncmp(&input->full_str[input->index], ">>", 2) == 0)
-			add_token(&input->tokens, init_token(mshell, input, 2, REDIRECT_APPEND));
+			add_token(&input->tokens, init_token(mshell, input, 2, REDIR_APPEND));
 		else if (input->full_str[input->index] == '|')
 			add_token(&input->tokens, init_token(mshell, input, 1, PIPE));
 		else if (input->full_str[input->index] == '<')
-			add_token(&input->tokens, init_token(mshell, input, 1, REDIRECT_IN));
+			add_token(&input->tokens, init_token(mshell, input, 1, REDIR_IN));
 		else if (input->full_str[input->index] == '>')
-			add_token(&input->tokens, init_token(mshell, input, 1, REDIRECT_OUT));
+			add_token(&input->tokens, init_token(mshell, input, 1, REDIR_OUT));
 		else
 			word(mshell, input);
 	}

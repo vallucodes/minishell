@@ -28,13 +28,13 @@ static int	quote_validation(char *input, t_quotes type, int *balanced)
 	return (i);
 }
 
-int input_validation(char *input)
+int	input_validation(char *input)
 {
 	int	balanced;
 
 	balanced = 1;
 	if (!input || ft_is_all_whitespace(input))
-		return(FAIL);
+		return (FAIL);
 	quote_validation(input, NONE, &balanced);
 	if (!balanced)
 	{

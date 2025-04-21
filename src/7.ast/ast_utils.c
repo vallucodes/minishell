@@ -12,7 +12,7 @@ t_token	*skip_to_next_pipe(t_token *tokens)
 
 int	last_is_pipe(t_ast **ast)
 {
-	t_ast *temp;
+	t_ast	*temp;
 
 	if (!*ast)
 		return (0);

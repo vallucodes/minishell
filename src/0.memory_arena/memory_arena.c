@@ -31,35 +31,29 @@ static size_t	calc_actual_size(t_arena *a, size_t size, size_t alignment)
 
 void	*arena_alloc(t_arena *a, size_t size, size_t alignment)
 {
-	t_arenablock	*block;
 	t_arenablock	*new_block;
 	size_t			actual_size;
 	size_t			new_size;
 	void			*result;
 
 	actual_size = calc_actual_size(a, size, alignment);
-	block = a->current;
-	// printf("capacity atm %li, used atm %li, needed %li\n", block->capacity, block->used, actual_size);
-	if (block->used + actual_size > block->capacity)
+	if (a->current->used + actual_size > a->current->capacity)
 	{
 		new_size = a->default_block_size;
-
 		while (new_size <= actual_size)
 			new_size *= 2;
 		new_block = malloc(sizeof(t_arenablock) + new_size);
 		if (!new_block)
 			return (NULL);
-		// printf("allocated block with size %li\n", new_size);
 		new_block->next = NULL;
 		new_block->capacity = new_size;
 		new_block->used = 0;
-
 		a->current->next = new_block;
 		a->current = new_block;
-		block = new_block;
+		a->current = new_block;
 	}
-	result = block->data + block->used;
-	block->used += actual_size;
+	result = a->current->data + a->current->used;
+	a->current->used += actual_size;
 	return (result);
 }
 

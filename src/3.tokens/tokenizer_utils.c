@@ -2,7 +2,8 @@
 
 int	is_separator(char c)
 {
-	return(c == '<' || c == '>' || c == '|' || c == '<' || ft_isspace(c) || c == '\0');
+	return (c == '<' || c == '>' || c == '|' || c == '<'
+		|| ft_isspace(c) || c == '\0');
 }
 
 int	is_quote(char c)
@@ -17,8 +18,9 @@ int	is_operator(char c)
 
 int	is_valid_char(t_quotes_helper *quotes, t_input *input)
 {
-	return (input->full_str[input->index] &&
-		((!is_separator(input->full_str[input->index]) || quotes->in_quotes)));
+	return (input->full_str[input->index]
+		&& ((!is_separator(input->full_str[input->index])
+				|| quotes->in_quotes)));
 }
 
 void	update_quote_state(char c, t_quotes_helper *quotes)

@@ -10,10 +10,10 @@ char *get_token_type_name(t_token_type token_type)
 		case FILE_TOKEN: return "FILE";
 		case HERE_TOKEN: return "HERE_WORD";
 		case PIPE: return "PIPE";
-		case REDIRECT_IN: return "REDIRECT_IN";
-		case REDIRECT_OUT: return "REDIRECT_OUT";
-		case REDIRECT_APPEND: return "REDIRECT_APPEND";
-		case HERE_DOCUMENT: return "HERE_STRING";
+		case REDIR_IN: return "REDIR_IN";
+		case REDIR_OUT: return "REDIR_OUT";
+		case REDIR_APPEND: return "REDIR_APPEND";
+		case HERE_DOC: return "HERE_STRING";
 		case ENV_VAR: return "ENV_VAR";
 		default: return "UNKNOWN";
 	}

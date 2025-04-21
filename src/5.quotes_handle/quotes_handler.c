@@ -1,6 +1,7 @@
 #include "../inc/minishell.h"
 
-static void	init_vars(size_t *i, char **input_str, t_token *current, t_quotes_helper *quotes)
+static void	init_vars(size_t *i, char **input_str, \
+		t_token *current, t_quotes_helper *quotes)
 {
 	*i = 0;
 	init_quotes(quotes);
@@ -37,7 +38,7 @@ static void	loop_through_word(t_minishell *mshell, t_token *current)
 
 void	expand_remove_quotes(t_minishell *mshell, t_token *tokens)
 {
-	t_token *current;
+	t_token	*current;
 
 	current = tokens;
 	while (current)

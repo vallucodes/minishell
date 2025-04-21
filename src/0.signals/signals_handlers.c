@@ -8,7 +8,8 @@ void	sigint_handler_heredoc(int signal)
 	{
 		g_signal = signal;
 		close(STDIN_FILENO);
-		write(STDOUT_FILENO, "\n", 1);
+		// printf("this is coming from heredoc\n");
+		write(1, "\n", 1);
 		set_exitcode_signal(NULL);
 	}
 }
@@ -19,6 +20,7 @@ void	sigint_handler_main(int signal)
 	{
 		g_signal = signal;
 		set_exitcode_signal(NULL);
+		// printf("this is coming from main\n");
 		write(STDOUT_FILENO, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
@@ -29,7 +31,10 @@ void	sigint_handler_main(int signal)
 void	sigint_handler_parent(int signal)
 {
 	if (signal == SIGINT)
+	{
+		// printf("this is coming from parent\n");
 		write(STDOUT_FILENO, "\n", 1);
+	}
 	if (signal == SIGQUIT)
 		ft_dprintf(2, "Quit, core dumped\n");
 }
