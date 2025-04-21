@@ -55,8 +55,7 @@ int	open_redir_file(const char *file, int flags, int *fd);
 int		setup_pipe(t_exec *exec);
 int		setup_fork(t_exec *exec);
 void	setup_child_pipe_fds(t_minishell *mshell, t_exec *exec);
-void	setup_parent_pipe_fds(t_exec *exec);
-
+void setup_parent_pipe_fds(t_minishell *mshell, t_exec *exec);
 
 
 //execute builtins

@@ -1,7 +1,7 @@
 #include "../../inc/minishell.h"
 
-int			execute_builtin_alone(t_minishell *mshell, t_ast *ast);
-int			execute_in_sub_process(t_minishell *mshell, t_ast *ast);
+int	execute_builtin_alone(t_minishell *mshell, t_ast *ast);
+int	execute_in_sub_process(t_minishell *mshell, t_ast *ast);
 
 void execute_ast_v1(t_minishell *mshell, t_ast *ast)
 {
@@ -30,10 +30,8 @@ int execute_in_sub_process(t_minishell *mshell, t_ast *ast)
 {
 	t_exec	exec;
 	t_ast	*current;
-	int		exitcode = 0;
 
 	exec.prev_fd = -1;
-	exec.status = 0;
 	exec.command_count = 0;
 	current = ast;
 	while (current)
@@ -43,16 +41,17 @@ int execute_in_sub_process(t_minishell *mshell, t_ast *ast)
 			return FAIL;
 		if (setup_fork(&exec) == FAIL)
 			return FAIL;
-
 		if (exec.pid == 0)
+		{
+			mshell->in_child = 1;
 			handle_child_process(mshell, current, &exec);
+		}
 		else
-			setup_parent_pipe_fds(&exec);
-
+			setup_parent_pipe_fds(mshell, &exec);
 		current = current->next_right;
 	}
-	exitcode = wait_for_children(&exec);
-	return (exitcode);
+	mshell->exitcode = wait_for_children(&exec);
+	return (mshell->exitcode);
 }
 
 

@@ -54,10 +54,10 @@ typedef struct s_minishell
 	t_ast		*ast;
 	int			exitcode; //exitcode assignment after exe
 	char		**path;
-	int			command_count;
 	char 		*input_str; //for free if error
 	int			origin_stdin;
 	int			origin_stdout;
+	int			in_child;
 	//later add execution, exit code when we are there
 }				t_minishell ;
 

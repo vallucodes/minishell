@@ -26,7 +26,7 @@ static int exec_external_command(t_minishell *mshell, t_ast *ast)
 
 void	handle_child_process(t_minishell *mshell, t_ast *ast, t_exec *exec)
 {
-	close_origin_fds(mshell); // closes duped std fds in child
+	close_origin_fds(mshell);
 	setup_child_pipe_fds(mshell, exec);
 	if (handle_redirection(ast) == FAIL)
 		exit(1);

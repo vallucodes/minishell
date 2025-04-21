@@ -33,7 +33,7 @@ int main(int ac, char **av, char **envp)
 		expand_remove_quotes(&mshell, input.tokens);
 		// print_tokens(input.tokens);
 		build_ast_binary_tree(&mshell, input.tokens, &ast);
-		mshell.command_count = 0;
+
 		//print_whole_tree(ast);
 		// execute_ast(&mshell, ast);
 		execute_ast_v1(&mshell, ast);
