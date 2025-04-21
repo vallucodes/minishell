@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   printf_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vlopatin <vlopatin@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 17:03:16 by vlopatin          #+#    #+#             */
-/*   Updated: 2025/04/16 16:45:02 by vlopatin         ###   ########.fr       */
+/*   Updated: 2025/04/21 16:38:21 by hiennguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,12 @@
 
 void	ft_putstr(int fd, char *str)
 {
-	int	i;
+	int	len;
 
-	i = 0;
-	while (str[i])
-	{
-		write(fd, &str[i], 1);
-		i++;
-	}
+	len = 0;
+	while (str[len])
+		len++;
+	write(fd, str, len);
 }
 
 static size_t	lenint(unsigned int n)
