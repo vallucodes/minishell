@@ -8,7 +8,6 @@ char	*get_command_path(t_minishell *mshell, t_ast *ast)
 {
 	char	*full_path = NULL;
 	char	*env_path_value;
-	char	**splitted_path = NULL;
 
 	if (!ast || !ast->cmd || !ast->cmd[0])
 		exit_cleanup_error(mshell, "command");
@@ -17,15 +16,14 @@ char	*get_command_path(t_minishell *mshell, t_ast *ast)
 
 	if (env_path_value && *env_path_value)
 	{
-		splitted_path = ft_split(env_path_value, ':');
-		if (!splitted_path)
+		mshell->path = ft_split(env_path_value, ':');
+		if (!mshell->path )
 			exit_cleanup_error(mshell, "malloc");
-		mshell->path = splitted_path;
 	}
 
-	if (!ft_strchr(ast->cmd[0], '/') && splitted_path && *splitted_path)
+	if (!ft_strchr(ast->cmd[0], '/') && mshell->path  && *mshell->path)
 	{
-		full_path = get_cmd_full_path(mshell, splitted_path, ast->cmd[0]);
+		full_path = get_cmd_full_path(mshell, mshell->path , ast->cmd[0]);
 		if (!full_path)
 		{
 			ft_dprintf(2, "Giraffeshell: %s: command not found\n", ast->cmd[0]);

@@ -19,11 +19,6 @@ int	init_minishell(struct sigaction	*sa, t_minishell *mshell, char **envp, t_ast
 	if (mshell->origin_stdin < 0 || mshell->origin_stdout < 0)
 		return (FAIL);
 	*ast = NULL;
-	// path_str = get_env_value(mshell->envp->envp, "PATH");
-	// if (path_str)
-	// 	mshell->path = ft_split(path_str, ':');
-	// if (!mshell->path) //this can be also malloc fail
-	// 	ft_dprintf(2, "Giraffeshell: PATH not found in environment\n");
 	init_signals(mshell->sa);
 	return (0);
 }

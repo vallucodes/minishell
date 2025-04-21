@@ -32,8 +32,13 @@ void	handle_child_process(t_minishell *mshell, t_ast *ast, t_exec *exec)
 		exit(1);
 
 	if (is_builtin(ast))
-		exit(execute_builtin(mshell, ast));
+	{
+		mshell->exitcode = execute_builtin(mshell, ast);
+		delete_minishell(mshell);
+		exit(mshell->exitcode);
+	}
 	else
 		exec_external_command(mshell, ast);
 	exit(127);
 }
+
