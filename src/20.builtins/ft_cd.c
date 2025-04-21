@@ -8,13 +8,10 @@ static int	go_home(t_env *my_env);
 
 int	ft_cd(t_env **my_env, int argv_count, char **argv)
 {
-	char old_pwd[PATH_MAX];
+	char	old_pwd[PATH_MAX];
 
 	if (!getcwd(old_pwd, sizeof(old_pwd)))
-	{
-		perror("getcwd");
-		return (FAIL);
-	}
+		return (perror("getcwd"), FAIL);
 	if (argv_count == 1)
 	{
 		if (go_home(*my_env) == FAIL)
@@ -27,7 +24,8 @@ int	ft_cd(t_env **my_env, int argv_count, char **argv)
 	}
 	else if (chdir(argv[1]) != 0)
 	{
-		ft_dprintf(STDERR_FILENO, "Giraffeshell: cd: %s: %s\n", argv[1], strerror(errno));
+		ft_dprintf(STDERR_FILENO, "Giraffeshell: cd: %s: %s\n", argv[1],
+			strerror(errno));
 		return (FAIL);
 	}
 	if (check_env_updates(*my_env, old_pwd) == FAIL)
@@ -37,7 +35,7 @@ int	ft_cd(t_env **my_env, int argv_count, char **argv)
 
 static int	check_env_updates(t_env *env, const char *old_pwd)
 {
-	int failed;
+	int	failed;
 
 	failed = 0;
 	if (update_oldpwd(env, old_pwd))
@@ -51,12 +49,11 @@ static int	check_env_updates(t_env *env, const char *old_pwd)
 
 static int	update_pwd(t_env *env)
 {
-	char cwd[PATH_MAX];
-	char *full_path_var;
+	char	cwd[PATH_MAX];
+	char	*full_path_var;
 
 	if (!getcwd(cwd, sizeof(cwd)))
 		return (FAIL);
-
 	full_path_var = ft_strjoin("PWD=", cwd);
 	if (!full_path_var)
 	{
@@ -76,7 +73,7 @@ static int	update_pwd(t_env *env)
 
 static int	update_oldpwd(t_env *env, const char *old_pwd)
 {
-	char *full_path_var;
+	char	*full_path_var;
 
 	full_path_var = ft_strjoin("OLDPWD=", old_pwd);
 	if (!full_path_var)
@@ -97,7 +94,7 @@ static int	update_oldpwd(t_env *env, const char *old_pwd)
 
 static int	go_home(t_env *my_env)
 {
-	char *home;
+	char	*home;
 
 	home = get_env_value(my_env->envp, "HOME");
 	if (!home)
@@ -107,7 +104,8 @@ static int	go_home(t_env *my_env)
 	}
 	if (chdir(home) != 0)
 	{
-		ft_dprintf(STDERR_FILENO, "Giraffeshell: cd: %s: %s\n", home, strerror(errno));
+		ft_dprintf(STDERR_FILENO, "Giraffeshell: cd: %s: %s\n", home,
+			strerror(errno));
 		return (FAIL);
 	}
 	return (SUCCESS);

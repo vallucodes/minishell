@@ -10,7 +10,6 @@ char	**dup_and_sort_env(t_env *env)
 	copy = malloc(sizeof(char *) * (env->len + 1));
 	if (!copy)
 		return (NULL);
-
 	i = 0;
 	while (i < (int)env->len)
 	{
@@ -23,7 +22,6 @@ char	**dup_and_sort_env(t_env *env)
 		i++;
 	}
 	copy[i] = NULL;
-
 	sort_strings_tab(copy, env->len);
 	return (copy);
 }
@@ -47,5 +45,3 @@ static void	sort_strings_tab(char **arr, int len)
 			i++;
 	}
 }
-
-
