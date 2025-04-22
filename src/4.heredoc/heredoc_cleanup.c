@@ -26,8 +26,8 @@ void	delete_tmp_files(t_minishell *mshell)
 void	cleanup_at_signal(t_minishell *mshell, char **input, \
 			int fd_stdin, int fd_tmp)
 {
-	// sig_action_ignore(mshell);
-	
+	sig_action_ignore(mshell);
+
 	close(fd_tmp);
 	delete_tmp_files(mshell);
 	free(*input);
@@ -47,7 +47,7 @@ void	print_warning(size_t rl_count, char *eof)
 void	cleanup_at_success(t_minishell *mshell, char **input, \
 			int *fd_tmp, int *fd_stdin)
 {
-	// sig_action_ignore(mshell);
+	sig_action_ignore(mshell);
 	mshell->rl_count += mshell->rl_count_heredoc;
 	mshell->rl_count_heredoc = 0;
 	close_fds(fd_tmp, fd_stdin);

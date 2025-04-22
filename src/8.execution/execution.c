@@ -254,7 +254,7 @@ void execute_ast(t_minishell *mshell, t_ast *ast)
 			handle_parent(mshell, &exec, pipefd, pid);
 		ast = ast->next_right;
 	}
-	// sig_action_parent(mshell);
+	sig_action_parent(mshell);
 	mshell->exitcode = wait_for_children(mshell);
 }
 
