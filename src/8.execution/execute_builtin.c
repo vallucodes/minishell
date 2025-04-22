@@ -1,5 +1,20 @@
 #include "../../inc/minishell.h"
 
+static int return_builtin(t_minishell *mshell, int argc, char **argv);
+
+int execute_builtin(t_minishell *mshell, t_ast *ast)
+{
+	int argc;
+	t_ast *cmd_node;
+
+	cmd_node = get_cmd_node(ast);
+	if (!cmd_node || !cmd_node->cmd || !cmd_node->cmd[0])
+		return (FAIL);
+	argc = count_argv(cmd_node->cmd);
+	mshell->exitcode = return_builtin(mshell, argc, cmd_node->cmd);
+	return (mshell->exitcode);
+}
+
 int	is_builtin(t_ast *ast)
 {
 	while (ast)
@@ -11,7 +26,7 @@ int	is_builtin(t_ast *ast)
 				|| ft_strcmp(ast->cmd[0], "pwd") == 0
 				|| ft_strcmp(ast->cmd[0], "export") == 0
 				|| ft_strcmp(ast->cmd[0], "unset") == 0
-				|| ft_strcmp(ast->cmd[0], "env") == 0	//printf("FINAL EXIT CODE IS %d\n", exitcode);
+				|| ft_strcmp(ast->cmd[0], "env") == 0
 				|| ft_strcmp(ast->cmd[0], "exit") == 0)
 		)
 			return (1);
@@ -24,7 +39,6 @@ static int return_builtin(t_minishell *mshell, int argc, char **argv)
 {
 	if (!argv || !argv[0])
 		return (FAIL);
-
 	if (ft_strcmp(argv[0], "env") == 0)
 		return ft_env(&mshell->envp, argv);
 	else if (ft_strcmp(argv[0], "pwd") == 0)
@@ -47,18 +61,3 @@ static int return_builtin(t_minishell *mshell, int argc, char **argv)
 	}
 	return FAIL;
 }
-
-int execute_builtin(t_minishell *mshell, t_ast *ast)
-{
-	int argc;
-	t_ast *cmd_node;
-
-	cmd_node = get_cmd_node(ast);
-	if (!cmd_node || !cmd_node->cmd || !cmd_node->cmd[0])
-		return (FAIL);
-	argc = count_argv(cmd_node->cmd);
-	mshell->exitcode = return_builtin(mshell, argc, cmd_node->cmd);
-	return (mshell->exitcode);
-}
-
-

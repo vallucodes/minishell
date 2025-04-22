@@ -18,7 +18,6 @@ static int exec_external_command(t_minishell *mshell, t_ast *ast)
 		mshell->exitcode = 127;
 	else if (errno == EACCES || errno == EISDIR || errno == ENOTDIR)
 		mshell->exitcode = 126;
-
 	free(full_cmd_path);
 	delete_minishell(mshell);
 	exit(mshell->exitcode);
@@ -30,7 +29,6 @@ void	handle_child_process(t_minishell *mshell, t_ast *ast, t_exec *exec)
 	setup_child_pipe_fds(mshell, exec);
 	if (handle_redirection(ast) == FAIL)
 		exit(1);
-
 	if (is_builtin(ast))
 	{
 		mshell->exitcode = execute_builtin(mshell, ast);
@@ -39,6 +37,6 @@ void	handle_child_process(t_minishell *mshell, t_ast *ast, t_exec *exec)
 	}
 	else
 		exec_external_command(mshell, ast);
-	exit(127);
+	exit(SUCCESS);
 }
 
