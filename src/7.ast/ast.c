@@ -1,6 +1,7 @@
 #include "../inc/minishell.h"
 
-t_ast	*init_node(t_minishell *mshell, char **cmd, char *file, t_token_type type)
+t_ast	*init_node(t_minishell *mshell, \
+		char **cmd, char *file, t_token_type type)
 {
 	t_ast	*new_node;
 
@@ -17,7 +18,7 @@ t_ast	*init_node(t_minishell *mshell, char **cmd, char *file, t_token_type type)
 
 void	add_node(t_ast **ast, t_ast *new_node, t_order order)
 {
-	t_ast *temp;
+	t_ast	*temp;
 
 	if (!new_node || !ast)
 		return ;

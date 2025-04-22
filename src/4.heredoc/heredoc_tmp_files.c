@@ -1,6 +1,7 @@
 #include "../inc/minishell.h"
 
-void	save_line_to_tmp_file(t_minishell *mshell, char *input, int fd_tmp, t_expand expand)
+void	save_line_to_tmp_file(t_minishell *mshell, \
+			char *input, int fd_tmp, t_expand expand)
 {
 	size_t	i;
 
@@ -72,7 +73,7 @@ char	*create_tmp_file(t_minishell *mshell, int *fd)
 			exit_error(mshell, TMP_FILES);
 	}
 	*fd = open(tmp_file, O_WRONLY | O_CREAT | O_EXCL, 0644);
-	if (fd < 0)
+	if (*fd < 0)
 		exit_cleanup_error(mshell, "file");
 	return (tmp_file);
 }

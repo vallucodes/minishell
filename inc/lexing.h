@@ -16,10 +16,10 @@ typedef enum e_token_type
 	FILE_TOKEN,			//4 word classified as file
 	HERE_TOKEN,			//5 word classified as heredoc
 	PIPE,				//6 |
-	REDIRECT_IN,		//7 <
-	REDIRECT_OUT,		//8 >
-	REDIRECT_APPEND,	//9 >>
-	HERE_DOCUMENT,		//10 <<
+	REDIR_IN,		//7 <
+	REDIR_OUT,		//8 >
+	REDIR_APPEND,	//9 >>
+	HERE_DOC,		//10 <<
 	ENV_VAR,			//11 $
 }	t_token_type;
 

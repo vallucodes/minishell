@@ -17,6 +17,7 @@ void	next_tmp_file(t_minishell *mshell, char *file, int nb);
 //utils
 void	print_warning(size_t readline_count, char *eof);
 int		is_eof(char *eof, char *input);
+int		get_stdin(t_minishell *mshell);
 
 //cleanup and exit
 void	delete_tmp_files(t_minishell *mshell);

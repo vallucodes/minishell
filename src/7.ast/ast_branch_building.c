@@ -18,7 +18,8 @@ static char	**find_cmd_and_compose(t_minishell *mshell, t_token *tokens)
 	int		i;
 
 	i = 0;
-	cmd = arena_alloc(mshell->arena, (count_amount_cmd(tokens) + 1) * sizeof(char *), alignof(char *));
+	cmd = arena_alloc(mshell->arena, \
+		(count_amount_cmd(tokens) + 1) * sizeof(char *), alignof(char *));
 	if (!cmd)
 		exit_cleanup_error(mshell, "malloc");
 	cmd[i] = add_command(tokens);
@@ -33,7 +34,8 @@ static char	**find_cmd_and_compose(t_minishell *mshell, t_token *tokens)
 	return (cmd);
 }
 
-static void	build_branch_add_redirects(t_minishell *mshell, t_ast **ast, t_token *tokens, t_branch branch)
+static void	build_branch_add_redirects(t_minishell *mshell, \
+			t_ast **ast, t_token *tokens, t_branch branch)
 {
 	t_token	*tmp;
 
@@ -44,7 +46,8 @@ static void	build_branch_add_redirects(t_minishell *mshell, t_ast **ast, t_token
 		{
 			if (is_any_redirect(tmp))
 			{
-				add_node(ast, init_node(mshell, NULL, tmp->next->value, tmp->type), FIRST);
+				add_node(ast, init_node(mshell, NULL, \
+						tmp->next->value, tmp->type), FIRST);
 				tmp = tmp->next;
 				break ;
 			}
@@ -54,12 +57,14 @@ static void	build_branch_add_redirects(t_minishell *mshell, t_ast **ast, t_token
 	while (tmp && tmp->type != PIPE)
 	{
 		if (is_any_redirect(tmp))
-			add_node(ast, init_node(mshell, NULL, tmp->next->value, tmp->type), NON_FIRST);
+			add_node(ast, init_node(mshell, NULL, \
+					tmp->next->value, tmp->type), NON_FIRST);
 		tmp = tmp->next;
 	}
 }
 
-static void	build_branch_add_command(t_minishell *mshell, t_ast **ast, t_token *tokens, t_branch branch)
+static void	build_branch_add_command(t_minishell *mshell, \
+			t_ast **ast, t_token *tokens, t_branch branch)
 {
 	t_token	*tmp;
 	char	**cmd;
@@ -71,15 +76,18 @@ static void	build_branch_add_command(t_minishell *mshell, t_ast **ast, t_token *
 		{
 			cmd = find_cmd_and_compose(mshell, tmp);
 			if (branch == LAST_BRANCH && last_is_pipe(ast))
-				add_node(ast, init_node(mshell, cmd, NULL, tmp->type), FIRST);
+				add_node(ast, init_node(mshell, cmd, \
+						NULL, tmp->type), FIRST);
 			else
-				add_node(ast, init_node(mshell, cmd, NULL, tmp->type), NON_FIRST);
+				add_node(ast, init_node(mshell, cmd, \
+						NULL, tmp->type), NON_FIRST);
 		}
 		tmp = tmp->next;
 	}
 }
 
-void	build_branch(t_minishell *mshell, t_ast **ast, t_token *tokens, t_branch branch)
+void	build_branch(t_minishell *mshell, \
+		t_ast **ast, t_token *tokens, t_branch branch)
 {
 	build_branch_add_redirects(mshell, ast, tokens, branch);
 	build_branch_add_command(mshell, ast, tokens, branch);

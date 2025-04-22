@@ -8,7 +8,7 @@ void	sigint_handler_heredoc(int signal)
 	{
 		g_signal = signal;
 		close(STDIN_FILENO);
-		write(STDOUT_FILENO, "\n", 1);
+		write(1, "\n", 1);
 		set_exitcode_signal(NULL);
 	}
 }

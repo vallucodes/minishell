@@ -21,6 +21,7 @@ int	sig_action_main(t_minishell *mshell)
 
 int	sig_action_heredoc(t_minishell *mshell)
 {
+	g_signal = 0;
 	if (signal(SIGINT, sigint_handler_heredoc) == SIG_ERR)
 		exit_cleanup_error(mshell, "sigaction");
 	if (signal(SIGQUIT, SIG_IGN) == SIG_ERR)

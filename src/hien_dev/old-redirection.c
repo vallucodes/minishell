@@ -49,17 +49,17 @@ int handle_redirections(t_ast *node, t_execution *exec)
 {
 	while (node)
 	{
-		if (node->type == REDIRECT_IN || node->type == HERE_DOCUMENT)
+		if (node->type == REDIR_IN || node->type == HERE_DOC)
 		{
 			if (safe_open_redir_in(exec, node->file) == FAIL)
 				return (FAIL);
 		}
-		else if (node->type == REDIRECT_OUT)
+		else if (node->type == REDIR_OUT)
 		{
 			if (safe_open_redir_out(exec, node->file) == FAIL)
 				return (FAIL);
 		}
-		else if (node->type == REDIRECT_APPEND)
+		else if (node->type == REDIR_APPEND)
 		{
 			if (safe_open_redir_append(exec, node->file) == FAIL)
 				return (FAIL);
