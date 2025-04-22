@@ -12,7 +12,7 @@ typedef struct s_minishell t_minishell;
 int		is_valid_identifier_range(const char *str, size_t len);
 int		count_argv(char **argv);
 int		update_var_env(t_env *env, const char *arg, const char *key, int key_has_value);
-int		add_var_to_env(t_env *env, const char *arg, const char *key, size_t key_len, int key_has_value);
+int	add_var_to_env(t_env *env, const char *arg);
 
 int		ft_env(t_env **my_env, char **argv);
 int		ft_pwd(void);

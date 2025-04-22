@@ -48,12 +48,6 @@ SRC			=	main.c \
 				7.ast/ast_branch_building.c \
 				7.ast/ast_dev.c \
 				7.ast/ast_utils.c \
-				8.execution/safe_open.c \
-				8.execution/execute_builtin.c \
-				8.execution/path.c \
-				8.execution/setup_child_fds.c \
-				8.execution/execution.c \
-				8.execution/wait.c \
 				20.builtins/ft_env.c \
 				20.builtins/ft_pwd.c \
 				20.builtins/ft_cd.c \
@@ -63,9 +57,16 @@ SRC			=	main.c \
 				20.builtins/ft_export.c \
 				20.builtins/utils_builtins.c \
 				20.builtins/ft_export_sort_env.c \
-				99.dev/print_development.c
-
-#execution/utils.c \
+				99.dev/print_development.c \
+				9.redirection/open.c \
+				9.redirection/dup2.c \
+				9.redirection/redir.c \
+				8.execution/execute_builtin.c \
+				8.execution/execution.c \
+				8.execution/child_process.c \
+				8.execution/path.c \
+				8.execution/setup.c \
+				8.execution/wait.c
 
 OBJS		= $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
 

@@ -34,6 +34,20 @@ static void	delete_path(t_minishell *mshell)
 	mshell->path = NULL;
 }
 
+void close_origin_fds(t_minishell *mshell)
+{
+	if (mshell->origin_stdin >= 0)
+	{
+		close(mshell->origin_stdin);
+		mshell->origin_stdin = -1;
+	}
+	if (mshell->origin_stdout >= 0)
+	{
+		close(mshell->origin_stdout);
+		mshell->origin_stdout = -1;
+	}
+}
+
 void	delete_minishell(t_minishell *mshell)
 {
 	if (mshell == NULL)
@@ -45,6 +59,7 @@ void	delete_minishell(t_minishell *mshell)
 	free(mshell->input_str);
 	arena_delete(&mshell->arena);
 	rl_clear_history();
+	close_origin_fds(mshell);
 }
 
 void	exit_and_cleanup(t_minishell *mshell)

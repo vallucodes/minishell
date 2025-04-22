@@ -24,13 +24,12 @@ char *get_env_value(char **envp, const char *key)
 	while (envp && envp[i])
 	{
 		if (ft_strncmp(envp[i], key, key_len) == 0 && envp[i][key_len] == '=')
-			return (envp[i] + key_len + 1); // skip "KEY="
+			return (envp[i] + key_len + 1);
 		i++;
 	}
 	return (NULL);
 }
 
-//lets match input & env key
 int match_env_key(const char *env_entry, const char *key)
 {
 	int		result;
@@ -45,7 +44,6 @@ int match_env_key(const char *env_entry, const char *key)
 		return (0);
 }
 
-//realloc when theres not enough space in allocated memory
 int realloc_env_capacity(t_env *env)
 {
 	size_t	new_capacity;
@@ -53,10 +51,10 @@ int realloc_env_capacity(t_env *env)
 	size_t	i;
 
 	if (env->len + 1 < env->allocated_capacity)
-		return (1);
+		return (SUCCESS);
 	new_capacity = env->allocated_capacity * 2;
 	if (new_capacity == 0)
-		new_capacity = 8; //just in case new capa is 0 then 0 cant *2
+		new_capacity = 8;
 	new_envp = malloc(sizeof(char *) * (new_capacity + 1));
 	if (!new_envp)
 		return (FAIL);
@@ -69,7 +67,7 @@ int realloc_env_capacity(t_env *env)
 	free(env->envp);
 	env->envp = new_envp;
 	env->allocated_capacity = new_capacity;
-	return (1);// need to change to return SUCCESS
+	return (SUCCESS);
 }
 
 int copy_env(t_env **env, char **envp)
