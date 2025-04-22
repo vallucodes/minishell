@@ -97,8 +97,8 @@
 //         } else if (pipe_node->type == COMMAND) {
 //              printf(" (COMMAND: %s)\n", pipe_node->cmd ? pipe_node->cmd[0] : "N/A");
 // 		}
-// 		else if (pipe_node->type == 8) { //REDIRECT_OUT
-//              printf(" (REDIRECT_OUT FILE: %s)\n", pipe_node->file ? pipe_node->file : "N/A");
+// 		else if (pipe_node->type == 8) { //REDIR_OUT
+//              printf(" (REDIR_OUT FILE: %s)\n", pipe_node->file ? pipe_node->file : "N/A");
 //         } else {
 //              printf(" (Type %d)\n", pipe_node->type);
 //         }
@@ -157,7 +157,7 @@ void traverse(t_ast *ast)
 		// }
 		// else if (pipe_node->type == 8) { //I
 		// 	//execute_redirection();
-        //     printf(" (REDIRECT_OUT FILE: %s)\n", pipe_node->file ? pipe_node->file : "N/A");
+        //     printf(" (REDIR_OUT FILE: %s)\n", pipe_node->file ? pipe_node->file : "N/A");
         // } else {
         //      printf(" (Type %d)\n", pipe_node->type);
          }
