@@ -2,27 +2,17 @@
 
 static char	*get_cmd_full_path(t_minishell *mshell, char **path, char *cmd);
 static char	*build_cmd_path(t_minishell *mshell, char *dir, char *cmd);
-
-
+static void split_env_path_value(t_minishell *mshell);
 
 char	*get_command_path(t_minishell *mshell, t_ast *ast)
 {
-	char	*full_path = NULL;
-	char	*env_path_value;
+	char	*full_path;
 
+	full_path = NULL;
 	if (!ast || !ast->cmd || !ast->cmd[0])
 		exit_cleanup_error(mshell, "command");
-
-	env_path_value = get_env_value(mshell->envp->envp, "PATH");
-
-	if (env_path_value && *env_path_value)
-	{
-		mshell->path = ft_split(env_path_value, ':');
-		if (!mshell->path )
-			exit_cleanup_error(mshell, "malloc");
-	}
-
-	if (!ft_strchr(ast->cmd[0], '/') && mshell->path  && *mshell->path)
+	split_env_path_value(mshell);
+	if (!ft_strchr(ast->cmd[0], '/') && mshell->path && *mshell->path)
 	{
 		full_path = get_cmd_full_path(mshell, mshell->path , ast->cmd[0]);
 		if (!full_path)
@@ -41,6 +31,18 @@ char	*get_command_path(t_minishell *mshell, t_ast *ast)
 	return (full_path);
 }
 
+static void split_env_path_value(t_minishell *mshell)
+{
+	char	*env_path_value;
+
+	env_path_value = get_env_value(mshell->envp->envp, "PATH");
+	if (env_path_value && *env_path_value)
+	{
+		mshell->path = ft_split(env_path_value, ':');
+		if (!mshell->path )
+			exit_cleanup_error(mshell, "malloc");
+	}
+}
 
 static char	*get_cmd_full_path(t_minishell *mshell, char **path, char *cmd)
 {
@@ -78,8 +80,3 @@ static char	*build_cmd_path(t_minishell *mshell, char *dir, char *cmd)
 	free(temp);
 	return (full_path);
 }
-
-
-
-
-
