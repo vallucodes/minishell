@@ -57,8 +57,8 @@ typedef struct s_minishell
 	int			origin_stdin;
 	int			origin_stdout;
 	int			in_child;
-	size_t				rl_count;
-	size_t				rl_count_heredoc;
+	size_t		rl_count;
+	size_t		rl_count_heredoc;
 	//later add execution, exit code when we are there
 }				t_minishell ;
 
