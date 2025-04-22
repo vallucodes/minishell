@@ -10,8 +10,8 @@ int	ft_cd(t_env **my_env, int argv_count, char **argv)
 {
 	char	old_pwd[PATH_MAX];
 
-	if (!getcwd(old_pwd, sizeof(old_pwd)))
-		return (perror("getcwd"), FAIL);
+	// if (!getcwd(old_pwd, sizeof(old_pwd)))
+	// 	return (perror("getcwd"), FAIL);
 	if (argv_count == 1)
 	{
 		if (go_home(*my_env) == FAIL)
@@ -25,6 +25,13 @@ int	ft_cd(t_env **my_env, int argv_count, char **argv)
 	else if (chdir(argv[1]) != 0)
 	{
 		ft_dprintf(STDERR_FILENO, "Giraffeshell: cd: %s: %s\n", argv[1],
+			strerror(errno));
+		return (FAIL);
+	}
+	if (!getcwd(old_pwd, sizeof(old_pwd)))
+	{
+		ft_dprintf(STDERR_FILENO,
+			"cd: error retrieving current directory: getcwd: cannot access parent directories: %s\n",
 			strerror(errno));
 		return (FAIL);
 	}

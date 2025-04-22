@@ -9,6 +9,8 @@ int ft_pwd(void)
         printf("%s\n", cwd);
         return (SUCCESS);
     }
-    perror("pwd");
+    ft_dprintf(STDERR_FILENO,
+		"pwd: error retrieving current directory: getcwd: cannot access parent directories: %s\n",
+		strerror(errno));
     return (FAIL);
 }
