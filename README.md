@@ -12,14 +12,14 @@ Minishell is a simple Unix shell implementation written in C. This project is pa
 - Handle input/output redirections (`<`, `>`, `<<`, `>>`).
 - Implement pipes (`|`) for command chaining.
 - Environment variable expansion (`$VAR` and `$?`).
-- Built-in commands:  
-  - `echo` (with `-n` option)  
-  - `cd` (with relative/absolute paths)  
-  - `pwd`  
-  - `export`  
-  - `unset`  
-  - `env`  
-  - `exit`  
+- Built-in commands:
+  - `echo` (with `-n` option)
+  - `cd` (with relative/absolute paths)
+  - `pwd`
+  - `export`
+  - `unset`
+  - `env`
+  - `exit`
 - Signal handling (`Ctrl-C`, `Ctrl-D`, `Ctrl-\`).
 - Command history support.
 
@@ -45,6 +45,10 @@ https://m.youtube.com/watch?v=UYLHA_Ey8Ys
 - [Git repo: charMstr](https://github.com/charMstr/minishell)
 - [42 Minishell Functions](https://42-cursus.gitbook.io/guide/rank-03/minishell/functions) #brief explanation of all allowed functions
 
+https://github.com/tdameros/42-minishell/blob/main/src/signals/interactive_signal_handling.c
+
+https://github.com/zelhajou/ft_unix_minishell/tree/main/minishell
+
 ## Example File Structure:
 
 - [tjensen42/42-minishell](https://github.com/tjensen42/42-minishell/tree/main/)
@@ -66,12 +70,12 @@ From main branch to your own branch: `git merge main`
 
 ### creating branch command flow:
 
-git checkout main  
-git pull  
+git checkout main
+git pull
 git checkout -b branch-name
 
 ## suppression
 
 valgrind --leak-check=full --show-reachable=yes --error-limit=no --gen-suppressions=all --log-file=minimalraw.log ./minishell
-cat ./minimalraw.log | ./parse_valgrind_suppressions.sh > minimal.supp 
+cat ./minimalraw.log | ./parse_valgrind_suppressions.sh > minimal.supp
 valgrind --leak-check=full --show-reachable=yes --error-limit=no --suppressions=./minimal.supp ./minishell

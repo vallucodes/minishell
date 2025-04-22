@@ -20,6 +20,7 @@ int	init_minishell(t_minishell *mshell, char **envp, t_ast **ast)
 	if (mshell->origin_stdin < 0 || mshell->origin_stdout < 0)
 		return (FAIL);
 	*ast = NULL;
+	set_exitcode_signal(mshell);
 	return (0);
 }
 

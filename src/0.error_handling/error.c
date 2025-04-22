@@ -21,13 +21,13 @@ void	print_error(char *msg, char *token, t_token_type type)
 		ft_dprintf(2, "%s%s\n", msg, token);
 	if (type)
 	{
-		if (type == REDIRECT_IN)
+		if (type == REDIR_IN)
 			ft_dprintf(2, "%s%s\n", msg, INFILE_ERROR);
-		else if (type == REDIRECT_OUT)
+		else if (type == REDIR_OUT)
 			ft_dprintf(2, "%s%s\n", msg, OUTFILE_ERROR);
-		else if (type == REDIRECT_APPEND)
+		else if (type == REDIR_APPEND)
 			ft_dprintf(2, "%s%s\n", msg, APPENDFILE_ERROR);
-		else if (type == HERE_DOCUMENT)
+		else if (type == HERE_DOC)
 			ft_dprintf(2, "%s%s\n", msg, HEREDOC_ERROR);
 		else if (type == PIPE)
 			ft_dprintf(2, "%s%s\n", msg, PIPE_ERROR);

@@ -1,13 +1,12 @@
 #include "../inc/minishell.h"
 
-static int	get_stdin(t_minishell *mshell)
+static void	init_heredoc_input(t_minishell *mshell, \
+			int *fd_tmp, int *fd_stdin, char **file)
 {
-	int		fd_stdin;
-
-	fd_stdin = dup(STDIN_FILENO);
-	if (fd_stdin == -1)
-		exit_cleanup_error(mshell, "dup");
-	return (fd_stdin);
+	sig_action_heredoc(mshell);
+	*fd_stdin = get_stdin(mshell);
+	*file = create_tmp_file(mshell, fd_tmp);
+	mshell->rl_count_heredoc = 0;
 }
 
 static char	*read_heredoc_input(t_minishell *mshell, char *eof, t_expand expand)
@@ -17,10 +16,7 @@ static char	*read_heredoc_input(t_minishell *mshell, char *eof, t_expand expand)
 	int		fd_tmp;
 	int		fd_stdin;
 
-	file = create_tmp_file(mshell, &fd_tmp);
-	fd_stdin = get_stdin(mshell);
-	sig_action_heredoc(mshell);
-	mshell->rl_count_heredoc = 0;
+	init_heredoc_input(mshell, &fd_tmp, &fd_stdin, &file);
 	while (1)
 	{
 		input = readline("> ");
@@ -37,7 +33,6 @@ static char	*read_heredoc_input(t_minishell *mshell, char *eof, t_expand expand)
 		save_line_to_tmp_file(mshell, input, fd_tmp, expand);
 		free_and_set(&input);
 	}
-	sig_action_ignore(mshell);
 	cleanup_at_success(mshell, &input, &fd_tmp, &fd_stdin);
 	return (file);
 }
@@ -46,7 +41,7 @@ static void	replace_token(t_token *current, char *file)
 {
 	current->value++;
 	current->len = 1;
-	current->type = REDIRECT_IN;
+	current->type = REDIR_IN;
 	current->next->type = FILE_TOKEN;
 	current->next->value = file;
 	current->next->len = ft_strlen(file);
@@ -84,16 +79,16 @@ int	handle_heredoc(t_minishell *mshell, t_token *tokens)
 {
 	t_token		*current;
 	char		*file;
-	t_expand	expansion_flag;
+	t_expand	expnd_flag;
 
-	expansion_flag = EXPAND;
+	expnd_flag = EXPAND;
 	current = tokens;
 	while (current)
 	{
-		if (current->type == HERE_DOCUMENT)
+		if (current->type == HERE_DOC)
 		{
-			expansion_flag = check_quotes(mshell, current->next);
-			file = read_heredoc_input(mshell, current->next->value, expansion_flag);
+			expnd_flag = check_quotes(mshell, current->next);
+			file = read_heredoc_input(mshell, current->next->value, expnd_flag);
 			if (file == NULL)
 				return (FAIL);
 			replace_token(current, file);

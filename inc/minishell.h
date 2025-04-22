@@ -28,7 +28,7 @@
 //error prompts
 # define AC "Error: invalid number of arguments!\n"
 # define BALANCE "Error: quotes or brackets unbalanced\n"
-# define REDIRECT "Error: redirections invalid\n"
+# define REDIR "Error: redirections invalid\n"
 # define TOKEN_ERROR "syntax error near unexpected token"
 # define UNREACHABLE "This is unreachable code, something is wrong with error handling\n"
 # define TMP_FILES "Too many heredoc redirections\n"

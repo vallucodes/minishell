@@ -8,17 +8,17 @@ int	handle_redirection(t_ast *ast)
 {
 	while (ast)
 	{
-		if (ast->type == REDIRECT_IN)
+		if (ast->type == REDIR_IN)
 		{
 			if (redirect_input(ast) == FAIL)
 				return (FAIL);
 		}
-		else if (ast->type == REDIRECT_OUT)
+		else if (ast->type == REDIR_OUT)
 		{
 			if (redirect_output(ast) == FAIL)
 				return (FAIL);
 		}
-		else if (ast->type == REDIRECT_APPEND)
+		else if (ast->type == REDIR_APPEND)
 		{
 			if (redirect_append(ast) == FAIL)
 				return (FAIL);

@@ -20,7 +20,9 @@ size_t	get_len_explandeble(char *str)
 		len++;
 	return (len);
 }
-void	write_or_add_to_str(t_minishell *mshell, int fd, char **new_str, char *str_pid)
+
+void	write_or_add_to_str(t_minishell *mshell, \
+		int fd, char **new_str, char *str_pid)
 {
 	size_t	i;
 
