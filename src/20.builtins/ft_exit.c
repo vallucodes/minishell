@@ -1,5 +1,13 @@
 #include "../../inc/minishell.h"
 
+void	check_num_arg(char **argv, t_minishell *mshell)
+{
+	ft_dprintf(2, "Giraffeshell: exit: %s: numeric argument required\n",
+		argv[1]);
+	delete_minishell(mshell);
+	exit(2);
+}
+
 void	ft_exit(char **argv, t_minishell *mshell)
 {
 	long	code;
@@ -14,11 +22,7 @@ void	ft_exit(char **argv, t_minishell *mshell)
 		exit(mshell->exitcode);
 	}
 	if (!ft_atol(argv[1], &code))
-	{
-		ft_dprintf(2, "Giraffeshell: exit: %s: numeric argument required\n", argv[1]);
-		delete_minishell(mshell);
-		exit(2);
-	}
+		check_num_arg(argv, mshell);
 	if (argv_count > 2)
 	{
 		ft_dprintf(2, "Giraffeshell: exit: too many arguments\n");

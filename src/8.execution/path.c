@@ -4,6 +4,7 @@ static char	*get_cmd_full_path(t_minishell *mshell, char **path, char *cmd);
 static char	*build_cmd_path(t_minishell *mshell, char *dir, char *cmd);
 
 
+
 char	*get_command_path(t_minishell *mshell, t_ast *ast)
 {
 	char	*full_path = NULL;
