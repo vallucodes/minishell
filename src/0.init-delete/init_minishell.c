@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	init_minishell(struct sigaction	*sa, t_minishell *mshell, char **envp, t_ast **ast)
+int	init_minishell(t_minishell *mshell, char **envp, t_ast **ast)
 {
 	char	*path_str;
 

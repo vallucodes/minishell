@@ -15,7 +15,6 @@ void	arena_delete(t_arena **a)
 		block = next;
 	}
 	free(*a);
-	// printf("Arena destroyed\n");
 	*a = NULL;
 }
 
