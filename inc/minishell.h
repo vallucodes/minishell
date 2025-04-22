@@ -11,6 +11,8 @@
 # include <errno.h>
 # include <signal.h>			//signals
 # include <limits.h>			//FILE_MAX
+# include <sys/wait.h>
+# include <sys/stat.h>
 # include "../lib/libft/inc/libft.h"
 # include "signals.h"
 # include "lexing.h"
@@ -46,14 +48,15 @@ typedef enum e_exit
 
 typedef struct s_minishell
 {
-	t_arena				*arena;
-	t_env				*envp; // env struct
-	t_ast				*ast;
-	int					exitcode; //exitcode assignment after exe
-	char				**path;
-	int					command_count;
-	pid_t				last_pid;
-	char 				*input_str; //for free if error
+	t_arena		*arena;
+	t_env		*envp; // env struct
+	t_ast		*ast;
+	int			exitcode; //exitcode assignment after exe
+	char		**path;
+	char 		*input_str; //for free if error
+	int			origin_stdin;
+	int			origin_stdout;
+	int			in_child;
 	size_t				rl_count;
 	size_t				rl_count_heredoc;
 	//later add execution, exit code when we are there

@@ -10,21 +10,16 @@ int	init_minishell(t_minishell *mshell, char **envp, t_ast **ast)
 		return (FAIL);
 	}
 	mshell->exitcode = 0;
-	mshell->last_pid = -1;
+	mshell->in_child = 0;
 	mshell->path = NULL;
 	mshell->arena = NULL;
 	mshell->rl_count = 0;
 	mshell->rl_count_heredoc = 0;
+	mshell->origin_stdin = dup(STDIN_FILENO);
+	mshell->origin_stdout = dup(STDOUT_FILENO);
+	if (mshell->origin_stdin < 0 || mshell->origin_stdout < 0)
+		return (FAIL);
 	*ast = NULL;
-	path_str = get_env_value(mshell->envp->envp, "PATH");
-	if (path_str)
-		mshell->path = ft_split(path_str, ':');
-	if (!mshell->path) //this can be also malloc fail
-		ft_dprintf(2, "Giraffeshell: PATH not found in environment\n");
-	set_exitcode_signal(mshell);
-	//later add full struct
-	// if (init_execution(&mshell->exec) != 0)
-	//     return (1);
 	return (0);
 }
 

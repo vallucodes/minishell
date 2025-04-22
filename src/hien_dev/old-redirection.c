@@ -3,7 +3,7 @@
 static int safe_open_redir_in(t_execution *exec, char *filepath)
 {
 	if (exec->redir_fd[FD_IN] != STDIN_FILENO)
-		close(exec->redir_fd[0]);
+		close(exec->redir_fd[FD_IN]);
 
 	exec->redir_fd[FD_IN] = open(filepath, O_RDONLY, 0);
 	if (exec->redir_fd[FD_IN] == -1)
@@ -66,37 +66,6 @@ int handle_redirections(t_ast *node, t_execution *exec)
 		}
 		node = node->next_left;
 	}
-	return (SUCCESS);
-}
-
-static t_ast *get_cmd_node(t_ast *ast_branch)
-{
-	t_ast *current = ast_branch; // Start from the main node (PIPE or first command)
-	// Traverse the left branch (command/redirections)
-	while (current)
-	{
-		if (current->type == COMMAND)
-			return (current); // Found the command node
-		current = current->next_left;
-	}
-	//ft_dprintf(2, "Debug: get_cmd_node did NOT find a COMMAND node.\n"); // Debug print
-	return (NULL); // No command node found in this branch
-}
-
-int travel_left(t_minishell *mshell, t_execution *exec, t_ast *ast)
-{
-	t_ast *cmd_node;
-
-	if (handle_redirections(ast, exec) == FAIL)
-	{
-		mshell->exitcode = 1;
-		delete_minishell(mshell);
-		exit(mshell->exitcode);
-	}
-
-	cmd_node = get_cmd_node(ast);
-	if (cmd_node)
-		exec->cmd_args = cmd_node->cmd;
 	return (SUCCESS);
 }
 

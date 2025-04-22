@@ -1,7 +1,6 @@
 #include "../../inc/minishell.h"
-#include <sys/wait.h>
 
-int	wait_for_children(t_minishell *mshell)
+int	wait_for_children(t_exec *exec)
 {
 	int	i;
 	int	wstatus;
@@ -9,9 +8,9 @@ int	wait_for_children(t_minishell *mshell)
 
 	i = 0;
 	exit_code = 0;
-	while (i < mshell->command_count)
+	while (i < exec->command_count)
 	{
-		if (mshell->last_pid == wait(&wstatus))
+		if (exec->last_pid == wait(&wstatus))
 		{
 			if (WIFEXITED(wstatus))
 				exit_code = WEXITSTATUS(wstatus);

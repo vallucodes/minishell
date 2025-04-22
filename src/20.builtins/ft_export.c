@@ -11,7 +11,6 @@ int	ft_export(char **args, t_minishell *mshell)
 
 	i = 1;
 	exit_code = 0;
-	//if there is no argurment after export, then just print export list
 	if (!args[i])
 		return (print_sorted_export(mshell->envp), 0);
 	while (args[i])
@@ -63,19 +62,24 @@ static int	handle_export_arg(t_minishell *mshell, char *arg)
 		key_len = (size_t)(equal_sign - arg);
 	else
 		key_len = ft_strlen(arg);
+
 	if (!is_valid_identifier_range(arg, key_len))
 	{
 		ft_dprintf(2, "Giraffeshell: export: `%s`: not a valid identifier\n", arg);
 		return (FAIL);
 	}
 	if (export_update_or_add(mshell, arg, key_len, key_has_value) == FAIL)
+	{
+		ft_dprintf(2, "Giraffeshell: export: `%s`: add update fails\n", arg);
 		return (FAIL);
+	}
+
 	return (SUCCESS);
 }
 
 static int	export_update_or_add(t_minishell *mshell, char *arg, size_t key_len, int key_has_value)
 {
-	char *key = ft_substr(arg, 0, key_len); //this needs to be fixed for malloc fails
+	char *key = ft_substr(arg, 0, key_len);
 	if (!key)
 	{
 		ft_dprintf(2, "Giraffeshell: export: malloc failed\n");
@@ -83,7 +87,7 @@ static int	export_update_or_add(t_minishell *mshell, char *arg, size_t key_len, 
 	}
 	if (update_var_env(mshell->envp, arg, key, key_has_value) == FAIL)
 	{
-		if (add_var_to_env(mshell->envp, arg, key, key_len, key_has_value) == FAIL)
+		if (add_var_to_env(mshell->envp, arg) == FAIL)
 		{
 			perror("malloc");
 			delete_minishell(mshell);

@@ -6,7 +6,8 @@ void	ft_exit(char **argv, t_minishell *mshell)
 	int		argv_count;
 
 	argv_count = count_argv(argv);
-	write(STDERR_FILENO, "exit\n", 5);
+	if (mshell->in_child == 0)
+		ft_dprintf(2, "exit\n");
 	if (argv_count == 1)
 	{
 		delete_minishell(mshell);
@@ -15,6 +16,7 @@ void	ft_exit(char **argv, t_minishell *mshell)
 	if (!ft_atol(argv[1], &code))
 	{
 		ft_dprintf(2, "Giraffeshell: exit: %s: numeric argument required\n", argv[1]);
+		delete_minishell(mshell);
 		exit(2);
 	}
 	if (argv_count > 2)
@@ -23,6 +25,6 @@ void	ft_exit(char **argv, t_minishell *mshell)
 		mshell->exitcode = 1;
 		return ;
 	}
+	delete_minishell(mshell);
 	exit((unsigned char)code);
 }
-
