@@ -26,25 +26,6 @@ void	sigint_handler_main(int signal)
 	}
 }
 
-<<<<<<< HEAD
-t_minishell *get_minishell(t_minishell *m)
-{
-	static t_minishell *minishell;
-
-	if (m == NULL)
-		return (minishell);
-	minishell = m;
-	return (NULL);
-}
-
-// void	sigint_handler_child(int signal)
-// {
-// 	if (signal == SIGINT)
-// 		write(STDOUT_FILENO, "\n", 1);
-// 	if (signal == SIGQUIT)
-// 		ft_dprintf(2, "Quit, core dump\n");
-// }
-=======
 void	sigint_handler_parent(int signal)
 {
 	if (signal == SIGINT)
@@ -62,4 +43,3 @@ void	set_exitcode_signal(t_minishell *mshell)
 	else if (g_signal != 0)
 		current_mshell->exitcode = 128 + g_signal;
 }
->>>>>>> main

@@ -11,15 +11,15 @@ int	init_minishell(t_minishell *mshell, char **envp, t_ast **ast)
 	}
 	mshell->exitcode = 0;
 	mshell->in_child = 0;
-	mshell->sa = sa;
 	mshell->path = NULL;
 	mshell->arena = NULL;
+	mshell->rl_count = 0;
+	mshell->rl_count_heredoc = 0;
 	mshell->origin_stdin = dup(STDIN_FILENO);
 	mshell->origin_stdout = dup(STDOUT_FILENO);
 	if (mshell->origin_stdin < 0 || mshell->origin_stdout < 0)
 		return (FAIL);
 	*ast = NULL;
-	init_signals(mshell->sa);
 	return (0);
 }
 
