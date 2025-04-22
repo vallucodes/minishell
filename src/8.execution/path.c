@@ -49,6 +49,8 @@ static char	*get_cmd_full_path(t_minishell *mshell, char **path, char *cmd)
 	int		i;
 	char	*full_path;
 
+	if (*cmd == '\0')
+		return (NULL);
 	i = 0;
 	while (path && path[i])
 	{

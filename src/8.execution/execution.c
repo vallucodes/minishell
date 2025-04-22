@@ -5,6 +5,7 @@ int	execute_in_sub_process(t_minishell *mshell, t_ast *ast);
 
 void execute_ast_v1(t_minishell *mshell, t_ast *ast)
 {
+
 	if (ast->type != PIPE && is_builtin(ast))
 		mshell->exitcode = execute_builtin_alone(mshell, ast);
 	else
@@ -34,6 +35,7 @@ int execute_in_sub_process(t_minishell *mshell, t_ast *ast)
 	exec.prev_fd = -1;
 	exec.command_count = 0;
 	current = ast;
+
 	while (current)
 	{
 		exec.has_pipe = (current->next_right != NULL);
