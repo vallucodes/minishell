@@ -50,6 +50,7 @@ int execute_in_sub_process(t_minishell *mshell, t_ast *ast)
 			setup_parent_pipe_fds(mshell, &exec);
 		current = current->next_right;
 	}
+	sig_action_parent(mshell);
 	mshell->exitcode = wait_for_children(&exec);
 	return (mshell->exitcode);
 }

@@ -8,9 +8,9 @@ static int exec_external_command(t_minishell *mshell, t_ast *ast)
 	cmd_node = get_cmd_node(ast);
 	if (!cmd_node || !cmd_node->cmd || !cmd_node->cmd[0])
 		return FAIL;
-
 	full_cmd_path = get_command_path(mshell, cmd_node);
 	//printf("COMMAND OR ARGS COUNT: %d\n", count_argv(cmd_node->cmd));
+	sig_action_default(mshell);
 	execve(full_cmd_path, cmd_node->cmd, mshell->envp->envp);
 	ft_dprintf(2, "Giraffeshell: %s: %s\n", cmd_node->cmd[0], strerror(errno));
 	mshell->exitcode = 1;
