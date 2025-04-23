@@ -34,7 +34,6 @@ static void	delete_token(t_input *input, t_token *current, t_token *previous)
 		input->tokens = current->next;
 	}
 }
-//this is to find out that it is expandable which has space AND is FILE_TOKEN. So that it would not be expanded
 static bool	is_ambiguous_redirect(t_minishell *mshell, t_token *current, char *str)
 {
 	size_t	i;
@@ -61,7 +60,13 @@ static bool	is_ambiguous_redirect(t_minishell *mshell, t_token *current, char *s
 				}
 				j++;
 			}
+			return (0);
 		}
+	}
+	if (env[i] == NULL)
+	{
+		current->ambiguous = 1;
+		return (1);
 	}
 	return (0);
 }
