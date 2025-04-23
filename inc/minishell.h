@@ -75,24 +75,29 @@ void	exit_cleanup_error(t_minishell *mshell, char *msg);
 void	print_error(char *msg, char *token, t_token_type type);
 
 //global utils
-void	append_char(t_minishell *mshell, char *src, char **dst, int i);
+void	append_char(t_minishell *mshell, char *src, char **dst, size_t i);
 int		is_any_redirect(t_token *current);
 void	replace_content_of_token(t_token *current, char *new_str);
-int		there_is_quote_state_change(t_quotes_helper quotes);
+bool	there_is_quote_state_change(t_quotes_helper quotes);
 
 //quote handler
 void	expand_remove_quotes(t_minishell *mshell, t_input *input);
+void	init_vars(t_minishell *mshell, t_vars *vars, t_token *current);
 
 //quote utils
-int		is_valid_expandable(t_quotes_helper quotes, char *input_str);
-int		is_any_word(t_token_type type);
-int		expandable_exists(int len, char **env, int i, char *str);
-int		is_exitcode_expansion(t_quotes_helper quotes, char *input_str);
-int		is_pid_expansion(t_quotes_helper quotes, char *input_str);
+bool	is_valid_expandable(t_quotes_helper quotes, char *input_str);
+bool	is_any_word(t_token_type type);
+bool	expandable_exists(int len, char **env, size_t i, char *str);
+bool	is_exitcode_expansion(t_quotes_helper quotes, char *input_str);
+bool	is_pid_expansion(t_quotes_helper quotes, char *input_str);
+bool	is_exp_is_empty_is_bare_is_cmd_or_arg(t_vars vars, t_token *curr);
+
+void	update_vars_quote(t_vars *vars, size_t *i);
+void	update_vars_append(t_minishell *mshell, t_vars *vars, size_t *i);
 
 //expansion
 size_t	expand_pid(t_minishell *mshell, int fd, char **new_str);
-size_t	expand_content(t_minishell *mshell, t_token *current, char *str, int fd, char **new_str);
+size_t	expand_content(t_minishell *mshell, char *str, int fd, char **new_str);
 size_t	expand_exitcode_value(t_minishell *mshell, int fd, char **new_str);
 void	write_or_add_to_str(t_minishell *mshell, int fd, char **new_str, char *str_pid);
 int		skip_to_start_of_expandable(char *env_row);
