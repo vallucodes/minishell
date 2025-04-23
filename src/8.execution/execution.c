@@ -5,7 +5,8 @@ int	execute_in_sub_process(t_minishell *mshell, t_ast *ast);
 
 void execute_ast_v1(t_minishell *mshell, t_ast *ast)
 {
-
+	if (!ast)
+		return ;
 	if (ast->type != PIPE && is_builtin(ast))
 		mshell->exitcode = execute_builtin_alone(mshell, ast);
 	else

@@ -28,6 +28,7 @@ typedef struct s_token
 	char			*value;
 	int				len;
 	t_token_type	type;
+	bool			ambiguous;
 	struct s_token	*next;
 }				t_token;
 

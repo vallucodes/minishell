@@ -51,6 +51,8 @@ void	build_ast_binary_tree(t_minishell *mshell, t_token *tokens, t_ast **ast)
 	size_t	i;
 
 	*ast = NULL;
+	if (!tokens)
+		return ;
 	i = 0;
 	amount_of_pipes = get_amount_of_pipes(tokens);
 	while (i < amount_of_pipes)

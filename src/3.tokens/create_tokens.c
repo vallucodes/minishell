@@ -12,6 +12,7 @@ static t_token	*init_token(t_minishell *mshell, \
 	new_token->len = len;
 	new_token->type = type;
 	new_token->next = NULL;
+	new_token->ambiguous = 0;
 	input->index += len;
 	return (new_token);
 }
@@ -28,6 +29,7 @@ static t_token	*init_token_word(t_minishell *mshell, \
 	new_token->len = ft_strlen(word);
 	new_token->type = type;
 	new_token->next = NULL;
+	new_token->ambiguous = 0;
 	return (new_token);
 }
 
