@@ -13,6 +13,7 @@
 # include <limits.h>			//FILE_MAX
 # include <sys/wait.h>
 # include <sys/stat.h>
+# include <stdbool.h>			//bool
 # include "../lib/libft/inc/libft.h"
 # include "signals.h"
 # include "lexing.h"
@@ -80,7 +81,7 @@ void	replace_content_of_token(t_token *current, char *new_str);
 int		there_is_quote_state_change(t_quotes_helper quotes);
 
 //quote handler
-void	expand_remove_quotes(t_minishell *mshell, t_token *tokens);
+void	expand_remove_quotes(t_minishell *mshell, t_input *input);
 
 //quote utils
 int		is_valid_expandable(t_quotes_helper quotes, char *input_str);
@@ -91,7 +92,7 @@ int		is_pid_expansion(t_quotes_helper quotes, char *input_str);
 
 //expansion
 size_t	expand_pid(t_minishell *mshell, int fd, char **new_str);
-size_t	expand_content(t_minishell *mshell, char *str, int fd, char **new_str);
+size_t	expand_content(t_minishell *mshell, t_token *current, char *str, int fd, char **new_str);
 size_t	expand_exitcode_value(t_minishell *mshell, int fd, char **new_str);
 void	write_or_add_to_str(t_minishell *mshell, int fd, char **new_str, char *str_pid);
 int		skip_to_start_of_expandable(char *env_row);

@@ -25,7 +25,7 @@ void print_tokens(t_token *tokens)
 	{
 		if (tokens->value)
 		{
-			printf("Type: %15s, Length of token: %d, Value: %.*s\n", get_token_type_name(tokens->type), tokens->len, tokens->len, tokens->value);
+			printf("Type: %15s, Length of token: %d, Value: %.*s, Ambiguous %i\n", get_token_type_name(tokens->type), tokens->len, tokens->len, tokens->value, tokens->ambiguous);
 		}
 		tokens = tokens->next;
 	}

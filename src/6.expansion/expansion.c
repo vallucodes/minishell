@@ -49,7 +49,7 @@ size_t	expand_pid(t_minishell *mshell, int fd, char **new_str)
 	return (2);
 }
 
-size_t	expand_content(t_minishell *mshell, char *str, int fd, char **new_str)
+size_t	expand_content(t_minishell *mshell, t_token *current, char *str, int fd, char **new_str)
 {
 	size_t	i;
 	size_t	j;

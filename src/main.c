@@ -29,8 +29,8 @@ int main(int ac, char **av, char **envp)
 			continue ;
 		if (handle_heredoc(&mshell, input.tokens) == FAIL)
 			continue ;
-		expand_remove_quotes(&mshell, input.tokens);
-		// print_tokens(input.tokens);
+		expand_remove_quotes(&mshell, &input);
+		print_tokens(input.tokens);
 		build_ast_binary_tree(&mshell, input.tokens, &ast);
 
 		//print_whole_tree(ast);
