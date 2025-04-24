@@ -1,20 +1,8 @@
 #include "../../inc/minishell.h"
 
-static int exec_external_command(t_minishell *mshell, t_ast *ast)
+static void handle_error(t_minishell *mshell, t_ast *cmd_node, char *full_cmd_path)
 {
-	char *full_cmd_path;
-	t_ast *cmd_node;
 	struct stat		statbuf;
-
-	cmd_node = get_cmd_node(ast);
-	if (!cmd_node || !cmd_node->cmd || !cmd_node->cmd[0])
-		return FAIL;
-	full_cmd_path = get_command_path(mshell, cmd_node);
-	//printf("COMMAND OR ARGS COUNT: %d\n", count_argv(cmd_node->cmd));
-	sig_action_default(mshell);
-	execve(full_cmd_path, cmd_node->cmd, mshell->envp->envp);
-	//ft_dprintf(2, "Giraffeshell: %s: %s\n", cmd_node->cmd[0], strerror(errno));
-	mshell->exitcode = 1;
 	if (errno == ENOENT)
 	{
 		ft_dprintf(2, "Giraffeshell: %s: %s\n", cmd_node->cmd[0], strerror(errno));
@@ -33,6 +21,27 @@ static int exec_external_command(t_minishell *mshell, t_ast *ast)
 		ft_dprintf(STDERR_FILENO, "Giraffeshell: %s: %s\n", cmd_node->cmd[0], strerror(errno));
 		mshell->exitcode = 126;
 	}
+}
+
+static void exec_external_command(t_minishell *mshell, t_ast *ast)
+{
+	char *full_cmd_path;
+	t_ast *cmd_node;
+
+	cmd_node = get_cmd_node(ast);
+	if (!cmd_node || !cmd_node->cmd || !cmd_node->cmd[0])
+	{
+		mshell->exitcode = 127;
+		delete_minishell(mshell);
+		exit(mshell->exitcode);
+	}
+	full_cmd_path = get_command_path(mshell, cmd_node);
+	//printf("COMMAND OR ARGS COUNT: %d\n", count_argv(cmd_node->cmd));
+	sig_action_default(mshell);
+	execve(full_cmd_path, cmd_node->cmd, mshell->envp->envp);
+	//ft_dprintf(2, "Giraffeshell: %s: %s\n", cmd_node->cmd[0], strerror(errno));
+	mshell->exitcode = 1;
+	handle_error(mshell, cmd_node, full_cmd_path);
 	free(full_cmd_path);
 	delete_minishell(mshell);
 	exit(mshell->exitcode);
