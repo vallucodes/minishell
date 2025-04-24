@@ -37,7 +37,7 @@ static char	**find_cmd_and_compose(t_minishell *mshell, t_token *tokens)
 static void	build_branch_add_redirects(t_minishell *mshell, \
 			t_ast **ast, t_token *tokens, t_branch branch)
 {
-	t_token	*tmp;
+	t_token		*tmp;
 
 	tmp = tokens;
 	if (branch == LAST_BRANCH)
@@ -46,8 +46,7 @@ static void	build_branch_add_redirects(t_minishell *mshell, \
 		{
 			if (is_any_redirect(tmp))
 			{
-				add_node(ast, init_node(mshell, NULL, \
-						tmp->next->value, tmp->type), FIRST);
+				add_node(ast, init_node(mshell, NULL, tmp, 0), FIRST);
 				tmp = tmp->next;
 				break ;
 			}
@@ -57,8 +56,7 @@ static void	build_branch_add_redirects(t_minishell *mshell, \
 	while (tmp && tmp->type != PIPE)
 	{
 		if (is_any_redirect(tmp))
-			add_node(ast, init_node(mshell, NULL, \
-					tmp->next->value, tmp->type), NON_FIRST);
+			add_node(ast, init_node(mshell, NULL, tmp, 0), NON_FIRST);
 		tmp = tmp->next;
 	}
 }
@@ -66,8 +64,8 @@ static void	build_branch_add_redirects(t_minishell *mshell, \
 static void	build_branch_add_command(t_minishell *mshell, \
 			t_ast **ast, t_token *tokens, t_branch branch)
 {
-	t_token	*tmp;
-	char	**cmd;
+	t_token		*tmp;
+	char		**cmd;
 
 	tmp = tokens;
 	while (tmp && tmp->type != PIPE)
@@ -76,11 +74,9 @@ static void	build_branch_add_command(t_minishell *mshell, \
 		{
 			cmd = find_cmd_and_compose(mshell, tmp);
 			if (branch == LAST_BRANCH && last_is_pipe(ast))
-				add_node(ast, init_node(mshell, cmd, \
-						NULL, tmp->type), FIRST);
+				add_node(ast, init_node(mshell, cmd, tmp, 0), FIRST);
 			else
-				add_node(ast, init_node(mshell, cmd, \
-						NULL, tmp->type), NON_FIRST);
+				add_node(ast, init_node(mshell, cmd, tmp, 0), NON_FIRST);
 		}
 		tmp = tmp->next;
 	}

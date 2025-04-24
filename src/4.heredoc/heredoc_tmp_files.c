@@ -17,7 +17,7 @@ void	save_line_to_tmp_file(t_minishell *mshell, \
 		while (input[i])
 		{
 			if (input[i] == '$' && is_valid_char_expansion(input[i + 1]))
-				i += expand_content(mshell, NULL, &input[i], fd_tmp, NULL);
+				i += expand_content(mshell, &input[i], fd_tmp, NULL);
 			else if (input[i] == '$' && input[i + 1] == '$')
 				i += expand_pid(mshell, fd_tmp, NULL);
 			else if (input[i] == '$' && input[i + 1] == '?')

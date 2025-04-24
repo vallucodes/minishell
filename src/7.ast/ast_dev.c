@@ -31,7 +31,8 @@ void print_node(t_ast *node)
 {
     printf("Type: %15s ", get_token_type_name(node->type));
     print_cmd(node->cmd);
-    printf("file: %s\n", node->file ? node->file : "NULL");
+    printf("file: %20s ", node->file ? node->file : "NULL");
+    printf("ambiguous: %s\n", node->ambiguous ? "true" : "false");
 }
 
 void print_left_side(t_ast *ast)
