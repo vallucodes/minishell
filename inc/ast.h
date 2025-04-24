@@ -1,5 +1,7 @@
 #ifndef AST_H
 # define AST_H
+
+typedef struct s_token	t_token;
 typedef struct s_ast
 {
 	t_token_type	type;
@@ -7,6 +9,8 @@ typedef struct s_ast
 	char			*file;
 	struct s_ast	*next_left;
 	struct s_ast	*next_right;
+	t_token			*token;
+
 }	t_ast;
 
 typedef enum e_order

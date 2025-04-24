@@ -28,7 +28,10 @@ void	handle_child_process(t_minishell *mshell, t_ast *ast, t_exec *exec)
 	close_origin_fds(mshell);
 	setup_child_pipe_fds(mshell, exec);
 	if (handle_redirection(ast) == FAIL)
+	{
+		delete_minishell(mshell);
 		exit(1);
+	}
 	if (is_builtin(ast))
 	{
 		mshell->exitcode = execute_builtin(mshell, ast);
@@ -37,6 +40,7 @@ void	handle_child_process(t_minishell *mshell, t_ast *ast, t_exec *exec)
 	}
 	else
 		exec_external_command(mshell, ast);
+	delete_minishell(mshell);
 	exit(SUCCESS);
 }
 
