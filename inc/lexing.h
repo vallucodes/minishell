@@ -48,6 +48,15 @@ typedef struct s_quotes_helper
 	int	previous_in_quotes;
 }				t_quotes_helper;
 
+typedef struct s_vars
+{
+	t_quotes_helper	quotes;
+	char			*new_str;
+	char			*input_str;
+	size_t			i;
+	bool			is_bare_exp;
+}				t_vars;
+
 typedef struct s_minishell t_minishell;
 
 //tokenizer

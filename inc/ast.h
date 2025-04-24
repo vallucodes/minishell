@@ -7,6 +7,7 @@ typedef struct s_ast
 	t_token_type	type;
 	char			**cmd;
 	char			*file;
+	bool			ambiguous; //add this in ast creation
 	struct s_ast	*next_left;
 	struct s_ast	*next_right;
 	t_token			*token;
@@ -25,11 +26,19 @@ typedef enum e_branch
 	NON_LAST_BRANCH,
 }	t_branch;
 
+typedef struct s_ast_vars
+{
+	t_token_type	type;
+	char			**cmd;
+	char			*file;
+	bool			ambiguous;
+}	t_ast_vars;
+
 //ast
 void	build_ast_binary_tree(t_minishell *mshell, t_token *tokens, t_ast **ast);
 void	build_branch(t_minishell *mshell, t_ast **ast, t_token *tokens, t_branch branch);
 void	add_node(t_ast **ast, t_ast *new_node, t_order order);
-t_ast	*init_node(t_minishell *mshell, char **cmd, char *file, t_token_type type);
+t_ast	*init_node(t_minishell *mshell, char **cmd, t_token *tokens, t_token_type type);
 
 //ast utils
 int		count_amount_cmd(t_token *tokens);

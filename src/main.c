@@ -32,13 +32,9 @@ int main(int ac, char **av, char **envp)
 		expand_remove_quotes(&mshell, &input);
 		print_tokens(input.tokens);
 		build_ast_binary_tree(&mshell, input.tokens, &ast);
-
-		print_whole_tree(ast);
-		// execute_ast(&mshell, ast);
+		// print_whole_tree(ast);
 		execute_ast_v1(&mshell, ast);
-
         //ft_dprintf(2, "Debug: Main loop continued. Child exit code was: %d\n", mshell.exitcode);
-
 		delete_tmp_files(&mshell);
 		free(mshell.input_str);
 		arena_delete(&mshell.arena);

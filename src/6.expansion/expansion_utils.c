@@ -1,8 +1,8 @@
 #include "../inc/minishell.h"
 
-int	skip_to_start_of_expandable(char *env_row)
+size_t	skip_to_start_of_expandable(char *env_row)
 {
-	int	i;
+	size_t	i;
 
 	i = 0;
 	while (env_row[i] && env_row[i] != '=')

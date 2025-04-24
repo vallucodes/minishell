@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	append_char(t_minishell *mshell, char *src, char **dst, int i)
+void	append_char(t_minishell *mshell, char *src, char **dst, size_t i)
 {
 	char	additive[2];
 

@@ -1,13 +1,5 @@
 #include "../inc/minishell.h"
 
-static void	init_vars(size_t *i, char **input_str, \
-		t_token *current, t_quotes_helper *quotes)
-{
-	*i = 0;
-	init_quotes(quotes);
-	*input_str = current->value;
-}
-
 static void	find_and_set_next_command(t_token *current)
 {
 	current = current->next;
@@ -34,7 +26,7 @@ static void	delete_token(t_input *input, t_token *current, t_token *previous)
 		input->tokens = current->next;
 	}
 }
-static bool	is_ambiguous_redirect(t_minishell *mshell, t_token *current, char *str)
+bool	is_ambiguous_redirect(t_minishell *mshell, t_token *current, char *str)
 {
 	size_t	i;
 	size_t	j;
@@ -76,49 +68,28 @@ static bool	is_ambiguous_redirect(t_minishell *mshell, t_token *current, char *s
 	return (0);
 }
 
-static void	loop_through_word(t_minishell *mshell, t_input *input, t_token *current, t_token *previous)
+static void	loop_through_word(t_minishell *mshell, \
+	t_input *input, t_token *current, t_token *previous)
 {
-	t_quotes_helper	quotes;
-	char			*new_str;
-	char			*input_str;
-	size_t			i;
-	bool			is_only_env_expandable;
+	t_vars	vars;
+	size_t	i;
 
-	is_only_env_expandable = 1;
-	init_vars(&i, &input_str, current, &quotes);
-	new_str = ft_arena_strdup(mshell->arena, "");
-	if (!new_str)
-		exit_cleanup_error(mshell, "malloc");
-	while (input_str[i])
+	init_vars(mshell, &vars, current);
+	i = 0;
+	while (vars.input_str[i])
 	{
-		update_quote_state(input_str[i], &quotes);
-		if (is_valid_expandable(quotes, &input_str[i]) && !is_ambiguous_redirect(mshell, current, &input_str[i]))
-			i += expand_content(mshell, current, &input_str[i], 0, &new_str);
-		else if (is_pid_expansion(quotes, &input_str[i]))
-		{
-			is_only_env_expandable = 0;
-			i += expand_pid(mshell, 0, &new_str);
-		}
-		else if (is_exitcode_expansion(quotes, &input_str[i]))
-		{
-			is_only_env_expandable = 0;
-			i += expand_exitcode_value(mshell, 0, &new_str);
-		}
-		else if (there_is_quote_state_change(quotes))
-		{
-			is_only_env_expandable = 0;
-			i++;
-		}
+		update_quote_state(vars.input_str[i], &vars.quotes);
+		if (handle_expandables(mshell, &vars, &i, current) == SUCCESS)
+			continue ;
+		if (there_is_quote_state_change(vars.quotes))
+			update_vars_quote(&vars, &i);
 		else
-		{
-			is_only_env_expandable = 0;
-			append_char(mshell, input_str, &new_str, i++);
-		}
+			update_vars_append(mshell, &vars, &i);
 	}
-	if (new_str[0] == '\0' && is_only_env_expandable == 1 && (current->type == COMMAND || current->type == ARG))
+	if (is_exp_is_empty_is_bare_is_cmd_or_arg(vars, current))
 		delete_token(input, current, previous);
 	else
-		replace_content_of_token(current, new_str);
+		replace_content_of_token(current, vars.new_str);
 }
 
 void	expand_remove_quotes(t_minishell *mshell, t_input *input)
