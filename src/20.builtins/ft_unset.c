@@ -2,26 +2,40 @@
 
 static void	remove_env_var(t_env *env, const char *key);
 
+// int	ft_unset(char **args, t_env *env)
+// {
+// 	int	i;
+// 	int	exit_code;
+
+// 	i = 1;
+// 	exit_code = SUCCESS;
+// 	while (args[i])
+// 	{
+// 		if (is_valid_identifier_range(args[i], ft_strlen(args[i])))
+// 			remove_env_var(env, args[i]);
+// 		else
+// 		{
+// 			ft_dprintf(2, "Giraffeshell: unset: `%s': not a valid identifier\n", args[i]);
+// 			exit_code = FAIL;
+// 		}
+// 		i++;
+// 	}
+// 	return (exit_code);
+// }
+
 int	ft_unset(char **args, t_env *env)
 {
 	int	i;
-	int	exit_code;
 
 	i = 1;
-	exit_code = SUCCESS;
 	while (args[i])
 	{
-		if (is_valid_identifier_range(args[i], ft_strlen(args[i])))
-			remove_env_var(env, args[i]);
-		else
-		{
-			ft_dprintf(2, "Giraffeshell: unset: `%s': not a valid identifier\n", args[i]);
-			exit_code = FAIL;
-		}
+		remove_env_var(env, args[i]);
 		i++;
 	}
-	return (exit_code);
+	return (SUCCESS);
 }
+
 
 static void	remove_env_var(t_env *env, const char *key)
 {

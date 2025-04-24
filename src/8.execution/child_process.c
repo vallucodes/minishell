@@ -4,6 +4,7 @@ static int exec_external_command(t_minishell *mshell, t_ast *ast)
 {
 	char *full_cmd_path;
 	t_ast *cmd_node;
+	struct stat		statbuf;
 
 	cmd_node = get_cmd_node(ast);
 	if (!cmd_node || !cmd_node->cmd || !cmd_node->cmd[0])
@@ -12,12 +13,26 @@ static int exec_external_command(t_minishell *mshell, t_ast *ast)
 	//printf("COMMAND OR ARGS COUNT: %d\n", count_argv(cmd_node->cmd));
 	sig_action_default(mshell);
 	execve(full_cmd_path, cmd_node->cmd, mshell->envp->envp);
-	ft_dprintf(2, "Giraffeshell: %s: %s\n", cmd_node->cmd[0], strerror(errno));
+	//ft_dprintf(2, "Giraffeshell: %s: %s\n", cmd_node->cmd[0], strerror(errno));
 	mshell->exitcode = 1;
 	if (errno == ENOENT)
+	{
+		ft_dprintf(2, "Giraffeshell: %s: %s\n", cmd_node->cmd[0], strerror(errno));
 		mshell->exitcode = 127;
-	else if (errno == EACCES || errno == EISDIR || errno == ENOTDIR)
+	}
+	else if (errno == EACCES)
+	{
+		if (stat(full_cmd_path, &statbuf) == 0 && S_ISDIR(statbuf.st_mode))
+			ft_dprintf(2, "Giraffeshell: %s: Is a directory\n", cmd_node->cmd[0]);
+		else
+			ft_dprintf(2, "Giraffeshell: %s: Permission denied\n", cmd_node->cmd[0]);
 		mshell->exitcode = 126;
+	}
+	else
+	{
+		ft_dprintf(STDERR_FILENO, "Giraffeshell: %s: %s\n", cmd_node->cmd[0], strerror(errno));
+		mshell->exitcode = 126;
+	}
 	free(full_cmd_path);
 	delete_minishell(mshell);
 	exit(mshell->exitcode);

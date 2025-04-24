@@ -7,11 +7,9 @@ typedef struct s_ast
 	t_token_type	type;
 	char			**cmd;
 	char			*file;
-	bool			ambiguous; //add this in ast creation
+	bool			ambiguous;
 	struct s_ast	*next_left;
 	struct s_ast	*next_right;
-	t_token			*token;
-
 }	t_ast;
 
 typedef enum e_order

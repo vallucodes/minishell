@@ -1,6 +1,5 @@
 #include "../../inc/minishell.h"
 
-
 static int check_ambiguous_redir(const char *file, t_ast *ast);
 
 int	open_redir_file(const char *file, int flags, int *fd, t_ast *ast)
@@ -21,28 +20,16 @@ int	open_redir_file(const char *file, int flags, int *fd, t_ast *ast)
 	return (SUCCESS);
 }
 
-static int check_ambiguous_redir(const char *file, t_ast *ast)
+static int	check_ambiguous_redir(const char *file, t_ast *ast)
 {
-	int i;
-
-	i = 0;
-	// if (!file || *file == '\0')
-	// {
-	// 	ft_dprintf(2, "Giraffeshell: %s: ambiguous redirect\n", file);  // TODO
-	// 	return (FAIL);
-	// }
-	while (file[i])
+	if (ast->ambiguous)
 	{
-		if (file && file[i] !='\0' && ast->token->ambiguous == 1)
-		{
+		if (file)
 			ft_dprintf(2, "Giraffeshell: %s: ambiguous redirect\n", file);
-			return (FAIL);
-		}
 		else
-		{
 			ft_dprintf(2, "Giraffeshell: : ambiguous redirect\n");
-		}
-		i++;
+		return (FAIL);
 	}
 	return (SUCCESS);
 }
+

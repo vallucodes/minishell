@@ -33,7 +33,7 @@ static int	redirect_input(t_ast *ast)
 	int	fd_in;
 
 	fd_in = -1;
-	if (open_redir_file(ast->file, O_RDONLY, &fd_in) == FAIL)
+	if (open_redir_file(ast->file, O_RDONLY, &fd_in, ast) == FAIL)
 		return (FAIL);
 
 	if (safe_dup2(fd_in, STDIN_FILENO) == FAIL)
@@ -50,7 +50,7 @@ static int	redirect_output(t_ast *ast)
 	int	fd_out;
 
 	fd_out = -1;
-	if (open_redir_file(ast->file, O_WRONLY | O_CREAT | O_TRUNC, &fd_out) == FAIL)
+	if (open_redir_file(ast->file, O_WRONLY | O_CREAT | O_TRUNC, &fd_out, ast) == FAIL)
 		return (FAIL);
 
 	if (safe_dup2(fd_out, STDOUT_FILENO) == FAIL)
@@ -67,7 +67,7 @@ static int	redirect_append(t_ast *ast)
 	int	fd_out;
 
 	fd_out = -1;
-	if (open_redir_file(ast->file, O_WRONLY | O_CREAT | O_APPEND, &fd_out) == FAIL)
+	if (open_redir_file(ast->file, O_WRONLY | O_CREAT | O_APPEND, &fd_out, ast) == FAIL)
 		return (FAIL);
 
 	if (safe_dup2(fd_out, STDOUT_FILENO) == FAIL)

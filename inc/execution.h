@@ -23,7 +23,7 @@ typedef struct s_exec
 //redirection
 int	handle_redirection(t_ast *ast);
 int	safe_dup2(int fd, int target_fd);
-int	open_redir_file(const char *file, int flags, int *fd);
+int	open_redir_file(const char *file, int flags, int *fd, t_ast *ast);
 
 //setup
 int		setup_pipe(t_exec *exec);
