@@ -40,6 +40,7 @@ SRC			=	main.c \
 				4.heredoc/heredoc_tmp_files.c \
 				4.heredoc/heredoc_cleanup.c \
 				5.quotes_handle/quotes_handler.c \
+				5.quotes_handle/quotes_handler_init.c \
 				5.quotes_handle/quotes_handler_utils.c \
 				5.quotes_handle/quotes_handler_utils2.c \
 				6.expansion/expansion.c \
@@ -48,6 +49,7 @@ SRC			=	main.c \
 				7.ast/ast_branch_building.c \
 				7.ast/ast_dev.c \
 				7.ast/ast_utils.c \
+				7.ast/ast_create_node.c \
 				20.builtins/ft_env.c \
 				20.builtins/ft_pwd.c \
 				20.builtins/ft_cd.c \

@@ -83,6 +83,8 @@ bool	there_is_quote_state_change(t_quotes_helper quotes);
 //quote handler
 void	expand_remove_quotes(t_minishell *mshell, t_input *input);
 void	init_vars(t_minishell *mshell, t_vars *vars, t_token *current);
+int		handle_expandables(t_minishell *mshell, t_vars *vars, size_t *i, t_token *current);
+bool	is_ambiguous_redirect(t_minishell *mshell, t_token *current, char *str);
 
 //quote utils
 bool	is_valid_expandable(t_quotes_helper quotes, char *input_str);

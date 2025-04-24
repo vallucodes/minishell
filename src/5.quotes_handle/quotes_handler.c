@@ -26,7 +26,7 @@ static void	delete_token(t_input *input, t_token *current, t_token *previous)
 		input->tokens = current->next;
 	}
 }
-static bool	is_ambiguous_redirect(t_minishell *mshell, t_token *current, char *str)
+bool	is_ambiguous_redirect(t_minishell *mshell, t_token *current, char *str)
 {
 	size_t	i;
 	size_t	j;
