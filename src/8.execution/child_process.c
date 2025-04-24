@@ -18,7 +18,7 @@ static void handle_error(t_minishell *mshell, t_ast *cmd_node, char *full_cmd_pa
 	}
 	else
 	{
-		ft_dprintf(STDERR_FILENO, "Giraffeshell: %s: %s\n", cmd_node->cmd[0], strerror(errno));
+		ft_dprintf(2, "Giraffeshell: %s: %s\n", cmd_node->cmd[0], strerror(errno));
 		mshell->exitcode = 126;
 	}
 }
@@ -39,7 +39,6 @@ static void exec_external_command(t_minishell *mshell, t_ast *ast)
 	//printf("COMMAND OR ARGS COUNT: %d\n", count_argv(cmd_node->cmd));
 	sig_action_default(mshell);
 	execve(full_cmd_path, cmd_node->cmd, mshell->envp->envp);
-	//ft_dprintf(2, "Giraffeshell: %s: %s\n", cmd_node->cmd[0], strerror(errno));
 	mshell->exitcode = 1;
 	handle_error(mshell, cmd_node, full_cmd_path);
 	free(full_cmd_path);
