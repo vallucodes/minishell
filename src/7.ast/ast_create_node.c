@@ -24,7 +24,8 @@ void static	init_cmd(t_ast *new_node, t_token *tokens, char **cmd)
 	new_node->ambiguous = 0;
 }
 
-t_ast	*init_node(t_minishell *mshell, char **cmd, t_token *tokens, t_token_type type)
+t_ast	*init_node(t_minishell *mshell, \
+		char **cmd, t_token *tokens, t_token_type type)
 {
 	t_ast	*new_node;
 
