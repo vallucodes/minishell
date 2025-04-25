@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free_env.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/25 21:53:06 by hiennguy          #+#    #+#             */
+/*   Updated: 2025/04/25 21:53:08 by hiennguy         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
 void	exit_env(char *msg, t_env **env)
@@ -10,11 +22,10 @@ void	exit_env(char *msg, t_env **env)
 
 void	free_env(t_env *env)
 {
-	unsigned int i;
+	unsigned int	i;
 
 	if (!env || !env->envp)
-		return;
-
+		return ;
 	i = 0;
 	while (i < env->len)
 	{
