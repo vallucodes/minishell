@@ -26,7 +26,7 @@ static void	delete_token(t_input *input, t_token *current, t_token *previous)
 		input->tokens = current->next;
 	}
 }
-bool	is_ambiguous_redirect(t_minishell *mshell, t_token *current, char *str)
+bool	is_ambiguous_redirect(t_minishell *mshell, t_quotes_helper quotes, t_token *current, char *str)
 {
 	size_t	i;
 	size_t	j;
@@ -34,6 +34,8 @@ bool	is_ambiguous_redirect(t_minishell *mshell, t_token *current, char *str)
 	char	**env;
 
 	if (current->type != FILE_TOKEN)
+		return (0);
+	if (quotes.in_double)
 		return (0);
 	env = mshell->envp->envp;
 	len = get_len_explandeble(str);
