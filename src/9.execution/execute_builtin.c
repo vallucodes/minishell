@@ -6,7 +6,7 @@
 /*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 20:34:47 by hiennguy          #+#    #+#             */
-/*   Updated: 2025/04/25 20:40:40 by hiennguy         ###   ########.fr       */
+/*   Updated: 2025/04/25 21:56:12 by hiennguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,13 @@ int	is_builtin(t_ast *ast)
 	while (ast)
 	{
 		if (
-			ast->type == COMMAND && (ft_strcmp(ast->cmd[0], "echo") == 0 \
-					|| ft_strcmp(ast->cmd[0], "cd") == 0 \
-					|| ft_strcmp(ast->cmd[0], "pwd") == 0 \
-					|| ft_strcmp(ast->cmd[0], "export") == 0 \
-					|| ft_strcmp(ast->cmd[0], "unset") == 0 \
-					|| ft_strcmp(ast->cmd[0], "env") == 0 \
-					|| ft_strcmp(ast->cmd[0], "exit") == 0))
+			ast->type == COMMAND && (ft_strcmp(ast->cmd[0], "echo") == 0
+				|| ft_strcmp(ast->cmd[0], "cd") == 0
+				|| ft_strcmp(ast->cmd[0], "pwd") == 0
+				|| ft_strcmp(ast->cmd[0], "export") == 0
+				|| ft_strcmp(ast->cmd[0], "unset") == 0
+				|| ft_strcmp(ast->cmd[0], "env") == 0
+				|| ft_strcmp(ast->cmd[0], "exit") == 0))
 			return (1);
 		ast = ast->next_left;
 	}
