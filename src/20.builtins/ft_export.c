@@ -8,7 +8,7 @@ int	ft_export(char **args, t_minishell *mshell)
 {
 	int i;
 	int exit_code;
-
+	
 	i = 1;
 	exit_code = 0;
 	if (!args[i])

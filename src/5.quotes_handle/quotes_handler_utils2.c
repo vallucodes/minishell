@@ -30,3 +30,19 @@ void	update_vars_append(t_minishell *mshell, t_vars *vars, size_t *i)
 	append_char(mshell, vars->input_str, &vars->new_str, *i);
 	(*i)++;
 }
+
+bool	process_expandable(size_t i, t_token *current, char	**env)
+{
+	size_t	j;
+
+	j = skip_to_start_of_expandable(env[i]);
+	if (env[i][j] == '\0')
+		return (current->ambiguous = 1, 1);
+	while (env[i][j])
+	{
+		if (current && ft_isspace(env[i][j]))
+			return (current->ambiguous = 1, 1);
+		j++;
+	}
+	return (0);
+}

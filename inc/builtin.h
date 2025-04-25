@@ -2,7 +2,7 @@
 #ifndef BUILTINS_H
 # define BUILTINS_H
 
-# include <stdio.h>
+// # include <stdio.h>
 
 typedef struct s_env t_env;
 typedef struct s_ast t_ast;

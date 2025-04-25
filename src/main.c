@@ -14,15 +14,7 @@ int main(int ac, char **av, char **envp)
 	while (1)
 	{
 		sig_action_main(&mshell);
-		// if (isatty(fileno(stdin)))
 		mshell.input_str = readline(PROMPT);
-		// else
-		// {
-		// 	char *line;
-		// 	line = get_next_line(fileno(stdin));
-		// 	mshell.input_str = ft_strtrim(line, "\n");
-		// 	free(line);
-		// }
 		sig_action_ignore(&mshell);
 		mshell.rl_count += 1;
 		if (!mshell.input_str)
@@ -30,7 +22,7 @@ int main(int ac, char **av, char **envp)
 		if (mshell.input_str[0] == '\0' && (free(mshell.input_str), 1))
 			continue ;
 		add_history(mshell.input_str);
-		if (input_validation(mshell.input_str) && (free(mshell.input_str), 1))
+		if (input_validation(&mshell) && (free(mshell.input_str), 1))
 			continue ;
 		init_arena(&mshell);
 		if (tokenizer(&mshell, &input) == FAIL)
@@ -40,7 +32,7 @@ int main(int ac, char **av, char **envp)
 		expand_remove_quotes(&mshell, &input);
 		//print_tokens(input.tokens);
 		build_ast_binary_tree(&mshell, input.tokens, &ast);
-		print_whole_tree(ast);
+		// print_whole_tree(ast);
 		execute_ast_v1(&mshell, ast);
         //ft_dprintf(2, "Debug: Main loop continued. Child exit code was: %d\n", mshell.exitcode);
 		delete_tmp_files(&mshell);
@@ -54,15 +46,12 @@ int main(int ac, char **av, char **envp)
 
 
 // ls -la<file1>fi"le"1.1| "c"a't' -e >fi""'le2' <'fi'le3 | cmd1 fi"l"en'am'e >>file4 | du -s > $HOME'/path'
+// ls -la<file1>fi"le"1.1| "c"a't' -e >fi""'le2' <<'fi'le3 | grep fi"l"en'am'e >>file4 | du -s > $HOME'/path'
+// ls -la<file1>fi"le"1.1| "c"a't' -e >fi""'le2' <<'fi'le3 | grep fi"l"en'am'e >>file4 | du -s > "$HO'ME"'/path'
 
 //valgrind --leak-check=full --show-reachable=yes --track-fds=yes --error-limit=no --suppressions=./minimal.supp ./minishell
 
-// $H echo a
 
-
-// vlopatin@c1r6p13:~/c/Main_studies/minishell (copy)$ export x="a s"
-// vlopatin@c1r6p13:~/c/Main_studies/minishell (copy)$ >$x
-// bash: $x: ambiguous redirect,
-// issue here is that we should print original token "$x".
-
+// OPT+CMD+(number)
+// handle this limiting the input length in input validation
 
