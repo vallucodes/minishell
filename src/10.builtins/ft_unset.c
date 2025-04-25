@@ -1,27 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_unset.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/25 21:03:49 by hiennguy          #+#    #+#             */
+/*   Updated: 2025/04/25 21:04:19 by hiennguy         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
 static void	remove_env_var(t_env *env, const char *key);
-
-// int	ft_unset(char **args, t_env *env)
-// {
-// 	int	i;
-// 	int	exit_code;
-
-// 	i = 1;
-// 	exit_code = SUCCESS;
-// 	while (args[i])
-// 	{
-// 		if (is_valid_identifier_range(args[i], ft_strlen(args[i])))
-// 			remove_env_var(env, args[i]);
-// 		else
-// 		{
-// 			ft_dprintf(2, "Giraffeshell: unset: `%s': not a valid identifier\n", args[i]);
-// 			exit_code = FAIL;
-// 		}
-// 		i++;
-// 	}
-// 	return (exit_code);
-// }
 
 int	ft_unset(char **args, t_env *env)
 {
@@ -36,7 +27,6 @@ int	ft_unset(char **args, t_env *env)
 	return (SUCCESS);
 }
 
-
 static void	remove_env_var(t_env *env, const char *key)
 {
 	unsigned int	cur_index;
@@ -45,7 +35,7 @@ static void	remove_env_var(t_env *env, const char *key)
 	cur_index = 0;
 	while (cur_index < env->len)
 	{
-		if(match_env_key(env->envp[cur_index], key))
+		if (match_env_key(env->envp[cur_index], key))
 		{
 			free(env->envp[cur_index]);
 			shift_left = cur_index;
@@ -56,7 +46,7 @@ static void	remove_env_var(t_env *env, const char *key)
 			}
 			env->envp[env->len - 1] = NULL;
 			env->len--;
-			return;
+			return ;
 		}
 		cur_index++;
 	}

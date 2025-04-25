@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_cd.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/25 20:55:18 by hiennguy          #+#    #+#             */
+/*   Updated: 2025/04/25 21:06:33 by hiennguy         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 #include <linux/limits.h>
 
@@ -22,17 +34,12 @@ int	ft_cd(t_env **my_env, int argv_count, char **argv)
 	}
 	else if (chdir(argv[1]) != 0)
 	{
-		ft_dprintf(STDERR_FILENO, "Giraffeshell: cd: %s: %s\n", argv[1],
-			strerror(errno));
+		ft_dprintf(STDERR_FILENO, "Giraffeshell: cd: %s: %s\n", argv[1], \
+				strerror(errno));
 		return (FAIL);
 	}
-	if (!getcwd(old_pwd, sizeof(old_pwd)))
-	{
-		ft_dprintf(STDERR_FILENO,
-			"cd: error retrieving current directory: getcwd: cannot access parent directories: %s\n",
-			strerror(errno));
+	if (get_current_directory(old_pwd, sizeof(old_pwd)) == FAIL)
 		return (FAIL);
-	}
 	if (check_env_updates(*my_env, old_pwd) == FAIL)
 		return (FAIL);
 	return (SUCCESS);
@@ -109,8 +116,8 @@ static int	go_home(t_env *my_env)
 	}
 	if (chdir(home) != 0)
 	{
-		ft_dprintf(STDERR_FILENO, "Giraffeshell: cd: %s: %s\n", home,
-			strerror(errno));
+		ft_dprintf(STDERR_FILENO, "Giraffeshell: cd: %s: %s\n", home, \
+				strerror(errno));
 		return (FAIL);
 	}
 	return (SUCCESS);

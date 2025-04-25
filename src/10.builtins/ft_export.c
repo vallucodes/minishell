@@ -1,13 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_export.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/25 21:02:27 by hiennguy          #+#    #+#             */
+/*   Updated: 2025/04/25 21:07:07 by hiennguy         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
-static void		print_sorted_export(t_env *env);
-static int		handle_export_arg(t_minishell *mshell, char *arg);
-static int		export_update_or_add(t_minishell *mshell, char *arg, size_t key_len, int key_has_value);
+static void	print_sorted_export(t_env *env);
+static int	handle_export_arg(t_minishell *mshell, char *arg);
+static int	export_update_or_add(t_minishell *mshell, char *arg, size_t key_len,
+				int key_has_value);
 
 int	ft_export(char **args, t_minishell *mshell)
 {
-	int i;
-	int exit_code;
+	int	i;
+	int	exit_code;
 
 	i = 1;
 	exit_code = 0;
@@ -22,17 +35,18 @@ int	ft_export(char **args, t_minishell *mshell)
 	return (exit_code);
 }
 
-static void print_sorted_export(t_env *env)
+static void	print_sorted_export(t_env *env)
 {
-	size_t key_len;
-	char **sorted;
-	size_t i;
+	size_t	key_len;
+	char	**sorted;
+	size_t	i;
+	char	*equal;
 
 	i = 0;
 	sorted = dup_and_sort_env(env);
 	while (sorted && sorted[i])
 	{
-		char *equal = ft_strchr(sorted[i], '=');
+		equal = ft_strchr(sorted[i], '=');
 		if (equal)
 		{
 			key_len = equal - sorted[i];
@@ -61,10 +75,10 @@ static int	handle_export_arg(t_minishell *mshell, char *arg)
 		key_len = (size_t)(equal_sign - arg);
 	else
 		key_len = ft_strlen(arg);
-
 	if (!is_valid_identifier_range(arg, key_len))
 	{
-		ft_dprintf(2, "Giraffeshell: export: `%s`: not a valid identifier\n", arg);
+		ft_dprintf(2, "Giraffeshell: export: `%s`: not a valid identifier\n", \
+				arg);
 		return (FAIL);
 	}
 	if (export_update_or_add(mshell, arg, key_len, key_has_value) == FAIL)
@@ -75,9 +89,10 @@ static int	handle_export_arg(t_minishell *mshell, char *arg)
 	return (SUCCESS);
 }
 
-static int	export_update_or_add(t_minishell *mshell, char *arg, size_t key_len, int key_has_value)
+static int	export_update_or_add(t_minishell *mshell, char *arg, size_t key_len,
+		int key_has_value)
 {
-	char *key;
+	char	*key;
 
 	key = ft_substr(arg, 0, key_len);
 	if (!key)
