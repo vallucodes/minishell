@@ -14,9 +14,9 @@ void	append_char(t_minishell *mshell, char *src, char **dst, size_t i)
 int	is_any_redirect(t_token *current)
 {
 	return (current->type == REDIR_IN
-			|| current->type == REDIR_OUT
-			|| current->type == REDIR_APPEND
-			|| current->type == HERE_DOC);
+		|| current->type == REDIR_OUT
+		|| current->type == REDIR_APPEND
+		|| current->type == HERE_DOC);
 }
 
 void	replace_content_of_token(t_token *current, char *new_str)

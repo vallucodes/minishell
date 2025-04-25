@@ -27,7 +27,6 @@ void	cleanup_at_signal(t_minishell *mshell, char **input, \
 			int fd_stdin, int fd_tmp)
 {
 	sig_action_ignore(mshell);
-
 	close(fd_tmp);
 	delete_tmp_files(mshell);
 	free(*input);

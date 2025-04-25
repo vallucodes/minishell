@@ -69,7 +69,7 @@ char	*create_tmp_file(t_minishell *mshell, int *fd)
 		if (access (tmp_file, F_OK) != 0)
 			break ;
 		index++;
-		if (index > 1000)
+		if (index > 16)
 			exit_error(mshell, TMP_FILES);
 	}
 	*fd = open(tmp_file, O_WRONLY | O_CREAT | O_EXCL, 0644);

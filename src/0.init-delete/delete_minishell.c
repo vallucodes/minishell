@@ -34,7 +34,7 @@ static void	delete_path(t_minishell *mshell)
 	mshell->path = NULL;
 }
 
-void close_origin_fds(t_minishell *mshell)
+void	close_origin_fds(t_minishell *mshell)
 {
 	if (mshell->origin_stdin >= 0)
 	{

@@ -22,7 +22,7 @@ int main(int ac, char **av, char **envp)
 		if (mshell.input_str[0] == '\0' && (free(mshell.input_str), 1))
 			continue ;
 		add_history(mshell.input_str);
-		if (input_validation(mshell.input_str) && (free(mshell.input_str), 1))
+		if (input_validation(&mshell) && (free(mshell.input_str), 1))
 			continue ;
 		init_arena(&mshell);
 		if (tokenizer(&mshell, &input) == FAIL)
@@ -46,15 +46,12 @@ int main(int ac, char **av, char **envp)
 
 
 // ls -la<file1>fi"le"1.1| "c"a't' -e >fi""'le2' <'fi'le3 | cmd1 fi"l"en'am'e >>file4 | du -s > $HOME'/path'
+// ls -la<file1>fi"le"1.1| "c"a't' -e >fi""'le2' <<'fi'le3 | grep fi"l"en'am'e >>file4 | du -s > $HOME'/path'
+// ls -la<file1>fi"le"1.1| "c"a't' -e >fi""'le2' <<'fi'le3 | grep fi"l"en'am'e >>file4 | du -s > "$HO'ME"'/path'
 
 //valgrind --leak-check=full --show-reachable=yes --track-fds=yes --error-limit=no --suppressions=./minimal.supp ./minishell
 
-// $H echo a
 
-
-// vlopatin@c1r6p13:~/c/Main_studies/minishell (copy)$ export x="a s"
-// vlopatin@c1r6p13:~/c/Main_studies/minishell (copy)$ >$x
-// bash: $x: ambiguous redirect,
-// issue here is that we should print original token "$x".
-
+// OPT+CMD+(number)
+// handle this limiting the input length in input validation
 

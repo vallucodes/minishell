@@ -1,8 +1,8 @@
 #include "../inc/minishell.h"
 
-static int	quote_validation(char *input, t_quotes type, int *balanced)
+static size_t	quote_validation(char *input, t_quotes type, bool *balanced)
 {
-	int	i;
+	size_t	i;
 
 	i = 0;
 	while (input[i])
@@ -28,17 +28,24 @@ static int	quote_validation(char *input, t_quotes type, int *balanced)
 	return (i);
 }
 
-int	input_validation(char *input)
+int	input_validation(t_minishell *mshell)
 {
-	int	balanced;
+	bool	balanced;
 
 	balanced = 1;
-	if (!input || ft_is_all_whitespace(input))
+	if (ft_strlen(mshell->input_str) > 8191)
+	{
+		print_error(LINE_TOO_LONG, NULL, 0);
+		mshell->exitcode = 2;
 		return (FAIL);
-	quote_validation(input, NONE, &balanced);
+	}
+	if (!mshell->input_str || ft_is_all_whitespace(mshell->input_str))
+		return (FAIL);
+	quote_validation(mshell->input_str, NONE, &balanced);
 	if (!balanced)
 	{
 		print_error(BALANCE, NULL, 0);
+		mshell->exitcode = 2;
 		return (FAIL);
 	}
 	return (SUCCESS);

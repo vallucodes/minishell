@@ -28,5 +28,5 @@ bool	expandable_exists(int len, char **env, size_t i, char *str)
 bool	is_exp_is_empty_is_bare_is_cmd_or_arg(t_vars vars, t_token *curr)
 {
 	return (vars.new_str[0] == '\0' && vars.is_bare_exp == 1
-			&& (curr->type == COMMAND || curr->type == ARG));
+		&& (curr->type == COMMAND || curr->type == ARG));
 }
