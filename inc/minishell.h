@@ -24,6 +24,7 @@
 # include "builtin.h"
 # include "execution.h"
 
+
 # define PROMPT "\001\e[93m\002🦒 >>>\001\e[0m\e[95m\002 Giraffeshell>$ \001\e[0m\002"
 
 //error prompts
@@ -66,6 +67,7 @@ typedef struct s_minishell
 int		input_validation(char *input);
 int		init_minishell(t_minishell *mshell, char **envp, t_ast **ast);
 void	init_quotes(t_quotes_helper *quotes);
+void	increment_shlvl(t_env *env);
 
 //errors, exits and cleanups
 void	delete_minishell(t_minishell *mshell);

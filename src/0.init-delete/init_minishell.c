@@ -9,6 +9,7 @@ int	init_minishell(t_minishell *mshell, char **envp, t_ast **ast)
 		ft_dprintf(2, UNREACHABLE);
 		return (FAIL);
 	}
+	increment_shlvl(mshell->envp);
 	mshell->exitcode = 0;
 	mshell->in_child = 0;
 	mshell->path = NULL;
