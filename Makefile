@@ -48,20 +48,8 @@ SRC			=	main.c \
 				6.expansion/expansion_utils.c \
 				7.ast/ast.c \
 				7.ast/ast_branch_building.c \
-				7.ast/ast_dev.c \
 				7.ast/ast_utils.c \
 				7.ast/ast_create_node.c \
-				20.builtins/ft_env.c \
-				20.builtins/ft_pwd.c \
-				20.builtins/ft_cwd.c \
-				20.builtins/ft_cd.c \
-				20.builtins/ft_echo.c \
-				20.builtins/ft_exit.c \
-				20.builtins/ft_unset.c \
-				20.builtins/ft_export.c \
-				20.builtins/utils_builtins.c \
-				20.builtins/ft_export_sort_env.c \
-				99.dev/print_development.c \
 				8.redirection/open.c \
 				8.redirection/dup2.c \
 				8.redirection/redir.c \
@@ -70,7 +58,20 @@ SRC			=	main.c \
 				9.execution/child_process.c \
 				9.execution/path.c \
 				9.execution/setup.c \
-				9.execution/wait.c
+				9.execution/wait.c \
+				10.builtins/ft_env.c \
+				10.builtins/ft_pwd.c \
+				10.builtins/ft_cwd.c \
+				10.builtins/ft_cd.c \
+				10.builtins/ft_echo.c \
+				10.builtins/ft_exit.c \
+				10.builtins/ft_unset.c \
+				10.builtins/ft_export.c \
+				10.builtins/utils_builtins.c \
+				10.builtins/ft_export_sort_env.c
+
+#99.dev/print_development.c
+#7.ast/ast_dev.c 
 
 OBJS		= $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
 

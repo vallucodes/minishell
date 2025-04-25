@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtin.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/25 21:19:03 by hiennguy          #+#    #+#             */
+/*   Updated: 2025/04/25 21:19:19 by hiennguy         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef BUILTINS_H
 # define BUILTINS_H
 
@@ -9,7 +21,6 @@ int		is_valid_identifier_range(const char *str, size_t len);
 int		count_argv(char **argv);
 int		update_var_env(t_env *env, const char *arg, const char *key, int key_has_value);
 int		add_var_to_env(t_env *env, const char *arg);
-
 int		ft_env(t_env **my_env, char **argv);
 int		ft_pwd(void);
 int		get_current_directory(char *buffer, size_t size);
