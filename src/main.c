@@ -13,6 +13,7 @@ int main(int ac, char **av, char **envp)
 	init_minishell(&mshell, envp, &ast);
 	while (1)
 	{
+		//
 		sig_action_main(&mshell);
 		mshell.input_str = readline(PROMPT);
 		sig_action_ignore(&mshell);
@@ -22,6 +23,8 @@ int main(int ac, char **av, char **envp)
 		if (mshell.input_str[0] == '\0' && (free(mshell.input_str), 1))
 			continue ;
 		add_history(mshell.input_str);
+
+		//
 		if (input_validation(mshell.input_str) && (free(mshell.input_str), 1))
 			continue ;
 		init_arena(&mshell);
@@ -33,8 +36,10 @@ int main(int ac, char **av, char **envp)
 		//print_tokens(input.tokens);
 		build_ast_binary_tree(&mshell, input.tokens, &ast);
 		// print_whole_tree(ast);
+
+		//
 		execute_ast_v1(&mshell, ast);
-        //ft_dprintf(2, "Debug: Main loop continued. Child exit code was: %d\n", mshell.exitcode);
+
 		delete_tmp_files(&mshell);
 		free(mshell.input_str);
 		arena_delete(&mshell.arena);

@@ -2,8 +2,6 @@
 
 int	init_minishell(t_minishell *mshell, char **envp, t_ast **ast)
 {
-	char	*path_str;
-
 	if (copy_env(&mshell->envp, envp) != 0)
 	{
 		ft_dprintf(2, UNREACHABLE);

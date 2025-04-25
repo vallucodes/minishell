@@ -22,7 +22,6 @@ int	ft_export(char **args, t_minishell *mshell)
 	return (exit_code);
 }
 
-
 static void print_sorted_export(t_env *env)
 {
 	size_t key_len;

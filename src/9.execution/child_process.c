@@ -36,6 +36,7 @@ static void exec_external_command(t_minishell *mshell, t_ast *ast)
 	}
 	full_cmd_path = get_command_path(mshell, cmd_node);
 	//printf("COMMAND OR ARGS COUNT: %d\n", count_argv(cmd_node->cmd));
+
 	sig_action_default(mshell);
 	execve(full_cmd_path, cmd_node->cmd, mshell->envp->envp);
 	mshell->exitcode = 1;
@@ -62,6 +63,7 @@ void	handle_child_process(t_minishell *mshell, t_ast *ast, t_exec *exec)
 	}
 	else
 		exec_external_command(mshell, ast);
+
 	delete_minishell(mshell);
 	exit(SUCCESS);
 }

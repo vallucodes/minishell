@@ -1,6 +1,6 @@
 NAME		= minishell
 CC			= cc
-CFLAGS		= -g3 -Wextra #-Wall -Werror
+CFLAGS		= -Wextra -Wall -Werror
 LDFLAGS		= -lreadline
 
 LIBFT_DIR 	= ./lib/libft
@@ -62,15 +62,15 @@ SRC			=	main.c \
 				20.builtins/utils_builtins.c \
 				20.builtins/ft_export_sort_env.c \
 				99.dev/print_development.c \
-				9.redirection/open.c \
-				9.redirection/dup2.c \
-				9.redirection/redir.c \
-				8.execution/execute_builtin.c \
-				8.execution/execution.c \
-				8.execution/child_process.c \
-				8.execution/path.c \
-				8.execution/setup.c \
-				8.execution/wait.c
+				8.redirection/open.c \
+				8.redirection/dup2.c \
+				8.redirection/redir.c \
+				9.execution/execute_builtin.c \
+				9.execution/execution.c \
+				9.execution/child_process.c \
+				9.execution/path.c \
+				9.execution/setup.c \
+				9.execution/wait.c
 
 OBJS		= $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
 

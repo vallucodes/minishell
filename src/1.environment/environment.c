@@ -32,13 +32,12 @@ char *get_env_value(char **envp, const char *key)
 
 int match_env_key(const char *env_entry, const char *key)
 {
-	int		result;
 	size_t	key_len;
 	int		match;
 
 	key_len = ft_strlen(key);
 	match = ft_strncmp(env_entry, key, key_len);
-	if (match == 0 && (env_entry[key_len] == '=' || env_entry[key_len] == '\0')) //last char must be = OR \0
+	if (match == 0 && (env_entry[key_len] == '=' || env_entry[key_len] == '\0'))
 		return (1);
 	else
 		return (0);
