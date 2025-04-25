@@ -14,7 +14,15 @@ int main(int ac, char **av, char **envp)
 	while (1)
 	{
 		sig_action_main(&mshell);
+		// if (isatty(fileno(stdin)))
 		mshell.input_str = readline(PROMPT);
+		// else
+		// {
+		// 	char *line;
+		// 	line = get_next_line(fileno(stdin));
+		// 	mshell.input_str = ft_strtrim(line, "\n");
+		// 	free(line);
+		// }
 		sig_action_ignore(&mshell);
 		mshell.rl_count += 1;
 		if (!mshell.input_str)
