@@ -1,11 +1,13 @@
 #ifndef AST_H
 # define AST_H
+
+typedef struct s_token	t_token;
 typedef struct s_ast
 {
 	t_token_type	type;
 	char			**cmd;
 	char			*file;
-	bool			ambiguous; //add this in ast creation
+	bool			ambiguous;
 	struct s_ast	*next_left;
 	struct s_ast	*next_right;
 }	t_ast;
