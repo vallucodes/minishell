@@ -31,7 +31,6 @@ static void exec_external_command(t_minishell *mshell, t_ast *ast)
 	cmd_node = get_cmd_node(ast);
 	if (!cmd_node || !cmd_node->cmd || !cmd_node->cmd[0])
 	{
-		mshell->exitcode = 127;
 		delete_minishell(mshell);
 		exit(mshell->exitcode);
 	}

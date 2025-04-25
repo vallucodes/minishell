@@ -68,3 +68,5 @@ minishell
 minishell_tester/
 42_minishell_tester
 src/get_next_line/
+check_io.sh
+minitest/
