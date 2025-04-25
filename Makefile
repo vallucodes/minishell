@@ -53,6 +53,7 @@ SRC			=	main.c \
 				7.ast/ast_create_node.c \
 				20.builtins/ft_env.c \
 				20.builtins/ft_pwd.c \
+				20.builtins/ft_cwd.c \
 				20.builtins/ft_cd.c \
 				20.builtins/ft_echo.c \
 				20.builtins/ft_exit.c \

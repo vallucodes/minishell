@@ -10,8 +10,6 @@ int	ft_cd(t_env **my_env, int argv_count, char **argv)
 {
 	char	old_pwd[PATH_MAX];
 
-	// if (!getcwd(old_pwd, sizeof(old_pwd)))
-	// 	return (perror("getcwd"), FAIL);
 	if (argv_count == 1)
 	{
 		if (go_home(*my_env) == FAIL)

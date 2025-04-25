@@ -24,7 +24,6 @@
 # include "builtin.h"
 # include "execution.h"
 
-
 # define PROMPT "\001\e[93m\002🦒 >>>\001\e[0m\e[95m\002 Giraffeshell>$ \001\e[0m\002"
 
 //error prompts

@@ -73,7 +73,6 @@ static int	handle_export_arg(t_minishell *mshell, char *arg)
 		ft_dprintf(2, "Giraffeshell: export: `%s`: add update fails\n", arg);
 		return (FAIL);
 	}
-
 	return (SUCCESS);
 }
 
@@ -98,4 +97,3 @@ static int	export_update_or_add(t_minishell *mshell, char *arg, size_t key_len, 
 	free(key);
 	return (SUCCESS);
 }
-

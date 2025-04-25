@@ -41,10 +41,7 @@ void	increment_shlvl(t_env *env)
 	}
 	if (realloc_env_capacity(env) == FAIL)
 		exit_env("malloc", &env);
-
 	env->envp[env->len] = new_entry;
 	env->len++;
 	env->envp[env->len] = NULL;
 }
-
-
