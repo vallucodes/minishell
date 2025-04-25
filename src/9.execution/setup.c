@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   setup.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/25 20:38:41 by hiennguy          #+#    #+#             */
+/*   Updated: 2025/04/25 20:38:54 by hiennguy         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
-t_ast *get_cmd_node(t_ast *ast)
+t_ast	*get_cmd_node(t_ast *ast)
 {
 	while (ast)
 	{
@@ -11,20 +23,20 @@ t_ast *get_cmd_node(t_ast *ast)
 	return (NULL);
 }
 
-int setup_pipe(t_exec *exec)
+int	setup_pipe(t_exec *exec)
 {
 	if (exec->has_pipe)
 	{
 		if (pipe(exec->pipefd) < 0)
 		{
 			ft_dprintf(2, "Giraffeshell: %s: %s\n", "pipe", strerror(errno));
-			return FAIL;
+			return (FAIL);
 		}
 	}
-	return SUCCESS;
+	return (SUCCESS);
 }
 
-int setup_fork(t_exec *exec)
+int	setup_fork(t_exec *exec)
 {
 	exec->pid = fork();
 	if (exec->pid < 0)
@@ -44,7 +56,7 @@ int setup_fork(t_exec *exec)
 	return (SUCCESS);
 }
 
-void setup_child_pipe_fds(t_minishell *mshell, t_exec *exec)
+void	setup_child_pipe_fds(t_minishell *mshell, t_exec *exec)
 {
 	if (exec->prev_fd != -1)
 	{
@@ -69,14 +81,12 @@ void setup_child_pipe_fds(t_minishell *mshell, t_exec *exec)
 	}
 }
 
-void setup_parent_pipe_fds(t_minishell *mshell, t_exec *exec)
+void	setup_parent_pipe_fds(t_minishell *mshell, t_exec *exec)
 {
 	exec->command_count++;
 	mshell->in_child = 0;
-	//printf("command count is %d\n", exec->command_count);
 	if (exec->prev_fd != -1)
 		close(exec->prev_fd);
-
 	if (exec->has_pipe)
 	{
 		close(exec->pipefd[1]);

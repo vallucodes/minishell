@@ -1,9 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   child_process.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/25 20:34:10 by hiennguy          #+#    #+#             */
+/*   Updated: 2025/04/25 20:39:53 by hiennguy         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
-static void exec_external_command(t_minishell *mshell, t_ast *ast);
-static void handle_error(t_minishell *mshell, t_ast *cmd_node, \
-			char *full_cmd_path);
-
+static void	exec_external_command(t_minishell *mshell, t_ast *ast);
+static void	handle_error(t_minishell *mshell, t_ast *cmd_node,
+				char *full_cmd_path);
 
 void	handle_child_process(t_minishell *mshell, t_ast *ast, t_exec *exec)
 {
@@ -22,15 +33,14 @@ void	handle_child_process(t_minishell *mshell, t_ast *ast, t_exec *exec)
 	}
 	else
 		exec_external_command(mshell, ast);
-
 	delete_minishell(mshell);
 	exit(SUCCESS);
 }
 
-static void exec_external_command(t_minishell *mshell, t_ast *ast)
+static void	exec_external_command(t_minishell *mshell, t_ast *ast)
 {
-	char *full_cmd_path;
-	t_ast *cmd_node;
+	char	*full_cmd_path;
+	t_ast	*cmd_node;
 
 	cmd_node = get_cmd_node(ast);
 	if (!cmd_node || !cmd_node->cmd || !cmd_node->cmd[0])
@@ -48,25 +58,31 @@ static void exec_external_command(t_minishell *mshell, t_ast *ast)
 	exit(mshell->exitcode);
 }
 
-static void handle_error(t_minishell *mshell, t_ast *cmd_node, char *full_cmd_path)
+static void	handle_error(t_minishell *mshell, t_ast *cmd_node,
+		char *full_cmd_path)
 {
-	struct stat		statbuf;
+	struct stat	statbuf;
+
 	if (errno == ENOENT)
 	{
-		ft_dprintf(2, "Giraffeshell: %s: %s\n", cmd_node->cmd[0], strerror(errno));
+		ft_dprintf(2, "Giraffeshell: %s: %s\n", cmd_node->cmd[0],
+			strerror(errno));
 		mshell->exitcode = 127;
 	}
 	else if (errno == EACCES)
 	{
 		if (stat(full_cmd_path, &statbuf) == 0 && S_ISDIR(statbuf.st_mode))
-			ft_dprintf(2, "Giraffeshell: %s: Is a directory\n", cmd_node->cmd[0]);
+			ft_dprintf(2, "Giraffeshell: %s: Is a directory\n",
+				cmd_node->cmd[0]);
 		else
-			ft_dprintf(2, "Giraffeshell: %s: Permission denied\n", cmd_node->cmd[0]);
+			ft_dprintf(2, "Giraffeshell: %s: Permission denied\n",
+				cmd_node->cmd[0]);
 		mshell->exitcode = 126;
 	}
 	else
 	{
-		ft_dprintf(2, "Giraffeshell: %s: %s\n", cmd_node->cmd[0], strerror(errno));
+		ft_dprintf(2, "Giraffeshell: %s: %s\n", cmd_node->cmd[0],
+			strerror(errno));
 		mshell->exitcode = 126;
 	}
 }

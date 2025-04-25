@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   path.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/25 20:38:20 by hiennguy          #+#    #+#             */
+/*   Updated: 2025/04/25 20:38:22 by hiennguy         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
 static char	*get_cmd_full_path(t_minishell *mshell, char **path, char *cmd);
 static char	*build_cmd_path(t_minishell *mshell, char *dir, char *cmd);
-static void split_env_path_value(t_minishell *mshell);
+static void	split_env_path_value(t_minishell *mshell);
 
 char	*get_command_path(t_minishell *mshell, t_ast *ast)
 {
@@ -14,7 +26,7 @@ char	*get_command_path(t_minishell *mshell, t_ast *ast)
 	split_env_path_value(mshell);
 	if (!ft_strchr(ast->cmd[0], '/') && mshell->path && *mshell->path)
 	{
-		full_path = get_cmd_full_path(mshell, mshell->path , ast->cmd[0]);
+		full_path = get_cmd_full_path(mshell, mshell->path, ast->cmd[0]);
 		if (!full_path)
 		{
 			ft_dprintf(2, "Giraffeshell: %s: command not found\n", ast->cmd[0]);
@@ -31,7 +43,7 @@ char	*get_command_path(t_minishell *mshell, t_ast *ast)
 	return (full_path);
 }
 
-static void split_env_path_value(t_minishell *mshell)
+static void	split_env_path_value(t_minishell *mshell)
 {
 	char	*env_path_value;
 
@@ -39,7 +51,7 @@ static void split_env_path_value(t_minishell *mshell)
 	if (env_path_value && *env_path_value)
 	{
 		mshell->path = ft_split(env_path_value, ':');
-		if (!mshell->path )
+		if (!mshell->path)
 			exit_cleanup_error(mshell, "malloc");
 	}
 }
