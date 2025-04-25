@@ -37,7 +37,7 @@ int main(int ac, char **av, char **envp)
 		// print_whole_tree(ast);
 
 		//
-		execute_ast_v1(&mshell, ast);
+		execute_ast(&mshell, ast);
 
 		delete_tmp_files(&mshell);
 		free(mshell.input_str);
