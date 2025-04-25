@@ -8,7 +8,7 @@ int	ft_export(char **args, t_minishell *mshell)
 {
 	int i;
 	int exit_code;
-	
+
 	i = 1;
 	exit_code = 0;
 	if (!args[i])
@@ -37,8 +37,8 @@ static void print_sorted_export(t_env *env)
 		{
 			key_len = equal - sorted[i];
 			ft_dprintf(STDOUT_FILENO, "declare -x ");
-			write(STDOUT_FILENO, sorted[i], key_len + 1); // print KEY=
-			ft_dprintf(STDOUT_FILENO, "\"%s\"\n", equal + 1); // print "VALUE"
+			write(STDOUT_FILENO, sorted[i], key_len + 1);
+			ft_dprintf(STDOUT_FILENO, "\"%s\"\n", equal + 1);
 		}
 		else
 		{
@@ -77,7 +77,9 @@ static int	handle_export_arg(t_minishell *mshell, char *arg)
 
 static int	export_update_or_add(t_minishell *mshell, char *arg, size_t key_len, int key_has_value)
 {
-	char *key = ft_substr(arg, 0, key_len);
+	char *key;
+
+	key = ft_substr(arg, 0, key_len);
 	if (!key)
 	{
 		ft_dprintf(2, "Giraffeshell: export: malloc failed\n");

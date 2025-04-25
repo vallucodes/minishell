@@ -1,11 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   open.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/25 20:32:11 by hiennguy          #+#    #+#             */
+/*   Updated: 2025/04/25 20:32:13 by hiennguy         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
-static int check_ambiguous_redir(const char *file, t_ast *ast);
+static int	check_ambiguous_redir(const char *file, t_ast *ast);
 
 int	open_redir_file(const char *file, int flags, int *fd, t_ast *ast)
 {
 	if (check_ambiguous_redir(file, ast) == FAIL)
-	 	return (FAIL);
+		return (FAIL);
 	if (*fd != -1)
 	{
 		close(*fd);
@@ -32,4 +44,3 @@ static int	check_ambiguous_redir(const char *file, t_ast *ast)
 	}
 	return (SUCCESS);
 }
-

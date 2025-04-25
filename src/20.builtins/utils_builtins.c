@@ -40,11 +40,11 @@ int	update_var_env(t_env *env, const char *arg, const char *key, int key_has_val
 				if (!env->envp[i])
 					return (FAIL);
 			}
-			return (SUCCESS); // key found and updated
+			return (SUCCESS);
 		}
 		i++;
 	}
-	return (FAIL); // not found
+	return (FAIL);
 }
 
 int	add_var_to_env(t_env *env, const char *arg)
