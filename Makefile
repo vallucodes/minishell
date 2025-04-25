@@ -21,9 +21,9 @@ SRC			=	main.c \
 				0.init-delete/shell_level.c  \
 				0.global_utils/utils.c \
 				0.memory_arena/memory_arena.c \
-				0.arena_libft/ft_arena_calloc.c \
-				0.arena_libft/ft_arena_strdup.c \
-				0.arena_libft/ft_arena_strjoin.c \
+				0.memory_arena_libft/ft_arena_calloc.c \
+				0.memory_arena_libft/ft_arena_strdup.c \
+				0.memory_arena_libft/ft_arena_strjoin.c \
 				0.signals/signals.c \
 				0.signals/signals_handlers.c \
 				1.environment/environment.c \

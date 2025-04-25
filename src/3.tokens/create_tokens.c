@@ -81,7 +81,8 @@ void	create_tokens(t_minishell *mshell, t_input *input)
 		if (ft_strncmp(&input->full_str[input->index], "<<", 2) == 0)
 			add_token(&input->tokens, init_token(mshell, input, 2, HERE_DOC));
 		else if (ft_strncmp(&input->full_str[input->index], ">>", 2) == 0)
-			add_token(&input->tokens, init_token(mshell, input, 2, REDIR_APPEND));
+			add_token(&input->tokens, \
+				init_token(mshell, input, 2, REDIR_APPEND));
 		else if (input->full_str[input->index] == '|')
 			add_token(&input->tokens, init_token(mshell, input, 1, PIPE));
 		else if (input->full_str[input->index] == '<')

@@ -26,14 +26,17 @@ static void	delete_token(t_input *input, t_token *current, t_token *previous)
 		input->tokens = current->next;
 	}
 }
-bool	is_ambiguous_redirect(t_minishell *mshell, t_token *current, char *str)
+
+bool	is_ambiguous_redirect(t_minishell *mshell, \
+		t_quotes_helper quotes, t_token *current, char *str)
 {
 	size_t	i;
-	size_t	j;
 	size_t	len;
 	char	**env;
 
 	if (current->type != FILE_TOKEN)
+		return (0);
+	if (quotes.in_double)
 		return (0);
 	env = mshell->envp->envp;
 	len = get_len_explandeble(str);
@@ -42,29 +45,14 @@ bool	is_ambiguous_redirect(t_minishell *mshell, t_token *current, char *str)
 	{
 		if (expandable_exists(len, env, i, str))
 		{
-			j = skip_to_start_of_expandable(env[i]);
-			if (env[i][j] == '\0') // variable is empty like "$haha" = ""
-			{
-				current->ambiguous = 1;
+			if (process_expandable(i, current, mshell->envp->envp) == 1)
 				return (1);
-			}
-			while (env[i][j])
-			{
-				if (current && ft_isspace(env[i][j]))
-				{
-					current->ambiguous = 1;
-					return (1);
-				}
-				j++;
-			}
-			return (0);
+			else
+				return (0);
 		}
 	}
 	if (env[i] == NULL)
-	{
-		current->ambiguous = 1;
-		return (1);
-	}
+		return (current->ambiguous = 1, 1);
 	return (0);
 }
 

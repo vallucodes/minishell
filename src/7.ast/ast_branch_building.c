@@ -13,7 +13,6 @@ static char	*add_command(t_token *tokens)
 
 static char	**find_cmd_and_compose(t_minishell *mshell, t_token *tokens)
 {
-	char	*arg;
 	char	**cmd;
 	int		i;
 

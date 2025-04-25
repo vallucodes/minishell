@@ -27,17 +27,21 @@ static int	validate_tokens_looping(t_token *current)
 	return (SUCCESS);
 }
 
-int	tokens_validation(t_token *tokens)
+int	tokens_validation(t_minishell *mshell, t_token *tokens)
 {
-	t_token *current;
+	t_token	*current;
 
 	current = tokens;
 	if (current->type == PIPE)
 	{
 		print_error(TOKEN_ERROR, PIPE_ERROR, 0);
+		mshell->exitcode = 2;
 		return (FAIL);
 	}
 	if (validate_tokens_looping(current) == FAIL)
+	{
+		mshell->exitcode = 2;
 		return (FAIL);
+	}
 	return (SUCCESS);
 }

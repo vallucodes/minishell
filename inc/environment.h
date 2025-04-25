@@ -3,9 +3,9 @@
 
 typedef struct s_env
 {
-	char			**envp;                // array of strings: "KEY=VALUE"
-	unsigned int	allocated_capacity;   // how many total entries allocated
-	unsigned int	len;                   // how many are actually used
+	char			**envp;
+	unsigned int	allocated_capacity;
+	unsigned int	len;
 
 }	t_env;
 
