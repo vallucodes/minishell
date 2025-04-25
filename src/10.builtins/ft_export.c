@@ -6,7 +6,7 @@
 /*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 21:02:27 by hiennguy          #+#    #+#             */
-/*   Updated: 2025/04/25 21:07:07 by hiennguy         ###   ########.fr       */
+/*   Updated: 2025/04/25 21:50:23 by hiennguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,8 @@ static int	handle_export_arg(t_minishell *mshell, char *arg)
 		key_len = ft_strlen(arg);
 	if (!is_valid_identifier_range(arg, key_len))
 	{
-		ft_dprintf(2, "Giraffeshell: export: `%s`: not a valid identifier\n", \
-				arg);
+		ft_dprintf(2, "Giraffeshell: export: `%s`: not a valid identifier\n",
+			arg);
 		return (FAIL);
 	}
 	if (export_update_or_add(mshell, arg, key_len, key_has_value) == FAIL)
