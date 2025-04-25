@@ -43,6 +43,11 @@ bool	is_ambiguous_redirect(t_minishell *mshell, t_token *current, char *str)
 		if (expandable_exists(len, env, i, str))
 		{
 			j = skip_to_start_of_expandable(env[i]);
+			if (env[i][j] == '\0') // variable is empty like "$haha" = ""
+			{
+				current->ambiguous = 1;
+				return (1);
+			}
 			while (env[i][j])
 			{
 				if (current && ft_isspace(env[i][j]))
