@@ -1,6 +1,6 @@
 NAME		= minishell
 CC			= cc
-CFLAGS		= -g3 -Wextra #-Wall -Werror
+CFLAGS		= -Wextra -Wall -Werror
 LDFLAGS		= -lreadline
 
 LIBFT_DIR 	= ./lib/libft
@@ -18,6 +18,7 @@ SRC			=	main.c \
 				0.error_handling/error.c \
 				0.init-delete/init_minishell.c \
 				0.init-delete/delete_minishell.c \
+				0.init-delete/shell_level.c  \
 				0.global_utils/utils.c \
 				0.memory_arena/memory_arena.c \
 				0.memory_arena_libft/ft_arena_calloc.c \
@@ -47,28 +48,30 @@ SRC			=	main.c \
 				6.expansion/expansion_utils.c \
 				7.ast/ast.c \
 				7.ast/ast_branch_building.c \
-				7.ast/ast_dev.c \
 				7.ast/ast_utils.c \
 				7.ast/ast_create_node.c \
-				20.builtins/ft_env.c \
-				20.builtins/ft_pwd.c \
-				20.builtins/ft_cd.c \
-				20.builtins/ft_echo.c \
-				20.builtins/ft_exit.c \
-				20.builtins/ft_unset.c \
-				20.builtins/ft_export.c \
-				20.builtins/utils_builtins.c \
-				20.builtins/ft_export_sort_env.c \
-				99.dev/print_development.c \
-				9.redirection/open.c \
-				9.redirection/dup2.c \
-				9.redirection/redir.c \
-				8.execution/execute_builtin.c \
-				8.execution/execution.c \
-				8.execution/child_process.c \
-				8.execution/path.c \
-				8.execution/setup.c \
-				8.execution/wait.c
+				8.redirection/open.c \
+				8.redirection/dup2.c \
+				8.redirection/redir.c \
+				9.execution/execute_builtin.c \
+				9.execution/execution.c \
+				9.execution/child_process.c \
+				9.execution/path.c \
+				9.execution/setup.c \
+				9.execution/wait.c \
+				10.builtins/ft_env.c \
+				10.builtins/ft_pwd.c \
+				10.builtins/ft_cwd.c \
+				10.builtins/ft_cd.c \
+				10.builtins/ft_echo.c \
+				10.builtins/ft_exit.c \
+				10.builtins/ft_unset.c \
+				10.builtins/ft_export.c \
+				10.builtins/utils_builtins.c \
+				10.builtins/ft_export_sort_env.c
+
+#99.dev/print_development.c
+#7.ast/ast_dev.c 
 
 OBJS		= $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
 

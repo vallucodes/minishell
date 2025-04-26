@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/25 21:13:49 by hiennguy          #+#    #+#             */
+/*   Updated: 2025/04/25 22:39:02 by hiennguy         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -50,6 +62,7 @@ typedef struct s_minishell
 int		input_validation(t_minishell *mshell);
 int		init_minishell(t_minishell *mshell, char **envp, t_ast **ast);
 void	init_quotes(t_quotes_helper *quotes);
+void	increment_shlvl(t_env *env);
 
 //global utils
 void	append_char(t_minishell *mshell, char *src, char **dst, size_t i);

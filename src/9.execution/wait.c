@@ -1,46 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_env.c                                         :+:      :+:    :+:   */
+/*   wait.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/25 21:53:06 by hiennguy          #+#    #+#             */
-/*   Updated: 2025/04/25 21:53:08 by hiennguy         ###   ########.fr       */
+/*   Created: 2025/04/25 20:39:14 by hiennguy          #+#    #+#             */
+/*   Updated: 2025/04/25 20:39:16 by hiennguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-void	exit_env(char *msg, t_env **env)
+int	wait_for_children(t_exec *exec)
 {
-	perror(msg);
-	if (env)
-		free(*env);
-	exit(FAIL);
-}
+	int	i;
+	int	wstatus;
+	int	exit_code;
 
-void	free_env(t_env *env)
-{
-	unsigned int	i;
-
-	if (!env || !env->envp)
-		return ;
 	i = 0;
-	while (i < env->len)
+	exit_code = 0;
+	while (i < exec->command_count)
 	{
-		free(env->envp[i]);
+		if (exec->last_pid == wait(&wstatus))
+		{
+			if (WIFEXITED(wstatus))
+				exit_code = WEXITSTATUS(wstatus);
+			else if (WIFSIGNALED(wstatus))
+				exit_code = 128 + WTERMSIG(wstatus);
+		}
 		i++;
 	}
-	free(env->envp);
-	env->envp = NULL;
-	env->len = 0;
-	env->allocated_capacity = 0;
-}
-
-void	free_partial_env(char **envp, int up_to)
-{
-	while (up_to--)
-		free(envp[up_to]);
-	free(envp);
+	return (exit_code);
 }

@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   environment.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/25 21:53:28 by hiennguy          #+#    #+#             */
+/*   Updated: 2025/04/25 22:16:15 by hiennguy         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
-static int init_env_storage(t_env *env, char **envp)
+static int	init_env_storage(t_env *env, char **envp)
 {
 	int	var_amount;
 
@@ -15,11 +27,12 @@ static int init_env_storage(t_env *env, char **envp)
 	return (SUCCESS);
 }
 
-char *get_env_value(char **envp, const char *key)
+char	*get_env_value(char **envp, const char *key)
 {
-	size_t	key_len = ft_strlen(key);
+	size_t	key_len;
 	size_t	i;
 
+	key_len = ft_strlen(key);
 	i = 0;
 	while (envp && envp[i])
 	{
@@ -30,21 +43,20 @@ char *get_env_value(char **envp, const char *key)
 	return (NULL);
 }
 
-int match_env_key(const char *env_entry, const char *key)
+int	match_env_key(const char *env_entry, const char *key)
 {
-	int		result;
 	size_t	key_len;
 	int		match;
 
 	key_len = ft_strlen(key);
 	match = ft_strncmp(env_entry, key, key_len);
-	if (match == 0 && (env_entry[key_len] == '=' || env_entry[key_len] == '\0')) //last char must be = OR \0
+	if (match == 0 && (env_entry[key_len] == '=' || env_entry[key_len] == '\0'))
 		return (1);
 	else
 		return (0);
 }
 
-int realloc_env_capacity(t_env *env)
+int	realloc_env_capacity(t_env *env)
 {
 	size_t	new_capacity;
 	char	**new_envp;
@@ -70,7 +82,7 @@ int realloc_env_capacity(t_env *env)
 	return (SUCCESS);
 }
 
-int copy_env(t_env **env, char **envp)
+int	copy_env(t_env **env, char **envp)
 {
 	size_t	i;
 
@@ -96,4 +108,3 @@ int copy_env(t_env **env, char **envp)
 	(*env)->len = i;
 	return (SUCCESS);
 }
-

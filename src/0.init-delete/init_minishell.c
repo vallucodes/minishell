@@ -1,14 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init_minishell.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/25 21:57:43 by hiennguy          #+#    #+#             */
+/*   Updated: 2025/04/25 21:57:45 by hiennguy         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	init_minishell(t_minishell *mshell, char **envp, t_ast **ast)
 {
-	char	*path_str;
-
 	if (copy_env(&mshell->envp, envp) != 0)
 	{
 		ft_dprintf(2, UNREACHABLE);
 		return (FAIL);
 	}
+	increment_shlvl(mshell->envp);
 	mshell->exitcode = 0;
 	mshell->in_child = 0;
 	mshell->path = NULL;

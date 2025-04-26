@@ -1,46 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_env.c                                         :+:      :+:    :+:   */
+/*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/25 21:53:06 by hiennguy          #+#    #+#             */
-/*   Updated: 2025/04/25 21:53:08 by hiennguy         ###   ########.fr       */
+/*   Created: 2025/04/25 21:01:11 by hiennguy          #+#    #+#             */
+/*   Updated: 2025/04/25 21:01:15 by hiennguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-void	exit_env(char *msg, t_env **env)
-{
-	perror(msg);
-	if (env)
-		free(*env);
-	exit(FAIL);
-}
-
-void	free_env(t_env *env)
+int	ft_env(t_env **my_env, char **argv)
 {
 	unsigned int	i;
+	int				arg_count;
 
-	if (!env || !env->envp)
-		return ;
-	i = 0;
-	while (i < env->len)
+	if (!my_env || !(*my_env) || !(*my_env)->envp)
+		return (FAIL);
+	arg_count = count_argv(&argv[1]);
+	if (arg_count > 0)
 	{
-		free(env->envp[i]);
+		ft_dprintf(STDERR_FILENO, "Giraffeshell: env: too many arguments\n");
+		return (FAIL);
+	}
+	i = 0;
+	while (i < (*my_env)->len)
+	{
+		if ((*my_env)->envp[i] && ft_strchr((*my_env)->envp[i], '='))
+			printf("%s\n", (*my_env)->envp[i]);
 		i++;
 	}
-	free(env->envp);
-	env->envp = NULL;
-	env->len = 0;
-	env->allocated_capacity = 0;
-}
-
-void	free_partial_env(char **envp, int up_to)
-{
-	while (up_to--)
-		free(envp[up_to]);
-	free(envp);
+	return (SUCCESS);
 }

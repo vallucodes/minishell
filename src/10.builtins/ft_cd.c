@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_cd.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/25 20:55:18 by hiennguy          #+#    #+#             */
+/*   Updated: 2025/04/25 21:49:07 by hiennguy         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 #include <linux/limits.h>
 
@@ -10,8 +22,6 @@ int	ft_cd(t_env **my_env, int argv_count, char **argv)
 {
 	char	old_pwd[PATH_MAX];
 
-	// if (!getcwd(old_pwd, sizeof(old_pwd)))
-	// 	return (perror("getcwd"), FAIL);
 	if (argv_count == 1)
 	{
 		if (go_home(*my_env) == FAIL)
@@ -28,13 +38,8 @@ int	ft_cd(t_env **my_env, int argv_count, char **argv)
 			strerror(errno));
 		return (FAIL);
 	}
-	if (!getcwd(old_pwd, sizeof(old_pwd)))
-	{
-		ft_dprintf(STDERR_FILENO,
-			"cd: error retrieving current directory: getcwd: cannot access parent directories: %s\n",
-			strerror(errno));
+	if (get_current_directory(old_pwd, sizeof(old_pwd)) == FAIL)
 		return (FAIL);
-	}
 	if (check_env_updates(*my_env, old_pwd) == FAIL)
 		return (FAIL);
 	return (SUCCESS);

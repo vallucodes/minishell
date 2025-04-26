@@ -1,46 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_env.c                                         :+:      :+:    :+:   */
+/*   dup2.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/25 21:53:06 by hiennguy          #+#    #+#             */
-/*   Updated: 2025/04/25 21:53:08 by hiennguy         ###   ########.fr       */
+/*   Created: 2025/04/25 20:31:46 by hiennguy          #+#    #+#             */
+/*   Updated: 2025/04/25 20:31:49 by hiennguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-void	exit_env(char *msg, t_env **env)
+int	safe_dup2(int fd, int target_fd)
 {
-	perror(msg);
-	if (env)
-		free(*env);
-	exit(FAIL);
-}
-
-void	free_env(t_env *env)
-{
-	unsigned int	i;
-
-	if (!env || !env->envp)
-		return ;
-	i = 0;
-	while (i < env->len)
+	if (dup2(fd, target_fd) < 0)
 	{
-		free(env->envp[i]);
-		i++;
+		perror("dup2");
+		close(fd);
+		return (FAIL);
 	}
-	free(env->envp);
-	env->envp = NULL;
-	env->len = 0;
-	env->allocated_capacity = 0;
-}
-
-void	free_partial_env(char **envp, int up_to)
-{
-	while (up_to--)
-		free(envp[up_to]);
-	free(envp);
+	return (SUCCESS);
 }

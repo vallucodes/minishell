@@ -1,46 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_env.c                                         :+:      :+:    :+:   */
+/*   ft_cwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/25 21:53:06 by hiennguy          #+#    #+#             */
-/*   Updated: 2025/04/25 21:53:08 by hiennguy         ###   ########.fr       */
+/*   Created: 2025/04/25 20:59:23 by hiennguy          #+#    #+#             */
+/*   Updated: 2025/04/25 21:49:49 by hiennguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-void	exit_env(char *msg, t_env **env)
+int	get_current_directory(char *buffer, size_t size)
 {
-	perror(msg);
-	if (env)
-		free(*env);
-	exit(FAIL);
-}
-
-void	free_env(t_env *env)
-{
-	unsigned int	i;
-
-	if (!env || !env->envp)
-		return ;
-	i = 0;
-	while (i < env->len)
+	if (!getcwd(buffer, size))
 	{
-		free(env->envp[i]);
-		i++;
+		ft_dprintf(STDERR_FILENO,
+			"cd: error retrieving current directory: "
+			"getcwd: cannot access parent directories: % s\n",
+			strerror(errno));
+		return (FAIL);
 	}
-	free(env->envp);
-	env->envp = NULL;
-	env->len = 0;
-	env->allocated_capacity = 0;
-}
-
-void	free_partial_env(char **envp, int up_to)
-{
-	while (up_to--)
-		free(envp[up_to]);
-	free(envp);
+	return (SUCCESS);
 }
