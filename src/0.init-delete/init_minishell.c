@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_minishell.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vlopatin <vlopatin@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 21:57:43 by hiennguy          #+#    #+#             */
-/*   Updated: 2025/04/26 20:51:45 by vlopatin         ###   ########.fr       */
+/*   Updated: 2025/04/26 22:12:23 by hiennguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	init_minishell(t_minishell *mshell, char **envp, t_ast **ast, char **av)
 {
 	(void) av;
-	if (copy_env(&mshell->envp, envp) != 0)
+	if (copy_env(&mshell->envp, envp) != SUCCESS)
 	{
 		ft_dprintf(2, UNREACHABLE);
 		return (FAIL);
@@ -37,7 +37,7 @@ int	init_minishell(t_minishell *mshell, char **envp, t_ast **ast, char **av)
 		return (FAIL);
 	*ast = NULL;
 	set_exitcode_signal(mshell);
-	return (0);
+	return (SUCCESS);
 }
 
 void	init_quotes(t_quotes_helper *quotes)
