@@ -70,4 +70,4 @@ minishell_tester/
 src/get_next_line/
 check_io.sh
 minitest/
-vlad_development/
+vlad_development
