@@ -6,7 +6,7 @@
 /*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 21:08:30 by hiennguy          #+#    #+#             */
-/*   Updated: 2025/04/25 21:12:49 by hiennguy         ###   ########.fr       */
+/*   Updated: 2025/04/26 20:58:09 by hiennguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef struct s_exec
 
 int		handle_redirection(t_ast *ast);
 int		safe_dup2(int fd, int target_fd);
+void	safe_close(int fd);
 int		open_redir_file(const char *file, int flags, int *fd, t_ast *ast);
 int		setup_pipe(t_exec *exec);
 int		setup_fork(t_exec *exec);

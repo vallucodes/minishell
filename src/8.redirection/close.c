@@ -1,24 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   dup2.c                                             :+:      :+:    :+:   */
+/*   close.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/25 20:31:46 by hiennguy          #+#    #+#             */
-/*   Updated: 2025/04/26 20:59:20 by hiennguy         ###   ########.fr       */
+/*   Created: 2025/04/26 20:37:35 by hiennguy          #+#    #+#             */
+/*   Updated: 2025/04/26 20:59:55 by hiennguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-int	safe_dup2(int fd, int target_fd)
+int	safe_close(int fd)
 {
-	if (dup2(fd, target_fd) < 0)
+	if (fd >= 0 && close(fd) == -1)
 	{
-		perror("dup2");
-		safe_close(fd);
-		return (FAIL);
+		perror("close");
+		return(FAIL);
 	}
 	return (SUCCESS);
 }
