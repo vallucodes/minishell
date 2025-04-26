@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ast_create_node.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vlopatin <vlopatin@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/26 16:46:30 by vlopatin          #+#    #+#             */
+/*   Updated: 2025/04/26 16:55:59 by vlopatin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../inc/minishell.h"
 
-void static	init_pipe(t_ast *new_node)
+static void	init_pipe(t_ast *new_node)
 {
 	new_node->cmd = NULL;
 	new_node->file = NULL;
@@ -8,7 +20,7 @@ void static	init_pipe(t_ast *new_node)
 	new_node->ambiguous = 0;
 }
 
-void static	init_redir(t_ast *new_node, t_token *tokens)
+static void	init_redir(t_ast *new_node, t_token *tokens)
 {
 	new_node->cmd = NULL;
 	new_node->file = tokens->next->value;
@@ -16,7 +28,7 @@ void static	init_redir(t_ast *new_node, t_token *tokens)
 	new_node->ambiguous = tokens->next->ambiguous;
 }
 
-void static	init_cmd(t_ast *new_node, t_token *tokens, char **cmd)
+static void	init_cmd(t_ast *new_node, t_token *tokens, char **cmd)
 {
 	new_node->cmd = cmd;
 	new_node->file = NULL;
@@ -24,7 +36,7 @@ void static	init_cmd(t_ast *new_node, t_token *tokens, char **cmd)
 	new_node->ambiguous = 0;
 }
 
-t_ast	*init_node(t_minishell *mshell, \
+t_ast	*init_node(t_minishell *mshell,
 		char **cmd, t_token *tokens, t_token_type type)
 {
 	t_ast	*new_node;

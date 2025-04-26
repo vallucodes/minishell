@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   heredoc_tmp_files.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vlopatin <vlopatin@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/26 16:45:43 by vlopatin          #+#    #+#             */
+/*   Updated: 2025/04/26 16:57:16 by vlopatin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../inc/minishell.h"
 
-void	save_line_to_tmp_file(t_minishell *mshell, \
+void	save_line_to_tmp_file(t_minishell *mshell,
 			char *input, int fd_tmp, t_expand expand)
 {
 	size_t	i;

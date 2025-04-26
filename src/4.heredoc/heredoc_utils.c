@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   heredoc_utils.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vlopatin <vlopatin@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/26 16:45:46 by vlopatin          #+#    #+#             */
+/*   Updated: 2025/04/26 16:49:13 by vlopatin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../inc/minishell.h"
 
 int	is_eof(char *eof, char *input)
 {
-	return (!(ft_strncmp(eof, input, ft_strlen(eof)) || \
-			(ft_strlen(input) != ft_strlen(eof))));
+	return (!(ft_strncmp(eof, input, ft_strlen(eof))
+			|| (ft_strlen(input) != ft_strlen(eof))));
 }
 
 int	is_valid_char_expansion(char c)

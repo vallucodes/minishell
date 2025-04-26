@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: vlopatin <vlopatin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 21:13:49 by hiennguy          #+#    #+#             */
-/*   Updated: 2025/04/25 22:39:02 by hiennguy         ###   ########.fr       */
+/*   Updated: 2025/04/26 17:52:40 by vlopatin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,10 @@
 # include "expansion.h"
 # include "error.h"
 
-# define PROMPT "\001\e[93m\002🦒 >>>\001\e[0m\e[95m\002 Giraffeshell>$ \001\e[0m\002"
+# define PROMPT "\001\e[93m\002🦒 >>>\001\e[0m\e[95m\002 \
+				Giraffeshell>$ \001\e[0m\002"
+
+extern volatile sig_atomic_t	g_signal;
 
 typedef enum e_exit
 {
