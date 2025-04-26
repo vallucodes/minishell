@@ -6,13 +6,11 @@
 /*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 16:44:24 by vlopatin          #+#    #+#             */
-/*   Updated: 2025/04/26 18:12:05 by hiennguy         ###   ########.fr       */
+/*   Updated: 2025/04/26 18:22:23 by hiennguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-#include "signals.h"
-// int	g_signal;
 
 void	sigint_handler_heredoc(int signal)
 {

@@ -6,7 +6,7 @@
 /*   By: vlopatin <vlopatin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 16:45:07 by vlopatin          #+#    #+#             */
-/*   Updated: 2025/04/26 16:45:08 by vlopatin         ###   ########.fr       */
+/*   Updated: 2025/04/26 18:06:48 by vlopatin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	exit_error(t_minishell *mshell, char *msg)
 	if (mshell)
 		delete_minishell(mshell);
 	ft_dprintf(2, msg);
-	exit(1);
+	exit(2);
 }
 
 void	print_error(char *msg, char *token, t_token_type type)

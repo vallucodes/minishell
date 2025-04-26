@@ -6,7 +6,7 @@
 /*   By: vlopatin <vlopatin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 16:45:43 by vlopatin          #+#    #+#             */
-/*   Updated: 2025/04/26 16:57:16 by vlopatin         ###   ########.fr       */
+/*   Updated: 2025/04/26 18:07:01 by vlopatin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,10 @@ char	*create_tmp_file(t_minishell *mshell, int *fd)
 			break ;
 		index++;
 		if (index > 16)
+		{
+			delete_tmp_files(mshell);
 			exit_error(mshell, TMP_FILES);
+		}
 	}
 	*fd = open(tmp_file, O_WRONLY | O_CREAT | O_EXCL, 0644);
 	if (*fd < 0)
