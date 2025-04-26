@@ -6,7 +6,7 @@
 /*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 16:37:18 by hiennguy          #+#    #+#             */
-/*   Updated: 2025/04/26 17:54:37 by hiennguy         ###   ########.fr       */
+/*   Updated: 2025/04/26 17:59:33 by hiennguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	main(int ac, char **av, char **envp)
 	if (ac != 1)
 		exit_error(NULL, AC);
 	if (init_minishell(&mshell, envp, &ast, av) != 0)
-		exit_error(&mshell, "Error: Failed to initialize minishell\n");
+		exit_error(&mshell, "Giraffeshell: Initialization failed\n");
 	run_minishell(&mshell, &input, &ast);
 	delete_minishell(&mshell);
 	return (0);
