@@ -26,6 +26,7 @@ HEADERS		=	inc/minishell.h \
 				inc/signals.h
 
 SRC			=	main.c \
+				minishell.c \
 				0.error_handling/error.c \
 				0.init-delete/init_minishell.c \
 				0.init-delete/delete_minishell.c \

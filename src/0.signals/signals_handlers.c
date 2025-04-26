@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals_handlers.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vlopatin <vlopatin@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 16:44:24 by vlopatin          #+#    #+#             */
-/*   Updated: 2025/04/26 18:11:46 by vlopatin         ###   ########.fr       */
+/*   Updated: 2025/04/26 18:22:23 by hiennguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

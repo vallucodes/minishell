@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vlopatin <vlopatin@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 21:13:49 by hiennguy          #+#    #+#             */
-/*   Updated: 2025/04/26 17:52:40 by vlopatin         ###   ########.fr       */
+/*   Updated: 2025/04/26 18:26:51 by hiennguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@
 # include "error.h"
 
 # define PROMPT "\001\e[93m\002🦒 >>>\001\e[0m\e[95m\002 \
-				Giraffeshell>$ \001\e[0m\002"
+Giraffeshell>$ \001\e[0m\002"
 
 extern volatile sig_atomic_t	g_signal;
 
@@ -63,7 +63,9 @@ typedef struct s_minishell
 
 //main functions
 int		input_validation(t_minishell *mshell);
-int		init_minishell(t_minishell *mshell, char **envp, t_ast **ast);
+int		init_minishell(t_minishell *mshell, char **envp, t_ast **ast,
+			char **av);
+void	run_minishell(t_minishell *mshell, t_input *input, t_ast **ast);
 void	init_quotes(t_quotes_helper *quotes);
 void	increment_shlvl(t_env *env);
 
@@ -72,13 +74,5 @@ void	append_char(t_minishell *mshell, char *src, char **dst, size_t i);
 int		is_any_redirect(t_token *current);
 void	replace_content_of_token(t_token *current, char *new_str);
 bool	there_is_quote_state_change(t_quotes_helper quotes);
-
-//developlment functions
-void	print_tokens(t_token *tokens);
-char	*get_token_type_name(t_token_type token_type);
-void	print_cmd(char **cmd);
-void	print_node(t_ast *node);
-void	print_left_side(t_ast *ast);
-void	print_whole_tree(t_ast *ast);
 
 #endif

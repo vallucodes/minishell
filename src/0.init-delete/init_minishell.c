@@ -6,14 +6,15 @@
 /*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 21:57:43 by hiennguy          #+#    #+#             */
-/*   Updated: 2025/04/25 21:57:45 by hiennguy         ###   ########.fr       */
+/*   Updated: 2025/04/26 16:30:13 by hiennguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	init_minishell(t_minishell *mshell, char **envp, t_ast **ast)
+int	init_minishell(t_minishell *mshell, char **envp, t_ast **ast, char **av)
 {
+	(void) av;
 	if (copy_env(&mshell->envp, envp) != 0)
 	{
 		ft_dprintf(2, UNREACHABLE);

@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   signals.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vlopatin <vlopatin@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 17:51:49 by vlopatin          #+#    #+#             */
-/*   Updated: 2025/04/26 17:51:50 by vlopatin         ###   ########.fr       */
+/*   Updated: 2025/04/26 18:26:32 by hiennguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SIGNALS_H
 # define SIGNALS_H
 
-extern volatile sig_atomic_t	g_signal;
 typedef struct s_minishell		t_minishell;
 
 void	sigint_handler_main(int signal);
