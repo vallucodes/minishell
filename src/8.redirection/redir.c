@@ -6,7 +6,7 @@
 /*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 20:32:40 by hiennguy          #+#    #+#             */
-/*   Updated: 2025/04/25 20:32:42 by hiennguy         ###   ########.fr       */
+/*   Updated: 2025/04/26 22:09:15 by hiennguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,12 @@ static int	redirect_input(t_ast *ast)
 		return (FAIL);
 	if (safe_dup2(fd_in, STDIN_FILENO) == FAIL)
 	{
-		close(fd_in);
+		if (close(fd_in) == -1)
+			perror("close");
 		return (FAIL);
 	}
-	close(fd_in);
+	if (close(fd_in) == -1)
+		perror("close");
 	return (SUCCESS);
 }
 
@@ -66,10 +68,12 @@ static int	redirect_output(t_ast *ast)
 		return (FAIL);
 	if (safe_dup2(fd_out, STDOUT_FILENO) == FAIL)
 	{
-		close(fd_out);
+		if (close(fd_out) == -1)
+			perror("close");
 		return (FAIL);
 	}
-	close(fd_out);
+	if (close(fd_out) == -1)
+		perror("close");
 	return (SUCCESS);
 }
 
@@ -83,9 +87,11 @@ static int	redirect_append(t_ast *ast)
 		return (FAIL);
 	if (safe_dup2(fd_out, STDOUT_FILENO) == FAIL)
 	{
-		close(fd_out);
+		if (close(fd_out) == -1)
+			perror("close");
 		return (FAIL);
 	}
-	close(fd_out);
+	if (close(fd_out) == -1)
+		perror("close");
 	return (SUCCESS);
 }
