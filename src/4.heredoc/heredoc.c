@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   heredoc.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vlopatin <vlopatin@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/26 16:45:48 by vlopatin          #+#    #+#             */
+/*   Updated: 2025/04/26 16:57:07 by vlopatin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../inc/minishell.h"
 
-static void	init_heredoc_input(t_minishell *mshell, \
+static void	init_heredoc_input(t_minishell *mshell,
 			int *fd_tmp, int *fd_stdin, char **file)
 {
 	sig_action_heredoc(mshell);

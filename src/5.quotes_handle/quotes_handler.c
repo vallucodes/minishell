@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   quotes_handler.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vlopatin <vlopatin@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/26 16:46:14 by vlopatin          #+#    #+#             */
+/*   Updated: 2025/04/26 16:55:47 by vlopatin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../inc/minishell.h"
 
 static void	find_and_set_next_command(t_token *current)
@@ -27,7 +39,7 @@ static void	delete_token(t_input *input, t_token *current, t_token *previous)
 	}
 }
 
-bool	is_ambiguous_redirect(t_minishell *mshell, \
+bool	is_ambiguous_redirect(t_minishell *mshell,
 		t_quotes_helper quotes, t_token *current, char *str)
 {
 	size_t	i;
@@ -56,7 +68,7 @@ bool	is_ambiguous_redirect(t_minishell *mshell, \
 	return (0);
 }
 
-static void	loop_through_word(t_minishell *mshell, \
+static void	loop_through_word(t_minishell *mshell,
 	t_input *input, t_token *current, t_token *previous)
 {
 	t_vars	vars;
