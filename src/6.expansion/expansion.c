@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expansion.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vlopatin <vlopatin@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/26 16:46:24 by vlopatin          #+#    #+#             */
+/*   Updated: 2025/04/26 16:56:27 by vlopatin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../inc/minishell.h"
 
 static char	*extract_pid(t_minishell *mshell, char *buffer)
@@ -100,11 +112,11 @@ size_t	expand_exitcode_value(t_minishell *mshell, int fd, char **new_str)
 	return (2);
 }
 
-int	handle_expandables(t_minishell *mshell, \
+int	handle_expandables(t_minishell *mshell,
 			t_vars *vars, size_t *i, t_token *current)
 {
 	if (is_valid_expandable(vars->quotes, &vars->input_str[*i])
-		&& !is_ambiguous_redirect \
+		&& !is_ambiguous_redirect
 		(mshell, vars->quotes, current, &vars->input_str[*i]))
 	{
 		*i += expand_content(mshell, &vars->input_str[*i], 0, &vars->new_str);

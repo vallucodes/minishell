@@ -12,7 +12,18 @@ SRC_DIR		= src/
 INCLUDES	= -I ./inc -I $(LIBFT_DIR)/inc
 
 LIBFTH		= $(LIBFT_DIR)/inc/libft.h
-MINISHH		= ./inc/minishell.h
+HEADERS		=	inc/minishell.h \
+				inc/ast.h \
+				inc/builtin.h \
+				inc/environment.h \
+				inc/error.h \
+				inc/execution.h \
+				inc/expansion.h \
+				inc/heredoc.h \
+				inc/lexing.h \
+				inc/memory_arena.h \
+				inc/quotes_handler.h \
+				inc/signals.h
 
 SRC			=	main.c \
 				minishell.c \
@@ -71,9 +82,6 @@ SRC			=	main.c \
 				10.builtins/utils_builtins.c \
 				10.builtins/ft_export_sort_env.c
 
-#99.dev/print_development.c
-#7.ast/ast_dev.c
-
 OBJS		= $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
 
 all: $(NAME)
@@ -81,11 +89,11 @@ all: $(NAME)
 $(LIBFT):
 	@$(MAKE) --no-print-directory -C $(LIBFT_DIR)
 
-$(OBJ_DIR)%.o: $(SRC_DIR)%.c $(MINISHH) $(LIBFTH)
+$(OBJ_DIR)%.o: $(SRC_DIR)%.c $(HEADERS) $(LIBFTH)
 	@mkdir -p $(dir $@)
 	@$(CC) $(CFLAGS) -o $@ -c $< $(INCLUDES)
 
-$(NAME): $(LIBFT) $(OBJS) $(MINISHH) $(LIBFTH)
+$(NAME): $(LIBFT) $(OBJS) $(HEADERS) $(LIBFTH)
 	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME) $(LDFLAGS)
 	@echo "\033[0;32mMinishell built successfully ✅\033[0m"
 

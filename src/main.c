@@ -5,14 +5,16 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/26 16:37:18 by hiennguy          #+#    #+#             */
-/*   Updated: 2025/04/26 17:59:33 by hiennguy         ###   ########.fr       */
+/*   Created: 2025/04/26 18:06:10 by hiennguy          #+#    #+#             */
+/*   Updated: 2025/04/26 18:06:30 by hiennguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-int	main(int ac, char **av, char **envp)
+volatile sig_atomic_t	g_signal = 0;
+
+int main(int ac, char **av, char **envp)
 {
 	t_minishell	mshell;
 	t_ast		*ast;

@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   create_tokens.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vlopatin <vlopatin@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/26 16:45:24 by vlopatin          #+#    #+#             */
+/*   Updated: 2025/04/26 16:56:59 by vlopatin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-static t_token	*init_token(t_minishell *mshell, \
+static t_token	*init_token(t_minishell *mshell,
 		t_input *input, int len, t_token_type type)
 {
 	t_token	*new_token;
@@ -17,7 +29,7 @@ static t_token	*init_token(t_minishell *mshell, \
 	return (new_token);
 }
 
-static t_token	*init_token_word(t_minishell *mshell, \
+static t_token	*init_token_word(t_minishell *mshell,
 		char *word, t_token_type type)
 {
 	t_token	*new_token;
@@ -81,7 +93,7 @@ void	create_tokens(t_minishell *mshell, t_input *input)
 		if (ft_strncmp(&input->full_str[input->index], "<<", 2) == 0)
 			add_token(&input->tokens, init_token(mshell, input, 2, HERE_DOC));
 		else if (ft_strncmp(&input->full_str[input->index], ">>", 2) == 0)
-			add_token(&input->tokens, \
+			add_token(&input->tokens,
 				init_token(mshell, input, 2, REDIR_APPEND));
 		else if (input->full_str[input->index] == '|')
 			add_token(&input->tokens, init_token(mshell, input, 1, PIPE));
