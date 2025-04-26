@@ -6,7 +6,7 @@
 /*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 20:32:11 by hiennguy          #+#    #+#             */
-/*   Updated: 2025/04/26 21:37:25 by hiennguy         ###   ########.fr       */
+/*   Updated: 2025/04/26 22:09:01 by hiennguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,14 @@ int	open_redir_file(const char *file, int flags, int *fd, t_ast *ast)
 		return (FAIL);
 	if (*fd != -1)
 	{
-		close(*fd);
+		if (close(*fd) == -1)
+			perror("close");
 		*fd = -1;
 	}
 	*fd = open(file, flags, 0644);
 	if (*fd < 0)
 	{
-		ft_dprintf(2, "Giraffeshell: %s: %s\n", file, strerror(errno), errno);
+		ft_dprintf(2, "Giraffeshell: %s: %s\n", file, strerror(errno));
 		return (FAIL);
 	}
 	return (SUCCESS);

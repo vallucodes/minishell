@@ -6,7 +6,7 @@
 /*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 20:38:41 by hiennguy          #+#    #+#             */
-/*   Updated: 2025/04/26 21:39:23 by hiennguy         ###   ########.fr       */
+/*   Updated: 2025/04/26 22:10:09 by hiennguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,10 @@ int	setup_fork(t_exec *exec)
 		ft_dprintf(2, "Giraffeshell: %s: %s\n", "fork", strerror(errno));
 		if (exec->has_pipe)
 		{
-			close(exec->pipefd[0]);
-			close(exec->pipefd[1]);
+			if (close(exec->pipefd[0]) == -1)
+				perror("close");
+			if (close(exec->pipefd[1]) == -1)
+				perror("close");
 		}
 		return (FAIL);
 	}
@@ -62,22 +64,23 @@ void	setup_child_pipe_fds(t_minishell *mshell, t_exec *exec)
 	{
 		if (safe_dup2(exec->prev_fd, STDIN_FILENO) == FAIL)
 		{
-			ft_dprintf(2, "Giraffeshell: %s: %s\n", "dup2", strerror(errno));
 			delete_minishell(mshell);
 			exit(FAIL);
 		}
-		close(exec->prev_fd);
+		if (close(exec->prev_fd) == -1)
+			perror("close");
 	}
 	if (exec->has_pipe)
 	{
-		close(exec->pipefd[0]);
+		if (close(exec->pipefd[0]) == -1)
+			perror("close");
 		if (safe_dup2(exec->pipefd[1], STDOUT_FILENO) == FAIL)
 		{
-			ft_dprintf(2, "Giraffeshell: %s: %s\n", "dup2", strerror(errno));
 			delete_minishell(mshell);
 			exit(FAIL);
 		}
-		close(exec->pipefd[1]);
+		if (close(exec->pipefd[1]) == -1)
+			perror("close");
 	}
 }
 
@@ -86,10 +89,14 @@ void	setup_parent_pipe_fds(t_minishell *mshell, t_exec *exec)
 	exec->command_count++;
 	mshell->in_child = 0;
 	if (exec->prev_fd != -1)
-		close(exec->prev_fd);
+	{
+		if (close(exec->prev_fd) == -1)
+			perror("close");
+	}
 	if (exec->has_pipe)
 	{
-		close(exec->pipefd[1]);
+		if (close(exec->pipefd[1]) == -1)
+			perror("close");
 		exec->prev_fd = exec->pipefd[0];
 	}
 }
