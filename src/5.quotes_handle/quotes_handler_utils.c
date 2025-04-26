@@ -6,7 +6,7 @@
 /*   By: vlopatin <vlopatin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 16:45:53 by vlopatin          #+#    #+#             */
-/*   Updated: 2025/04/26 16:46:05 by vlopatin         ###   ########.fr       */
+/*   Updated: 2025/04/26 20:34:45 by vlopatin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,8 @@
 
 bool	is_valid_expandable(t_quotes_helper quotes, char *input_str)
 {
-	int	i;
-
-	i = 0;
-	return (!quotes.in_single && input_str[i] == '$'
-		&& is_valid_char_expansion(input_str[i + 1]));
+	return (!quotes.in_single && input_str[0] == '$'
+		&& is_valid_char_expansion(input_str[1]));
 }
 
 bool	there_is_quote_state_change(t_quotes_helper quotes)

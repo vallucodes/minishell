@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   delete_minishell.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: vlopatin <vlopatin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 21:57:55 by hiennguy          #+#    #+#             */
-/*   Updated: 2025/04/25 21:57:58 by hiennguy         ###   ########.fr       */
+/*   Updated: 2025/04/26 20:49:33 by vlopatin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,14 @@ void	close_origin_fds(t_minishell *mshell)
 {
 	if (mshell->origin_stdin >= 0)
 	{
-		close(mshell->origin_stdin);
+		if (close(mshell->origin_stdin) == -1)
+			perror("close");
 		mshell->origin_stdin = -1;
 	}
 	if (mshell->origin_stdout >= 0)
 	{
-		close(mshell->origin_stdout);
+		if (close(mshell->origin_stdout) == -1)
+			perror("close");
 		mshell->origin_stdout = -1;
 	}
 }
