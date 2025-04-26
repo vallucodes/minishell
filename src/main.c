@@ -6,7 +6,7 @@
 /*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 18:06:10 by hiennguy          #+#    #+#             */
-/*   Updated: 2025/04/26 18:06:30 by hiennguy         ###   ########.fr       */
+/*   Updated: 2025/04/26 18:37:12 by hiennguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 volatile sig_atomic_t	g_signal = 0;
 
-int main(int ac, char **av, char **envp)
+int	main(int ac, char **av, char **envp)
 {
 	t_minishell	mshell;
 	t_ast		*ast;
