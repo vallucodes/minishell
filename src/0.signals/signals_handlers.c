@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals_handlers.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: vlopatin <vlopatin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 16:44:24 by vlopatin          #+#    #+#             */
-/*   Updated: 2025/04/26 18:22:23 by hiennguy         ###   ########.fr       */
+/*   Updated: 2025/04/26 20:46:59 by vlopatin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ void	sigint_handler_heredoc(int signal)
 	if (signal == SIGINT)
 	{
 		g_signal = signal;
-		close(STDIN_FILENO);
+		if (close(STDIN_FILENO) == -1)
+			perror("close");
 		write(1, "\n", 1);
 		set_exitcode_signal(NULL);
 	}

@@ -6,7 +6,7 @@
 /*   By: vlopatin <vlopatin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 16:45:46 by vlopatin          #+#    #+#             */
-/*   Updated: 2025/04/26 16:49:13 by vlopatin         ###   ########.fr       */
+/*   Updated: 2025/04/26 20:38:34 by vlopatin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,14 @@ void	close_fds(int *fd1, int *fd2)
 {
 	if (fd1 && *fd1 != -1)
 	{
-		close (*fd1);
+		if (close(*fd1) == -1)
+			perror("close");
 		*fd1 = -1;
 	}
 	if (fd1 && *fd2 != -1)
 	{
-		close (*fd2);
+		if (close(*fd2) == -1)
+			perror("close");
 		*fd2 = -1;
 	}
 }

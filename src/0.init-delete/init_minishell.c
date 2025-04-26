@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_minishell.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: vlopatin <vlopatin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 21:57:43 by hiennguy          #+#    #+#             */
-/*   Updated: 2025/04/26 16:30:13 by hiennguy         ###   ########.fr       */
+/*   Updated: 2025/04/26 20:51:45 by vlopatin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,11 @@ int	init_minishell(t_minishell *mshell, char **envp, t_ast **ast, char **av)
 	mshell->rl_count = 0;
 	mshell->rl_count_heredoc = 0;
 	mshell->origin_stdin = dup(STDIN_FILENO);
+	if (mshell->origin_stdin == -1)
+		exit_cleanup_error(mshell, "dup");
 	mshell->origin_stdout = dup(STDOUT_FILENO);
+	if (mshell->origin_stdin == -1)
+		exit_cleanup_error(mshell, "dup");
 	if (mshell->origin_stdin < 0 || mshell->origin_stdout < 0)
 		return (FAIL);
 	*ast = NULL;

@@ -6,7 +6,7 @@
 /*   By: vlopatin <vlopatin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 16:46:24 by vlopatin          #+#    #+#             */
-/*   Updated: 2025/04/26 16:56:27 by vlopatin         ###   ########.fr       */
+/*   Updated: 2025/04/26 20:37:48 by vlopatin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,16 @@ size_t	expand_pid(t_minishell *mshell, int fd, char **new_str)
 	bytes_read = read(fd_get_pid, buf, sizeof(buf) - 1);
 	if (bytes_read <= 0)
 	{
-		close(fd_get_pid);
+		if (close(fd_get_pid) == -1)
+			perror("close");
 		write_or_add_to_str(mshell, fd, new_str, "$\0");
 		return (1);
 	}
 	buf[bytes_read] = '\0';
 	str_pid = extract_pid(mshell, buf);
 	write_or_add_to_str(mshell, fd, new_str, str_pid);
-	close(fd_get_pid);
+	if (close(fd_get_pid) == -1)
+		perror("close");
 	return (2);
 }
 

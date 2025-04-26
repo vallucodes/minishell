@@ -6,7 +6,7 @@
 /*   By: vlopatin <vlopatin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 16:45:43 by vlopatin          #+#    #+#             */
-/*   Updated: 2025/04/26 18:07:01 by vlopatin         ###   ########.fr       */
+/*   Updated: 2025/04/26 20:28:13 by vlopatin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ char	*create_tmp_file(t_minishell *mshell, int *fd)
 	{
 		ft_bzero(tmp_file, NAME_MAX + 1);
 		next_tmp_file(mshell, tmp_file, index);
-		if (access (tmp_file, F_OK) != 0)
+		if (access(tmp_file, F_OK) != 0)
 			break ;
 		index++;
 		if (index > 16)
