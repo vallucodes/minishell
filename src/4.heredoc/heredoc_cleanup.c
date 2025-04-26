@@ -6,7 +6,7 @@
 /*   By: vlopatin <vlopatin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 16:45:41 by vlopatin          #+#    #+#             */
-/*   Updated: 2025/04/26 16:57:23 by vlopatin         ###   ########.fr       */
+/*   Updated: 2025/04/26 20:20:52 by vlopatin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ void	delete_tmp_files(t_minishell *mshell)
 		next_tmp_file(mshell, tmp_file, i);
 		if (access(tmp_file, F_OK) == 0)
 		{
-			unlink(tmp_file);
+			if (unlink(tmp_file) == -1)
+				perror("unlink");
 			i++;
 		}
 		else

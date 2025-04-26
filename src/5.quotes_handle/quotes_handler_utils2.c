@@ -6,7 +6,7 @@
 /*   By: vlopatin <vlopatin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 16:46:12 by vlopatin          #+#    #+#             */
-/*   Updated: 2025/04/26 16:46:13 by vlopatin         ###   ########.fr       */
+/*   Updated: 2025/04/26 20:35:14 by vlopatin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,14 @@
 
 bool	is_pid_expansion(t_quotes_helper quotes, char *input_str)
 {
-	size_t	i;
-
-	i = 0;
-	return ((!quotes.in_single && input_str[i] == '$'
-			&& input_str[i + 1] == '$'));
+	return ((!quotes.in_single && input_str[0] == '$'
+			&& input_str[1] == '$'));
 }
 
 bool	is_exitcode_expansion(t_quotes_helper quotes, char *input_str)
 {
-	size_t	i;
-
-	i = 0;
-	return ((!quotes.in_single && input_str[i] == '$'
-			&& input_str[i + 1] == '?'));
+	return ((!quotes.in_single && input_str[0] == '$'
+			&& input_str[1] == '?'));
 }
 
 void	update_vars_quote(t_vars *vars, size_t *i)
