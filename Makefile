@@ -15,6 +15,7 @@ LIBFTH		= $(LIBFT_DIR)/inc/libft.h
 MINISHH		= ./inc/minishell.h
 
 SRC			=	main.c \
+				minishell.c \
 				0.error_handling/error.c \
 				0.init-delete/init_minishell.c \
 				0.init-delete/delete_minishell.c \
@@ -71,7 +72,7 @@ SRC			=	main.c \
 				10.builtins/ft_export_sort_env.c
 
 #99.dev/print_development.c
-#7.ast/ast_dev.c 
+#7.ast/ast_dev.c
 
 OBJS		= $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
 
