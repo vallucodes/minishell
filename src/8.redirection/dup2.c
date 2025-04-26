@@ -6,7 +6,7 @@
 /*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 20:31:46 by hiennguy          #+#    #+#             */
-/*   Updated: 2025/04/26 20:59:20 by hiennguy         ###   ########.fr       */
+/*   Updated: 2025/04/26 21:38:46 by hiennguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	safe_dup2(int fd, int target_fd)
 	if (dup2(fd, target_fd) < 0)
 	{
 		perror("dup2");
-		safe_close(fd);
+		close(fd);
 		return (FAIL);
 	}
 	return (SUCCESS);

@@ -6,7 +6,7 @@
 /*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 21:08:30 by hiennguy          #+#    #+#             */
-/*   Updated: 2025/04/26 20:58:09 by hiennguy         ###   ########.fr       */
+/*   Updated: 2025/04/26 21:40:59 by hiennguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ typedef struct s_exec
 
 int		handle_redirection(t_ast *ast);
 int		safe_dup2(int fd, int target_fd);
-void	safe_close(int fd);
 int		open_redir_file(const char *file, int flags, int *fd, t_ast *ast);
 int		setup_pipe(t_exec *exec);
 int		setup_fork(t_exec *exec);
@@ -42,12 +41,9 @@ t_ast	*get_cmd_node(t_ast *ast);
 int		is_builtin(t_ast *ast);
 int		execute_builtin(t_minishell *mshell, t_ast *ast);
 int		execute_builtin_alone(t_minishell *mshell, t_ast *ast);
-
 void	handle_child_process(t_minishell *mshell, t_ast *ast, t_exec *exec);
 char	*get_command_path(t_minishell *mshell, t_ast *ast);
-
 void	execute_ast(t_minishell *mshell, t_ast *ast);
-
 int		wait_for_children(t_exec *exec);
 void	close_origin_fds(t_minishell *mshell);
 

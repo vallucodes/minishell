@@ -6,7 +6,7 @@
 /*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 20:32:40 by hiennguy          #+#    #+#             */
-/*   Updated: 2025/04/26 20:46:28 by hiennguy         ###   ########.fr       */
+/*   Updated: 2025/04/26 21:37:56 by hiennguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,10 @@ static int	redirect_input(t_ast *ast)
 		return (FAIL);
 	if (safe_dup2(fd_in, STDIN_FILENO) == FAIL)
 	{
-		safe_close(fd_in);
+		close(fd_in);
 		return (FAIL);
 	}
-	safe_close(fd_in);
+	close(fd_in);
 	return (SUCCESS);
 }
 
@@ -66,10 +66,10 @@ static int	redirect_output(t_ast *ast)
 		return (FAIL);
 	if (safe_dup2(fd_out, STDOUT_FILENO) == FAIL)
 	{
-		safe_close(fd_out);
+		close(fd_out);
 		return (FAIL);
 	}
-	safe_close(fd_out);
+	close(fd_out);
 	return (SUCCESS);
 }
 
@@ -83,9 +83,9 @@ static int	redirect_append(t_ast *ast)
 		return (FAIL);
 	if (safe_dup2(fd_out, STDOUT_FILENO) == FAIL)
 	{
-		safe_close(fd_out);
+		close(fd_out);
 		return (FAIL);
 	}
-	safe_close(fd_out);
+	close(fd_out);
 	return (SUCCESS);
 }

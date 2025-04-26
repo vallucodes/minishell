@@ -6,7 +6,7 @@
 /*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 20:32:11 by hiennguy          #+#    #+#             */
-/*   Updated: 2025/04/26 20:48:24 by hiennguy         ###   ########.fr       */
+/*   Updated: 2025/04/26 21:37:25 by hiennguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	open_redir_file(const char *file, int flags, int *fd, t_ast *ast)
 		return (FAIL);
 	if (*fd != -1)
 	{
-		safe_close(*fd);
+		close(*fd);
 		*fd = -1;
 	}
 	*fd = open(file, flags, 0644);

@@ -63,7 +63,6 @@ SRC			=	main.c \
 				7.ast/ast_utils.c \
 				7.ast/ast_create_node.c \
 				8.redirection/open.c \
-				8.redirection/close.c \
 				8.redirection/dup2.c \
 				8.redirection/redir.c \
 				9.execution/execute_builtin.c \
