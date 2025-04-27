@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_cleanup.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vlopatin <vlopatin@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 16:45:41 by vlopatin          #+#    #+#             */
-/*   Updated: 2025/04/26 20:20:52 by vlopatin         ###   ########.fr       */
+/*   Updated: 2025/04/26 22:27:42 by hiennguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,14 @@ void	cleanup_at_signal(t_minishell *mshell, char **input,
 	int fd_stdin, int fd_tmp)
 {
 	sig_action_ignore(mshell);
-	close(fd_tmp);
+	if (close(fd_tmp) == -1)
+		perror("close");
 	delete_tmp_files(mshell);
 	free(*input);
 	if (dup2(fd_stdin, STDIN_FILENO) == -1)
 		exit_cleanup_error(mshell, "dup2");
-	close(fd_stdin);
+	if (close(fd_stdin) == -1)
+		perror("close");
 	free(mshell->input_str);
 	arena_delete(&mshell->arena);
 }

@@ -6,7 +6,7 @@
 /*   By: vlopatin <vlopatin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 21:57:43 by hiennguy          #+#    #+#             */
-/*   Updated: 2025/04/27 13:33:47 by vlopatin         ###   ########.fr       */
+/*   Updated: 2025/04/27 13:39:51 by vlopatin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	init_minishell(t_minishell *mshell, char **envp, t_ast **ast, char **av)
 {
 	(void) av;
-	if (copy_env(&mshell->envp, envp) != 0)
+	if (copy_env(&mshell->envp, envp) != SUCCESS)
 	{
 		ft_dprintf(2, UNREACHABLE);
 		return (FAIL);
@@ -40,7 +40,7 @@ int	init_minishell(t_minishell *mshell, char **envp, t_ast **ast, char **av)
 		return (FAIL);
 	*ast = NULL;
 	set_exitcode_signal(mshell);
-	return (0);
+	return (SUCCESS);
 }
 
 void	init_quotes(t_quotes_helper *quotes)
