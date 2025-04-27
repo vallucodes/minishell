@@ -6,7 +6,7 @@
 /*   By: vlopatin <vlopatin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 16:46:14 by vlopatin          #+#    #+#             */
-/*   Updated: 2025/04/26 16:55:47 by vlopatin         ###   ########.fr       */
+/*   Updated: 2025/04/27 18:26:38 by vlopatin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,10 @@ static void	delete_token(t_input *input, t_token *current, t_token *previous)
 	if (current->type == COMMAND)
 		find_and_set_next_command(current);
 	if (previous)
+	{
+		current->type = 0;
 		previous->next = current->next;
+	}
 	else
 	{
 		current->type = 0;
