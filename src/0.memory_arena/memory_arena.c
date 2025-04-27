@@ -6,7 +6,7 @@
 /*   By: vlopatin <vlopatin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 16:44:44 by vlopatin          #+#    #+#             */
-/*   Updated: 2025/04/26 16:44:45 by vlopatin         ###   ########.fr       */
+/*   Updated: 2025/04/27 14:01:51 by vlopatin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	*arena_alloc(t_arena *a, size_t size, size_t alignment)
 	return (result);
 }
 
-void	init_arena_values(t_arena **arena)
+static void	init_arena_values(t_arena **arena)
 {
 	(*arena)->first = NULL;
 	(*arena)->current = NULL;
