@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_cleanup.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: vlopatin <vlopatin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 16:45:41 by vlopatin          #+#    #+#             */
-/*   Updated: 2025/04/26 22:27:42 by hiennguy         ###   ########.fr       */
+/*   Updated: 2025/04/27 15:22:39 by vlopatin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
