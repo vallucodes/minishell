@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: vlopatin <vlopatin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 21:13:49 by hiennguy          #+#    #+#             */
-/*   Updated: 2025/04/26 18:26:51 by hiennguy         ###   ########.fr       */
+/*   Updated: 2025/04/27 13:14:20 by vlopatin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ typedef struct s_minishell
 {
 	t_arena		*arena;
 	t_env		*envp;
-	t_ast		*ast;
 	int			exitcode;
 	char		**path;
 	char		*input_str;

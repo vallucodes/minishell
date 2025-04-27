@@ -6,7 +6,7 @@
 /*   By: vlopatin <vlopatin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 21:57:43 by hiennguy          #+#    #+#             */
-/*   Updated: 2025/04/26 20:51:45 by vlopatin         ###   ########.fr       */
+/*   Updated: 2025/04/27 13:33:47 by vlopatin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,14 @@ int	init_minishell(t_minishell *mshell, char **envp, t_ast **ast, char **av)
 	increment_shlvl(mshell->envp);
 	mshell->exitcode = 0;
 	mshell->in_child = 0;
+	mshell->input_str = NULL;
 	mshell->path = NULL;
 	mshell->arena = NULL;
 	mshell->rl_count = 0;
 	mshell->rl_count_heredoc = 0;
-	mshell->origin_stdin = dup(STDIN_FILENO);
+	mshell->origin_stdin = -1;
+	mshell->origin_stdout = -1;
+	mshell->origin_stdin = -1; //dup(STDIN_FILENO);
 	if (mshell->origin_stdin == -1)
 		exit_cleanup_error(mshell, "dup");
 	mshell->origin_stdout = dup(STDOUT_FILENO);
