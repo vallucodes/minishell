@@ -1,5 +1,8 @@
 # Minishell
-**As beautiful as a shell**
+
+<p align="left">
+  <strong>✨ 𝒜𝓈 𝒷𝑒𝒶𝓊𝓉𝒾𝒻𝓊𝓁 𝒶𝓈 𝒶 𝓈𝒽𝑒𝓁𝓁 ✨</strong>
+</p>
 
 ## 📌 Overview
 
@@ -23,59 +26,38 @@ Minishell is a simple Unix shell implementation written in C. This project is pa
 - Signal handling (`Ctrl-C`, `Ctrl-D`, `Ctrl-\`).
 - Command history support.
 
+### Compilation
 
-## Very useful links:
+```bash
+1. git clone https://github.com/novth17/42-minishell.git
+2. cd 42-minishell
+3. make
+```
 
-- [Hive dashboard forum post](https://dashboard.hive.fi/topics/101/messages?cursus_id=21)
-- [Git repo: zelhajou](https://github.com/zelhajou/ft_unix_minishell)
-- [Git repo: madebypixel02](https://gitlab.com/madebypixel02/minishell)
-- [Minishell architecture flowchart picture](https://whimsical.com/minishell-architecture-big-picture-7b9N8PL3qHrddbs977mQ2J)
+## Run
 
-## Memory arena knowledge:
-https://www.rfleury.com/p/untangling-lifetimes-the-arena-allocator
-https://m.youtube.com/watch?v=3IAlJSIjvH0
-https://m.youtube.com/watch?v=TZ5a3gCCZYo
-https://m.youtube.com/watch?v=hI9aN8ZG4vg
-https://nullprogram.com/blog/2023/09/27/
-https://m.youtube.com/watch?v=UYLHA_Ey8Ys
+```bash
+./minishell
+```
 
-## Maybe useful stuff:
+## Example usage
 
-- [GNU Bash Manual](https://www.gnu.org/software/bash/manual/bash.html)
-- [Git repo: charMstr](https://github.com/charMstr/minishell)
-- [42 Minishell Functions](https://42-cursus.gitbook.io/guide/rank-03/minishell/functions) #brief explanation of all allowed functions
+```bash
+🦒 >>> Giraffeshell>$ echo Hello World
+Hello World
 
-https://github.com/tdameros/42-minishell/blob/main/src/signals/interactive_signal_handling.c
+🦒 >>> Giraffeshell>$ export NAME=42
+🦒 >>> Giraffeshell>$ echo $NAME
+42
 
-https://github.com/zelhajou/ft_unix_minishell/tree/main/minishell
+🦒 >>> Giraffeshell>$ ls | grep .c > out.txt
+🦒 >>> Giraffeshell>$ cat < out.txt | wc -l
+```
 
-## Example File Structure:
+## 📚 Key Concepts Learned
 
-- [tjensen42/42-minishell](https://github.com/tjensen42/42-minishell/tree/main/)
-
-## Git usage:
-
-### git fetch:
-
-Downloads changes from the remote (new commits, branches, etc.) but doesn’t merge them into your local branch. Great for checking what's new without affecting your local work.
-
-### git pull:
-
-Does fetch + merge in one step — it downloads changes and immediately merges them into your current branch. If there are conflicts, you'll have to resolve them before proceeding.
-
-### git merge:
-
-Add changes from main to your branch. For example before pull request.
-From main branch to your own branch: `git merge main`
-
-### creating branch command flow:
-
-git checkout main
-git pull
-git checkout -b branch-name
-
-## suppression
-
-valgrind --leak-check=full --show-reachable=yes --error-limit=no --gen-suppressions=all --log-file=minimalraw.log ./minishell
-cat ./minimalraw.log | ./parse_valgrind_suppressions.sh > minimal.supp
-valgrind --leak-check=full --show-reachable=yes --error-limit=no --suppressions=./minimal.supp ./minishell
+- Process control: fork, execve, waitpid, pipe, dup2
+- Terminal signals: sigaction, tcsetattr, tcgetattr
+- Shell parsing and execution via Abstract Syntax Tree (AST)
+- I/O redirection and FD manipulation
+- Memory management in C
