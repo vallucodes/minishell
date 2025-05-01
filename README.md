@@ -57,7 +57,7 @@ Hello World
 ## 📚 Key Concepts Learned
 
 - Process control: fork, execve, waitpid, pipe, dup2
-- Terminal signals: sigaction, tcsetattr, tcgetattr
+- Terminal signals
 - Shell parsing and execution via Abstract Syntax Tree (AST)
 - I/O redirection and FD manipulation
 - Memory management in C
