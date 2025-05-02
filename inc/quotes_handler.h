@@ -3,17 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   quotes_handler.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vlopatin <vlopatin@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 17:51:51 by vlopatin          #+#    #+#             */
-/*   Updated: 2025/04/26 17:51:52 by vlopatin         ###   ########.fr       */
+/*   Updated: 2025/05/02 13:55:11 by hiennguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef QUOTES_HANDLER_H
 # define QUOTES_HANDLER_H
-
-# include "minishell.h"
 
 //quote handler
 void	expand_remove_quotes(t_minishell *mshell, t_input *input);
