@@ -6,7 +6,7 @@
 /*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 20:59:23 by hiennguy          #+#    #+#             */
-/*   Updated: 2025/04/25 21:49:49 by hiennguy         ###   ########.fr       */
+/*   Updated: 2025/05/02 13:54:51 by hiennguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	get_current_directory(char *buffer, size_t size)
 	{
 		ft_dprintf(STDERR_FILENO,
 			"cd: error retrieving current directory: "
-			"getcwd: cannot access parent directories: % s\n",
+			"getcwd: cannot access parent directories: %s\n",
 			strerror(errno));
 		return (FAIL);
 	}
