@@ -52,6 +52,7 @@ Hello World
 
 🦒 >>> Giraffeshell>$ ls | grep .c > out.txt
 🦒 >>> Giraffeshell>$ cat < out.txt | wc -l
+2
 ```
 
 ## 📚 Key Concepts Learned
