@@ -6,7 +6,7 @@
 /*   By: hiennguy <hiennguy@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 21:00:50 by hiennguy          #+#    #+#             */
-/*   Updated: 2025/04/25 21:00:52 by hiennguy         ###   ########.fr       */
+/*   Updated: 2025/05/03 19:28:57 by hiennguy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,9 @@ static int	is_valid_n_flag(const char *arg)
 {
 	int	i;
 
-	i = 1;
-	if (arg[0] != '-')
+	if (arg[0] != '-' || arg[1] != 'n')
 		return (0);
+	i = 2;
 	while (arg[i])
 	{
 		if (arg[i] != 'n')
