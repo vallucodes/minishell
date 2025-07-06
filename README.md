@@ -23,16 +23,17 @@ Minishell is a simple Unix shell implementation written in C. This project aims 
   - `exit`
 - **Signal handling**: (interrupt) `Ctrl-C` , (exit) `Ctrl-D`, (quit with core dump) `Ctrl-\`
 
-### Compilation
 
+
+## ▶️ Run
+
+### Compilation
 ```bash
 git clone https://github.com/vallucodes/minishell.git
 cd minishell
 make
 ```
-
-## ▶️ Run
-
+### Run
 ```bash
 ./minishell
 ```
