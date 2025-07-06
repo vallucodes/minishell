@@ -4,14 +4,14 @@
 
 ## 📌 Overview
 
-Minishell is a simple Unix shell implementation written in C. This project is part of the 42 curriculum and aims to deepen the understanding of process management, file descriptors, and system calls.
+Minishell is a simple Unix shell implementation written in C. This project aims to deepen the understanding of process management, file descriptors, and system calls.
 
 ## 🌟 Features
 
 - **Interactive shell**: Custom prompt, command history, tab completion, input validation
 - **Command execution**: Absolute/relative paths, `$PATH` lookup, pipe chaining `|`
 - **I/O redirections**: (`<`, `>`, `<<`, `>>`)
-- **Quote Handling**: Single quotes (`'`) literal, double quotes (`"`) with variable expansion, nested protection
+- **Quote handling**: Single quotes (`'`) literal, double quotes (`"`) with variable expansion, nested protection
 - **Variable management**: Environment expansion (`$VAR`),, exit status (`$?`) and process ID (`$$`), assignment/export
 - **Built-in commands**:
   - `echo` (with `-n` option)
@@ -21,7 +21,7 @@ Minishell is a simple Unix shell implementation written in C. This project is pa
   - `unset`
   - `env`
   - `exit`
-- **Signal handling**: (interrup) `Ctrl-C` , (exit) `Ctrl-D`, (quit with core dump) `Ctrl-\`
+- **Signal handling**: (interrupt) `Ctrl-C` , (exit) `Ctrl-D`, (quit with core dump) `Ctrl-\`
 
 ### Compilation
 
@@ -52,6 +52,10 @@ Hello World
 2
 ```
 
+## 📦 Dependencies
+
+- Readline
+
 ## 🛠️ Technical Implementation
 
 | Component   | Details   |
@@ -59,21 +63,19 @@ Hello World
 | Terminal Interface | `readline` library integration for command history and line editing |
 | Lexical Analyzer| Custom tokenizer with state machine for parsing quotes, operators, and whitespace  |
 | Parser Architecture | Parser building Abstract Syntax Tree (AST) |
+| Heredoc Implementation | Custom parsing creates temporary files as input sources for `<<` operator |
 | Process Management | `fork()`, `execve()`, `wait()` for child process creation and monitoring |
 | Command Resolution | Path traversal algorithm for executable lookup in `$PATH` directories |
 | Inter-Process Communication  | `pipe()` system calls for command chaining with file descriptor management |
 | Memory management  | Arena-based allocation for each command parsing and execution with `malloc()` for environment variables, stack memory usage for the rest |
 | Signal Architecture | Custom signal handlers using `signal()` for clean interrupt handling |
-| Environment Handling | Environment handling with custom `env()`, `export()` and `unset()` functions |
+| Environment Handling | Environment handling with built-it implementations `env()`, `export()` and `unset()` |
 | Library | Custom library `libft` integration |
-| Error Handling | Comprehensive error checking with proper exit codes and error messages |
+| Error Handling | Comprehensive error checking with exit codes and error messages matching bash behaviour |
 
 ## 🏗️ Architecture Overview
 
-Execution flow:
-
-1. Input processing: Input validation → Tokenization → Heredoc handler → AST generation
-2. Execution: Setup forks → Setup pipe (chaining) → Setup FDs → Redirection setup → Get command from environment → Execute command
+![](imgs/Flowchart.png)
 
 ## 👥 Creators
 
