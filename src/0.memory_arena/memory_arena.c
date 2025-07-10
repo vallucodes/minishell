@@ -6,7 +6,7 @@
 /*   By: vlopatin <vlopatin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 16:44:44 by vlopatin          #+#    #+#             */
-/*   Updated: 2025/04/27 14:01:51 by vlopatin         ###   ########.fr       */
+/*   Updated: 2025/07/10 12:56:50 by vlopatin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ void	*arena_alloc(t_arena *a, size_t size, size_t alignment)
 		new_block->capacity = new_size;
 		new_block->used = 0;
 		a->current->next = new_block;
-		a->current = new_block;
 		a->current = new_block;
 	}
 	result = a->current->data + a->current->used;
