@@ -12,7 +12,7 @@ Minishell is a simple Unix shell implementation written in C. This project aims 
 - **Command execution**: Absolute/relative paths, `$PATH` lookup, pipe chaining `|`
 - **I/O redirections**: (`<`, `>`, `<<`, `>>`)
 - **Quote handling**: Single quotes (`'`) literal, double quotes (`"`) with variable expansion, nested protection
-- **Variable management**: Environment expansion (`$VAR`),, exit status (`$?`) and process ID (`$$`), assignment/export
+- **Variable management**: Environment expansion (`$VAR`), exit status (`$?`) and process ID (`$$`), assignment/export
 - **Built-in commands**:
   - `echo` (with `-n` option)
   - `cd` (with relative/absolute paths)
